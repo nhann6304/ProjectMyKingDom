@@ -1,0 +1,14 @@
+npm i @nestjs/config
+npm i helmet 
+
+
+
+
+
+
+
+npm i compression
+npm i --save-dev @types/compression
+
+npm i cookie-parser
+npm i --save-dev @types/cookie-parser
