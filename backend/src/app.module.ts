@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mysqlConfig from './config/mysql.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
@@ -11,9 +12,11 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configServer: ConfigService) =>
-        configServer.get<TypeOrmModuleOptions>("mysql"),
-    })
+      useFactory: (configService: ConfigService) =>
+        configService.get<TypeOrmModuleOptions>("mysql"),
+    }),
+
+    UsersModule
   ],
   controllers: [],
   providers: [],
