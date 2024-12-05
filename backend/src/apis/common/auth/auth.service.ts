@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { RegisterDto } from './auth.dto';
 import { UsersService } from 'src/apis/models/users/users.service';
 import { PasswordConfig } from 'src/helper/hashPassWord.helper';
+import { emailConfig } from 'src/config/email.config';
+import * as nodemailer from "nodemailer"
 
 @Injectable()
 export class AuthService {
@@ -31,7 +33,23 @@ export class AuthService {
 
         const userItem = this.userRepository.create({ ...dataUser, user_password: hashPassword });
         return this.userRepository.save(userItem)
+    }
 
+    async sendEmail(user_email: string, subject: string, templateEmail: any) {
+        const transport = emailConfig();
+
+        const options: nodemailer.SendMailOptions = {
+            from: process.env.EMAIL_USER_SEND,
+            to: user_email,
+            subject: subject, // Tiêu đề email,
+            html: templateEmail
+        };
+
+        try {
+            await transport.sendMail(options);
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
 
     }
 
