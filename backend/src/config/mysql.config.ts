@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserEntity } from 'src/apis/users/user.entity';
+import { UserEntity } from 'src/apis/models/users/user.entity';
 
 
 export default registerAs("mysql", (): TypeOrmModuleOptions => ({
@@ -16,5 +16,5 @@ export default registerAs("mysql", (): TypeOrmModuleOptions => ({
     // entities: [UserEntity],
     maxQueryExecutionTime: 3000,
     poolSize: 10,
-    logging: true,
+    // logging: true,
 }))

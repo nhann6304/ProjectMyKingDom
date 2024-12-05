@@ -4,6 +4,7 @@ import { EStatusUser } from 'src/enums/EStatusUser.enum';
 import { IAddress, IUser } from 'src/interfaces/common/IUser.interface';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AddressEntity } from '../address/address.entity';
+import { EGender } from 'src/enums/EGender.enum';
 
 @Entity('users')
 export class UserEntity extends ABaseModel implements IUser {
@@ -21,7 +22,10 @@ export class UserEntity extends ABaseModel implements IUser {
     user_password: string;
 
     @Column({ type: "int" })
-    user_phone: string;
+    user_phone: number;
+
+    @Column({ type: "enum", enum: EGender })
+    user_gender: EGender;
 
     @Column({ type: "enum", enum: ERole, default: ERole.CUSTOMER })
     user_role: ERole;
@@ -34,7 +38,4 @@ export class UserEntity extends ABaseModel implements IUser {
 
     @Column({ nullable: true })
     user_avatar?: string;
-
-
-
 }

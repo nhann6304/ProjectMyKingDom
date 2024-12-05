@@ -15,4 +15,23 @@ export class UsersService {
     return this.usersRepository.save(newUser);
   }
 
+
+  async findIsEmailExits(email: string,) {
+    const result = await this.usersRepository.findOne({ where: { user_email: email } })
+    if (result) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  async findIsPhone(phone: number,) {
+    const result = await this.usersRepository.findOne({ where: { user_phone: phone } })
+    if (result) {
+      return false
+    } else {
+      return true
+    }
+  }
+
 }

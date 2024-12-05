@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import mysqlConfig from './config/mysql.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UsersModule } from './apis/users/users.module';
+import { UsersModule } from './apis/models/users/users.module';
+import { AuthModule } from './apis/common/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { UsersModule } from './apis/users/users.module';
         configService.get<TypeOrmModuleOptions>("mysql"),
     }),
 
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
