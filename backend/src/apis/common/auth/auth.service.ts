@@ -4,11 +4,13 @@ import { UserEntity } from 'src/apis/models/users/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDto, RegisterDto } from './auth.dto';
 import { UsersService } from 'src/apis/models/users/users.service';
-import { PasswordConfig } from 'src/helper/hashPassWord.helper';
 import { emailConfig } from 'src/config/email.config';
 import * as nodemailer from "nodemailer"
 import { templateEmailRegister } from 'src/constants/templates/registerEmail.contants';
-import { SendEmailConfig } from 'src/helper/sendEmail.helper';
+import { SendEmailHelper } from 'src/helper/sendEmail.helper';
+import { PasswordHelper } from 'src/helper/hashPassWord.helper';
+import { TokenService } from '../token/token.service';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +18,8 @@ export class AuthService {
     constructor(
         @InjectRepository(UserEntity)
         private userRepository: Repository<UserEntity>,
-        private userService: UsersService
+        private userService: UsersService,
+        private tokenService: TokenService,
     ) { }
     async register(dataUser: RegisterDto) {
         const isEmail = await this.userService.findIsEmailExits(dataUser.user_email);
@@ -29,13 +32,13 @@ export class AuthService {
             throw new BadRequestException("Số điện thoại đã tồn tại trong hệ thống");
         }
 
-        const hashPassword = await PasswordConfig.hashPassword(dataUser.user_password);
+        const hashPassword = await PasswordHelper.hashPassword(dataUser.user_password);
 
         const userItem = this.userRepository.create({ ...dataUser, user_password: hashPassword });
         const savedUser = await this.userRepository.save(userItem);
 
         try {
-            await SendEmailConfig.sendEmail(
+            await SendEmailHelper.sendEmail(
                 userItem.user_email,
                 "Xác nhận tài khoản khách hàng",
                 templateEmailRegister(userItem.user_last_name, userItem.user_email)
@@ -46,17 +49,19 @@ export class AuthService {
         return savedUser;
     };
 
+    async login(loginData: LoginDto, res: Response) {
+        const user = await this.userService.findUserByEmail(loginData.user_email);
 
-
-
-    async login(loginData: LoginDto) {
-        const findUser = await this.userService.findUserByEmail(loginData.user_email);
-
-        const isPassWord = await PasswordConfig.comparePassword(findUser.user_password, loginData.user_password);
+        const isPassWord = await PasswordHelper.comparePassword(user.user_password, loginData.user_password);
         if (!isPassWord) {
             throw new BadRequestException("Email hoặc mật khẩu không chính xác.");
         }
 
+        const token = await this.tokenService.createToken(user.id, user.user_email)
 
+        return {
+            token,
+            user
+        }
     }
 }

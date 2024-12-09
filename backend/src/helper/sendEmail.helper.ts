@@ -3,7 +3,7 @@ import { emailConfig } from "src/config/email.config";
 import * as nodemailer from "nodemailer"
 
 
-export class SendEmailConfig {
+export class SendEmailHelper {
     static async sendEmail(user_email: string, subject: string, templateEmail: string) {
         const transport = emailConfig();
         const options: nodemailer.SendMailOptions = {

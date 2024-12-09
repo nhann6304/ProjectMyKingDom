@@ -5,12 +5,14 @@ import { UsersModule } from 'src/apis/models/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/apis/models/users/user.entity';
 import { ConfigModule } from '@nestjs/config';
+import { TokenModule } from '../token/token.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     ConfigModule.forRoot(),
-    UsersModule
+    UsersModule,
+    TokenModule
   ],
   controllers: [AuthController],
   providers: [AuthService],
