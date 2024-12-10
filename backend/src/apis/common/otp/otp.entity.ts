@@ -21,4 +21,5 @@ export class OtpEntity extends ABaseModel {
         now.setMinutes(now.getMinutes() + 15);
         this.expiresAt = now;
     }
+
 }

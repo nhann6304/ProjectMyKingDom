@@ -24,15 +24,15 @@ export class OtpService {
     const now = new Date();
 
     if (exitsOtp) {
-      if (exitsOtp.expiresAt > now) {
-        throw new BadRequestException(
-          'OTP đã được gửi trước đó. Vui lòng chờ OTP cũ hết hạn trước khi yêu cầu mã mới.'
-        );
-      } else {
+      if (exitsOtp.expiresAt < now) {
         exitsOtp.otp = hashOtp;
         exitsOtp.expiresAt = new Date(Date.now() + 15 * 60 * 1000);
         await this.otpRepository.save(exitsOtp);
         return exitsOtp;
+      } else {
+        throw new BadRequestException(
+          'OTP đã được gửi trước đó. Vui lòng chờ OTP cũ hết hạn trước khi yêu cầu mã mới.'
+        );
       }
     }
 
@@ -43,16 +43,45 @@ export class OtpService {
 
     return await this.otpRepository.save(newOtp);
   }
-
+  //
   async verifyOtp(user_id: string) {
+    const now = new Date();
+
     const userOtp = await this.otpRepository.findOne({
       where: { user: { id: user_id } },
       relations: ['user'],
     })
+
     if (!userOtp) {
       throw new BadRequestException("Người dùng không tồn tại trong hệ thống");
     }
+
+    if (userOtp.expiresAt < now) {
+      throw new BadRequestException("Mã xác thực hết hạn vui lòng thử lại")
+    }
+
+    delete userOtp.user.user_password;
+
+
     return userOtp
   }
+  //
+
+  async deletedOtp(user_id: string) {
+
+    const isOtp = await this.otpRepository.findOne({
+      where: { user: { id: user_id } },
+      relations: ["user"]
+    })
+
+    if (!isOtp) {
+      throw new BadRequestException("Người dùng không tồn tại");
+    }
+
+    const result = await this.otpRepository.delete(isOtp.id);
+
+    return result
+  }
+
 
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto, OtpCodeDto, RegisterDto, resetPasswordDto } from './auth.dto';
+import { LoginDto, OtpCodeDto, RegisterDto, resetPasswordDto, resetPasswordSendMailDto } from './auth.dto';
 import { CREATE, OK } from 'src/core/response.core';
 import { templateEmailRegister } from 'src/constants/templates/registerEmail.contants';
 import { Request, Response } from 'express';
@@ -81,7 +81,7 @@ export class AuthController {
   @Post("send-otp")
   @ApiOperation({ summary: "Gửi mã Otp đổi mật khẩu" })
   async sendOtp(
-    @Body() resetData: resetPasswordDto,
+    @Body() resetData: resetPasswordSendMailDto,
     @Req() req: Request
   ) {
     const items = await this.authService.sendOptEmail(resetData, req);
@@ -92,18 +92,32 @@ export class AuthController {
   }
 
 
-  @Post("reset-password")
-  @ApiOperation({ summary: "Thay đổi mật khẩu" })
-  async resetPassword(
+  @Post("verify-otp/:id")
+  @ApiOperation({ summary: "Kiểm tra otp" })
+  async verifyOtp(
     @Body() otpData: OtpCodeDto,
+    @Param("id") userId: string
   ) {
-
-    const result = await this.authService.resetPassword(otpData);
+    const items = await this.authService.verifyOtp(otpData, userId);
 
     return new OK({
-      message: "Ngon",
-      metadata: otpData
+      message: "Xác thực Otp thành công",
+      metadata: items
     })
   }
 
+  @Post("reset-passowrd")
+  @ApiOperation({ summary: "Thay đổi mật khẩu" })
+  async resetPassword(
+    @Body() resetPassData: resetPasswordDto,
+    @Req() req: Request
+  ) {
+
+    await this.authService.resetPassWord(resetPassData, req)
+
+    return new OK({
+      message: "Thay đổi mật khẩu thành công",
+    })
+
+  }
 } 

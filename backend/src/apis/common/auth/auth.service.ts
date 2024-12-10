@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/apis/models/users/user.entity';
 import { Repository } from 'typeorm';
-import { LoginDto, OtpCodeDto, RegisterDto, resetPasswordDto } from './auth.dto';
+import { LoginDto, OtpCodeDto, RegisterDto, resetPasswordDto, resetPasswordSendMailDto } from './auth.dto';
 import { UsersService } from 'src/apis/models/users/users.service';
 import { emailConfig } from 'src/config/email.config';
 import * as nodemailer from "nodemailer"
@@ -16,6 +16,7 @@ import { CONST_VAL } from 'src/constants/value.contants';
 import { CookieHelper } from 'src/helper/cookie.helper';
 import { calcNumberOtp } from 'src/utils/otp.helper';
 import { OtpService } from '../otp/otp.service';
+import { templateSenOtp } from 'src/constants/templates/sendOtp.contants';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +59,7 @@ export class AuthService {
     };
 
     async login(loginData: LoginDto, res: Response) {
-        const user = await this.userService.findUserByEmail(loginData.user_email);
+        const user = await this.userService.findUserByField("user_email", loginData.user_email);
 
         const isPassWord = await PasswordHelper.comparePassword(user.user_password, loginData.user_password);
         if (!isPassWord) {
@@ -92,9 +93,9 @@ export class AuthService {
         return true
     }
 
-    async sendOptEmail(resetData: resetPasswordDto, req: Request) {
+    async sendOptEmail(resetData: resetPasswordSendMailDto, req: Request) {
         const numberOtp = calcNumberOtp
-        const user = await this.userService.findUserByEmail(resetData.user_email);
+        const user = await this.userService.findUserByField("user_email", `${resetData.user_email}`);
 
         const result = await this.otpService.CreateOtp({ numberOtp, user });
         if (result) {
@@ -102,7 +103,7 @@ export class AuthService {
                 await SendEmailHelper.sendEmail({
                     subject: "Xác nhận đổi mật khẩu",
                     user_email: resetData.user_email,
-                    templateEmail: `<h1>Hello opt đổi mật khẩu của bạn là <b>${numberOtp}</b></h1>`
+                    templateEmail: templateSenOtp({ otpCode: numberOtp, user_last_name: user.user_last_name })
                 });
             } catch (error) {
                 throw new BadRequestException(`Không gửi được thông tin đến mail ${resetData.user_email}`);
@@ -112,16 +113,40 @@ export class AuthService {
         return result
     }
 
-    async resetPassword(otpData: OtpCodeDto) {
-        const optUser = await this.otpService.verifyOtp(otpData.user_id);
+    async verifyOtp(otpData: OtpCodeDto, userId: string) {
+        const optUser = await this.otpService.verifyOtp(userId);
         // Kiểm tra mã otp
         const isOtp = await PasswordHelper.comparePassword(optUser.otp, otpData.otp);
 
         if (!isOtp) {
             throw new BadRequestException("Mã opt không trùng khớp hãy kiểm tra email của bạn!!!");
         }
+        return optUser
+    }
 
-        return true
+
+    async resetPassWord(resetPassData: resetPasswordDto, req: Request) {
+
+        if (resetPassData.user_password !== resetPassData.confirm_password) {
+            throw new BadRequestException("Mật khẩu khồng trùng khớp")
+        }
+        const user = await this.userService.findUserByField("id", resetPassData.user_id);
+
+
+        if (!user) {
+            throw new BadRequestException("Người dùng không tồn tại");
+        }
+
+        req["user"] = null
+
+        const hashPass = await PasswordHelper.hashPassword(resetPassData.user_password)
+
+        await this.otpService.deletedOtp(user.id);
+
+        const result = await this.userService.resetPassword({ user_id: user.id, newPassWord: hashPass })
+
+        return result;
+
     }
 }
 
