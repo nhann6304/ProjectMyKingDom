@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { TokenEntity } from './token.entity';
@@ -41,4 +41,15 @@ export class TokenService {
     return token;
   }
 
+  async verifyToken(token: string) {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token);
+      const user = await this.userRepository.findOne({ where: { user_email: decoded.email } })
+      return user
+    } catch (error) {
+      console.log("Token không hợp lệ hoặc hết hạn");
+      throw new BadRequestException("Vui lòng đăng nhập lại");
+
+    };
+  };
 }

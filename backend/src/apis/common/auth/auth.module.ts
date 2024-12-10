@@ -6,15 +6,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/apis/models/users/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { TokenModule } from '../token/token.module';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { OtpService } from '../otp/otp.service';
+import { OtpModule } from '../otp/otp.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
     ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([UserEntity]),
     UsersModule,
-    TokenModule
+    TokenModule,
+    OtpModule
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
 })
 export class AuthModule { }

@@ -3,6 +3,7 @@ import { IsEmail, IsMobilePhone, IsNotEmpty } from "class-validator";
 import { CONST_ERROR } from "src/constants";
 import { EGender } from "src/enums/EGender.enum";
 import { IUser } from "src/interfaces/common/IUser.interface";
+import { OtpEntity } from "../otp/otp.entity";
 
 export class RegisterDto implements Partial<IUser> {
     @ApiProperty({ default: "Huỳnh" })
@@ -44,4 +45,19 @@ export class LoginDto implements Pick<IUser, "user_email" | "user_password"> {
     user_password: string;
 }
 
+export class resetPasswordDto implements Pick<IUser, "user_email"> {
+    @ApiProperty({ default: "huynhthanhnhan632004@gmail.com" })
+    @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Email") })
+    user_email: string;
+}
+
+export class OtpCodeDto implements Pick<OtpEntity, "otp"> {
+    @ApiProperty({ type: "string" })
+    @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Otp") })
+    otp: string;
+
+    @ApiProperty({ default: "17f20b51-df1b-42cf-a0e4-3f54523e9c89" })
+    @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Người dùng") })
+    user_id: string;
+}
 

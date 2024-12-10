@@ -1,9 +1,9 @@
 import *  as bcrypt from "bcryptjs"
-const salt = 10
+import { CONST_VAL } from "src/constants/value.contants";
 
 export class PasswordHelper {
     static async hashPassword(pass_hien_tai: string) {
-        const passwordHash = await bcrypt.hash(pass_hien_tai, salt);
+        const passwordHash = await bcrypt.hash(pass_hien_tai, CONST_VAL.SALT);
         return passwordHash
     }
 

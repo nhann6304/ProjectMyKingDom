@@ -5,14 +5,14 @@ import { TokenEntity } from './token.entity';
 import { jwtConfig } from 'src/config/jwt.config';
 import { UsersModule } from 'src/apis/models/users/users.module';
 import { UserEntity } from 'src/apis/models/users/user.entity';
+import { OtpEntity } from '../otp/otp.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TokenEntity, UserEntity]),
+    TypeOrmModule.forFeature([TokenEntity, UserEntity, OtpEntity]),
     jwtConfig(),
     forwardRef(() => UsersModule),
   ],
-  controllers: [],
   providers: [TokenService],
   exports: [TokenService],
 })

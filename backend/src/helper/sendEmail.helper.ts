@@ -4,7 +4,7 @@ import * as nodemailer from "nodemailer"
 
 
 export class SendEmailHelper {
-    static async sendEmail(user_email: string, subject: string, templateEmail: string) {
+    static async sendEmail({ user_email, subject, templateEmail }: { user_email: string, subject: string, templateEmail: string }) {
         const transport = emailConfig();
         const options: nodemailer.SendMailOptions = {
             from: process.env.EMAIL_USER_SEND,

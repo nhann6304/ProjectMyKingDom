@@ -2,7 +2,7 @@ import { ABaseModel } from 'src/abstracts/common/ABaseModel.abstracts';
 import { UserEntity } from 'src/apis/models/users/user.entity';
 import { Entity, Column, JoinColumn, OneToOne } from 'typeorm';
 
-@Entity('tokens')
+@Entity('token')
 export class TokenEntity extends ABaseModel {
     @OneToOne(() => UserEntity, { cascade: true })
     @JoinColumn({ name: 'user_id' })
