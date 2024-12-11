@@ -18,3 +18,8 @@ npm i @types/nodemailer
 
 npm i slug
 npm i @types/slug
+
+
+
+ nest g resource products  --no-spec
+ nest g guard otp

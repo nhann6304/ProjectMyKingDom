@@ -25,7 +25,7 @@ async function bootstrap() {
   });
 
   const configSwagger = new DocumentBuilder()
-    .setTitle('Api Automation')
+    .setTitle('Api MyKingDom')
     .setVersion('1.0')
     .build();
 

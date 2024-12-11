@@ -4,6 +4,7 @@ import mysqlConfig from './config/mysql.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from './apis/models/users/users.module';
 import { AuthModule } from './apis/common/auth/auth.module';
+import { ProductCategoriesModule } from './apis/models/product-categories/product-categories.module';
 
 @Module({
   imports: [
@@ -18,7 +19,12 @@ import { AuthModule } from './apis/common/auth/auth.module';
     }),
 
     UsersModule,
-    AuthModule
+    AuthModule,
+
+    //Product    
+    ProductCategoriesModule
+
+
   ],
   controllers: [],
   providers: [],

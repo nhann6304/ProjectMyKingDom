@@ -28,12 +28,14 @@ export class AuthGuard implements CanActivate {
 
     const result = await this.tokenService.verifyToken(token);
 
+    delete result.user_password;
+
     if (!result) {
       CookieHelper.clearCookie({ name: CONST_VAL.TOKEN_NAME, res })
       return false
     }
 
-    req['user'] = result
+    req['user'] = result;
 
     return true
   };
