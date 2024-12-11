@@ -1,17 +1,25 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { availableMemory } from "process";
 import { IBaseResponse } from "src/interfaces/core/IBaseResponse.interface";
+import { ArrayOverlap } from "typeorm";
 
 
 export abstract class RESPONSE<T = any> {
     message: string;
     metadata: T | undefined;
+    totalItem?: number;
     abstract statusCode: number;
     abstract reasonStatusCode: string;
+
+
 
     constructor({ message, metadata }: IBaseResponse<T>) {
         this.message = message;
         this.metadata = metadata;
+        if (Array.isArray(this.metadata)) {
+            this.totalItem = this.metadata.length;
+        }
+
     }
 }
 

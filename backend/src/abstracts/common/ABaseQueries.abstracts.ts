@@ -9,31 +9,31 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
         type: [String],
         required: false,
         title: "Get fields",
-        minimum: 1,
-        maximum: 100,
-        default: 1,
         description: 'Lấy các trường',
     })
-    fields?: Array<keyof T>;
+    fields?: Array<string>;
 
     @IsOptional()
     @ApiProperty({
         type: "number",
         title: "Lấy bao nhiêu",
+        default: 10,
+        required: false,
         description: 'Giới hạn item trong một trang',
 
     })
     limit?: number;
 
+
+    @IsOptional()
     @ApiProperty({
         type: "number",
         title: "Số trang",
         minimum: 1,
         format: 'int32',
         default: 1,
+        required: false,
         description: 'Hiển thị trang hiện tại',
-
     })
-    @IsOptional()
     page?: number;
 }

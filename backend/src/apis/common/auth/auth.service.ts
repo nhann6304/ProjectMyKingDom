@@ -14,7 +14,7 @@ import { Request, Response } from 'express';
 import { IUser } from 'src/interfaces/common/IUser.interface';
 import { CONST_VAL } from 'src/constants/value.contants';
 import { CookieHelper } from 'src/helper/cookie.helper';
-import { calcNumberOtp } from 'src/utils/otp.helper';
+import { calcNumberOtp } from 'src/utils/otp.utils';
 import { OtpService } from '../otp/otp.service';
 import { templateSenOtp } from 'src/constants/templates/sendOtp.contants';
 

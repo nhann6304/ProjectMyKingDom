@@ -1,7 +1,7 @@
 export interface IQueries<T = any> {
     limit?: number;
     page?: number;
-    fields?: Array<keyof T>
+    fields?: Array<string>
     // sortBy?: string;
     // sortChildrenBy?: string;
     // sortDir?: string | TDirectionSort;

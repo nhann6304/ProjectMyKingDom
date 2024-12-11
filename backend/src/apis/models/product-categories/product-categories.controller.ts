@@ -29,7 +29,6 @@ export class ProductCategoriesController {
     })
   }
 
-
   @Get("find-all")
   @ApiOperation({ summary: 'Get all blog' })
   async findAll(
@@ -37,10 +36,12 @@ export class ProductCategoriesController {
     queries: AQueries,
     @Req() req: Request,
   ) {
-    console.log(queries);
-    new OK({
+
+    const items = await this.productCategoriesService.findAll(queries, req)
+
+    return new OK({
       message: "Oke",
-      metadata: queries
+      metadata: items
     });
   }
 
