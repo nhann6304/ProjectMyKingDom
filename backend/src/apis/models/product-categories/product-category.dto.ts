@@ -3,6 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsOptional } from "class-validator";
 import { CONST_ERROR } from "src/constants";
 import { ProductCategoryEntity } from "./product-category.entity";
+import { CreateProductDto } from "../products/create-product.dto";
 
 export class CreateProductCategoryDto extends PartialType(ProductCategoryEntity) {
     @ApiProperty({ example: "84776a72-7609-4307-abb0-c44c2aee7549", required: false })
@@ -17,6 +18,23 @@ export class CreateProductCategoryDto extends PartialType(ProductCategoryEntity)
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Mô tả danh mục") })
     pc_description: string;
 }
+
+
+export class UpdateProductCategoriesDto extends CreateProductDto {
+
+    @ApiProperty({ example: "84776a72-7609-4307-abb0-c44c2aee7549", required: false })
+    @IsOptional()
+    parentId?: string; // ID của danh mục cha, không bắt buộc
+
+    @ApiProperty({ type: String, required: false })
+    @IsOptional()
+    pc_name?: string;
+
+    @ApiProperty({ type: String, required: false })
+    @IsOptional()
+    pc_description?: string;
+}
+
 
 
 

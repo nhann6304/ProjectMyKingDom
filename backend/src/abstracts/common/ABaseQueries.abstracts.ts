@@ -24,7 +24,6 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
     })
     limit?: number;
 
-
     @IsOptional()
     @ApiProperty({
         type: "number",
@@ -36,4 +35,14 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
         description: 'Hiển thị trang hiện tại',
     })
     page?: number;
+
+    @IsOptional()
+    @ApiProperty({
+        type: "boolean",
+        title: "Thùng rác",
+        default: true,
+        required: true,
+        description: 'Hiển thị trang hiện tại',
+    })
+    isDeleted: string;
 }

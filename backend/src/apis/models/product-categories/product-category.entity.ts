@@ -17,6 +17,8 @@ export class ProductCategoryEntity extends ABaseModel implements IProductCategor
     @Column('varchar', { length: 255, unique: true })
     pc_slug: string;
 
+    @Column('boolean', { default: false })
+    isDeleted: boolean
 
     @ManyToOne(() => ProductCategoryEntity, (category) => category.children, { nullable: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "parentId" })
@@ -28,10 +30,17 @@ export class ProductCategoryEntity extends ABaseModel implements IProductCategor
     @OneToMany(() => ProductsEntity, (product) => product.pc_category)
     products: ProductsEntity[];
 
-
     @ManyToOne(() => UserEntity, (user) => user.id, { nullable: true })
     @JoinColumn({ name: 'created_by' })
     createdBy: UserEntity;
+
+    @ManyToOne(() => UserEntity, (user) => user.id, { nullable: true })
+    @JoinColumn({ name: 'deleted_by' })
+    deletedBy: UserEntity;
+
+    @ManyToOne(() => UserEntity, (user) => user.id, { nullable: true })
+    @JoinColumn({ name: 'updated_by' })
+    updatedBy: UserEntity;
 
     @BeforeInsert()
     @BeforeUpdate()
