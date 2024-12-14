@@ -158,6 +158,10 @@ export class ProductCategoriesService {
             throw new BadRequestException(" danh mục sản phẩm không tồn tại");
         }
 
+        if (productCate.isDeleted) {
+            throw new BadRequestException("Danh mục sản phẩm đã được xóa");
+        }
+
         await this.productCategoriesRepository.update(id, {
             isDeleted: true,
             deletedBy: me,
@@ -172,6 +176,10 @@ export class ProductCategoriesService {
 
         if (!productCate) {
             throw new BadRequestException("Danh mục sản phẩm không tồn tại");
+        }
+
+        if (!productCate.isDeleted) {
+            throw new BadRequestException("Danh mục sản phẩm đã được khôi phục");
         }
 
         await this.productCategoriesRepository.update(id, {
@@ -206,6 +214,4 @@ export class ProductCategoriesService {
 
         return true;
     }
-
-
 }

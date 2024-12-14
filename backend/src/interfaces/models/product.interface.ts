@@ -1,3 +1,4 @@
+import { EAgeGroup } from "src/enums/EAge.enum";
 
 export interface IProduct {
     prod_name: string;
@@ -9,7 +10,7 @@ export interface IProduct {
     prod_description: string;
     prod_quantity: number; // Số lượng tồn
     prod_nation: string; // Xuất xứ
-    prod_agePlay: number; //  Độ tuổi
+    prod_agePlay: EAgeGroup; //  Độ tuổi
     shipping_code?: string; // Mã vận chuyển
     discount?: number; // giảm giá
 }

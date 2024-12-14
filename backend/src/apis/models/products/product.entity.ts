@@ -1,15 +1,17 @@
-import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
-import { IProduct } from "src/interfaces/models/product.interface";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from "typeorm";
 import * as slug from "slug";
+import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
+import { EAgeGroup } from "src/enums/EAge.enum";
+import { IProduct } from "src/interfaces/models/product.interface";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { ProductCategoryEntity } from "../product-categories/product-category.entity";
+import { UserEntity } from "../users/user.entity";
 
 @Entity("products")
 export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('varchar', { length: 255 })
     prod_name: string;
 
-    @Column('varchar', { length: 255 })
+    @Column('varchar', { length: 255, nullable: true })
     prod_thumb: string;
 
     @Column('varchar', { length: 50 }) // Công ty vd TOY MONSTER
@@ -27,23 +29,25 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('varchar', { length: 100 })
     prod_description: string;
 
-    @Column('int')
+    @Column('int', { default: 1 })
     prod_quantity: number;
 
-    @Column('int')
-    prod_agePlay: number;
+    @Column('enum', { enum: EAgeGroup, nullable: true })
+    prod_agePlay: EAgeGroup;
 
     @Column('varchar', { length: 50 })
-    prod_nation: string; // Quốc gia
+    prod_nation: string;
 
     @Column('varchar', { length: 50, nullable: true })
     shipping_code?: string;
 
-    @Column('decimal', { precision: 5, scale: 2 })
+    @Column('decimal', { precision: 5, scale: 2, default: 0 })
     discount: number;
 
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products, { nullable: false })
     pc_category: ProductCategoryEntity;
+
+
 
     @BeforeInsert()
     @BeforeUpdate()

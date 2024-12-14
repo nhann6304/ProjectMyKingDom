@@ -5,6 +5,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from './apis/models/users/users.module';
 import { AuthModule } from './apis/common/auth/auth.module';
 import { ProductCategoriesModule } from './apis/models/product-categories/product-categories.module';
+import { ProductsModule } from './apis/models/products/products.module';
 
 @Module({
   imports: [
@@ -17,12 +18,13 @@ import { ProductCategoriesModule } from './apis/models/product-categories/produc
       useFactory: (configService: ConfigService) =>
         configService.get<TypeOrmModuleOptions>("mysql"),
     }),
-
+    //Auth
     UsersModule,
     AuthModule,
 
     //Product    
-    ProductCategoriesModule
+    ProductCategoriesModule,
+    ProductsModule
 
 
   ],
