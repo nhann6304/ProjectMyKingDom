@@ -11,7 +11,7 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
         title: "Get fields",
         description: 'Lấy các trường',
     })
-    fields?: Array<string>;
+    fields?: Array<T>;
 
     @IsOptional()
     @ApiProperty({

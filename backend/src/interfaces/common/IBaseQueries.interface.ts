@@ -1,7 +1,7 @@
 export interface IQueries<T = any> {
     limit?: number;
     page?: number;
-    fields?: Array<string>
+    fields?: Array<T>
     isDeleted: string
     // sortBy?: string;
     // sortChildrenBy?: string;

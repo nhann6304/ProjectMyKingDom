@@ -2,9 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductsEntity } from './product.entity';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Request } from 'express';
 import { ProductCategoriesService } from '../product-categories/product-categories.service';
+import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
+import { UtilORM } from 'src/utils/orm.uutils';
 
 @Injectable()
 export class ProductsService {
@@ -13,6 +15,17 @@ export class ProductsService {
         private productRepository: Repository<ProductsEntity>,
         private productCategoriesService: ProductCategoriesService
     ) { }
+
+
+    async findById({ id }: { id: string }) {
+        const data = await this.productRepository.findOne({
+            where: { id },
+            relations: {
+                pc_category: true
+            }
+        })
+        return data
+    }
 
     async createProduct({ req, productData }: { req: Request, productData: CreateProductDto }) {
         const me = req['user'];
@@ -28,6 +41,31 @@ export class ProductsService {
         const result = await this.productRepository.save(newProduct);
 
         return result;
+    }
+
+
+    async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
+        const { isDeleted, fields, limit, page } = query;
+        const ALIAS_NAME = "product";
+
+        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
+            .leftJoinAndSelect(["pc_category"])
+            .select(fields)
+            .skip({ limit, page })
+            .take({ limit })
+
+        const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
+
+
+        const [items, totalItems] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount(),
+        ]);
+
+        return {
+            items,
+        }
+
     }
 
 
