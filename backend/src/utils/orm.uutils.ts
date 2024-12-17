@@ -24,31 +24,37 @@ export class UtilORM<T> {
     }
 
     where(filter: Partial<Record<keyof T, string | number | [number, number]>>): this {
+        let isFirstQuery = true;
 
-        let isFirstQuery = true; // Đặt biến ở bên ngoài vòng lặp để kiểm tra lần đầu
-
-        for (let key in filter) {
+        for (const key in filter) {
             const value = filter[key];
-            if (value !== undefined) {
-                // Kiểm tra nếu giá trị là mảng (ví dụ: cho khoảng giá trị)
-                if (Array.isArray(value)) {
-                    this.queryBuilder.andWhere(`${this.aliasName}.${key} BETWEEN :start AND :end`, {
-                        start: value[0],
-                        end: value[1]
-                    });
+
+            if (value !== undefined && value !== null) { // Kiểm tra null và undefined
+                if (Array.isArray(value) && value.length === 2) { // Kiểm tra mảng có 2 phần tử
+                    this.queryBuilder.andWhere(
+                        `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
+                        { [`${key}_start`]: value[0], [`${key}_end`]: value[1] }
+                    );
                 } else {
                     if (isFirstQuery) {
-                        console.log(123);
-                        this.queryBuilder.where(`${this.aliasName}.${key} = :value`, { value });
+                        this.queryBuilder.where(
+                            `${this.aliasName}.${key} = :${key}`,
+                            { [key]: value }
+                        );
                         isFirstQuery = false;
                     } else {
-                        this.queryBuilder.andWhere(`${this.aliasName}.${key} = :value`, { value });
+                        this.queryBuilder.andWhere(
+                            `${this.aliasName}.${key} = :${key}`,
+                            { [key]: value }
+                        );
                     }
                 }
             }
         }
+
         return this;
     }
+
 
 
     select(fields: Array<T> = []): this {

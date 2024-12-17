@@ -23,7 +23,7 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('varchar', { length: 100, unique: true })
     prod_slug: string;
 
-    @Column('decimal', { precision: 10, scale: 2 })
+    @Column('decimal', { precision: 10, scale: 0 })
     prod_price: number;
 
     @Column('varchar', { length: 100 })

@@ -11,6 +11,6 @@ export interface IQueries<T = any> {
     // filterBy?: string;
     // filterVal?: string;
     // isDeleted?: string | boolean;
-    // fieldsSelected?: Array<keyof TFieldSelected> | any;
-    // [key: string]: string | number | boolean | any;
+    fieldsSelected?: Array<keyof T> | any;
+    [key: string]: string | number | boolean | any;
 }

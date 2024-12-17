@@ -48,7 +48,7 @@ export class ProductsService {
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page } = query;
         const ALIAS_NAME = "product";
-
+        console.log(fields);
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .leftJoinAndSelect(["pc_category"])
             .select(fields)
@@ -57,7 +57,8 @@ export class ProductsService {
             .where({
                 // "pc_category": "54ccfb6d-a2f5-404f-a59b-d8a780143a8d",
                 // "prod_agePlay": EAgeGroup.Under1Year,
-                "prod_sku": "sku 321"
+                // "prod_sku": "sku 321",
+                // "prod_price": [1000000.0, 1500000.00]
             })
 
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
