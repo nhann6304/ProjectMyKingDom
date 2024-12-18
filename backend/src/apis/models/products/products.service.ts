@@ -8,6 +8,8 @@ import { ProductCategoriesService } from '../product-categories/product-categori
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
 import { UtilORM } from 'src/utils/orm.uutils';
 import { EAgeGroup } from 'src/enums/EAge.enum';
+import { IFilter } from 'src/interfaces/common/IFilterAction.interface';
+import { UtilConvert } from 'src/utils/convert.ultils';
 
 @Injectable()
 export class ProductsService {
@@ -44,43 +46,30 @@ export class ProductsService {
         return result;
     }
 
-
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
-        const { isDeleted, fields, limit, page } = query;
+        const { isDeleted, fields, limit, page, filter } = query;
+
+        const objFilter = UtilConvert.convertJsonToObject(filter)
+
         const ALIAS_NAME = "product";
-        console.log(fields);
+
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .leftJoinAndSelect(["pc_category"])
             .select(fields)
             .skip({ limit, page })
             .take({ limit })
-            .where({
-                // "pc_category": "54ccfb6d-a2f5-404f-a59b-d8a780143a8d",
-                // "prod_agePlay": EAgeGroup.Under1Year,
-                // "prod_sku": "sku 321",
-                // "prod_price": [1000000.0, 1500000.00]
-            })
+            .where(objFilter)
 
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
-
 
         const [items, totalItems] = await Promise.all([
             queryBuilder.getMany(),
             queryBuilder.getCount(),
         ]);
-
         return {
             items,
         }
-
     }
-
-
-
-
-
-
-
 }
 
 

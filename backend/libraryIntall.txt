@@ -23,3 +23,25 @@ npm i @types/slug
 
  nest g resource products  --no-spec
  nest g guard otp
+
+
+
+
+
+
+
+
+ const obj = {
+  prod_name: "xe dap dien",
+  prod_type: "xe may dien"
+};
+
+
+const filterArray = Object.entries(obj).map(([key, value]) => ({
+  f: key,
+  v: value,
+}));
+
+const filterJSON = JSON.stringify(filterArray);
+
+console.log(filterJSON);

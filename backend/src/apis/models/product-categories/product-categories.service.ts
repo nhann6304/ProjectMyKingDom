@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
 import { calculatorSkipPage } from 'src/utils/caculator.utils';
-import { convertStringToBoolean } from 'src/utils/convert.ultils';
 import { Repository } from 'typeorm';
 import { CreateProductCategoryDto, UpdateProductCategoriesDto } from './product-category.dto';
 import { ProductCategoryEntity } from './product-category.entity';
+import { UtilConvert } from 'src/utils/convert.ultils';
 
 @Injectable()
 export class ProductCategoriesService {
@@ -86,7 +86,7 @@ export class ProductCategoriesService {
 
         const filterItemsWithChildren = (data: Array<ProductCategoryEntity>) => {
             return data
-                .filter((val) => val.isDeleted === convertStringToBoolean(query.isDeleted))
+                .filter((val) => val.isDeleted === UtilConvert.convertStringToBoolean(query.isDeleted))
                 .map((val) => ({
                     ...val,
                     children: val.children
