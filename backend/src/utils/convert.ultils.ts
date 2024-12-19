@@ -12,6 +12,7 @@ export class UtilConvert {
         let obj: { [key: string]: any } = {};
 
         const parseObj = JSON.parse(`${val}`) as Partial<IFilter | IFilter[]>;
+
         if (Array.isArray(parseObj)) {
             for (let key in parseObj) {
                 if (Object.prototype.hasOwnProperty.call(parseObj, key)) {
@@ -24,7 +25,6 @@ export class UtilConvert {
         } else {
             obj = { [parseObj.f]: parseObj.v };
         }
-        console.log(obj);
         return obj;
     }
 

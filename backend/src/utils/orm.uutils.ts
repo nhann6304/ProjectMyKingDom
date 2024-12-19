@@ -2,6 +2,7 @@ import { Repository, SelectQueryBuilder } from "typeorm";
 import { calculatorSkipPage } from "./caculator.utils";
 import { CONST_VAL } from "src/constants/value.contants";
 import { start } from "repl";
+import { IRange } from "src/interfaces/common/IFilterAction.interface";
 
 export class UtilORM<T> {
     private queryBuilder: SelectQueryBuilder<T>;
@@ -23,17 +24,17 @@ export class UtilORM<T> {
         return this
     }
 
-    where(filter: Partial<Record<keyof T, string | number | [number, number]>>): this {
+    where(filter: Partial<Record<keyof T, string | number | IRange>>): this {
         let isFirstQuery = true;
 
         for (const key in filter) {
             const value = filter[key];
-
             if (value !== undefined && value !== null) { // Kiểm tra null và undefined
-                if (Array.isArray(value) && value.length === 2) { // Kiểm tra mảng có 2 phần tử
+                if (typeof value === "object") {
+                    const arr = [value.min, value.max];
                     this.queryBuilder.andWhere(
                         `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
-                        { [`${key}_start`]: value[0], [`${key}_end`]: value[1] }
+                        { [`${key}_start`]: arr[0], [`${key}_end`]: arr[1] }
                     );
                 } else {
                     if (isFirstQuery) {
