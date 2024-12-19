@@ -1,12 +1,13 @@
 @echo off
 
+:: Yêu cầu người dùng nhập vào commit message
 set /p commitMessage="Please enter commit message: "
 
-:: Add all changes to git
+:: Thêm tất cả thay đổi vào git
 git add .
 
-:: Commit changes with a message
-git commit -m "%commitMessage"
+:: Commit các thay đổi với commit message mà người dùng đã nhập
+git commit -m "%commitMessage%"
 
-:: Push changes to the 'dev' branch of the 'hs' remote
+:: Đẩy thay đổi lên nhánh 'main'
 git push origin main
