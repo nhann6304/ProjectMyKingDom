@@ -45,3 +45,20 @@ const filterArray = Object.entries(obj).map(([key, value]) => ({
 const filterJSON = JSON.stringify(filterArray);
 
 console.log(filterJSON);
+
+
+
+
+
+
+
+
+
+
+ {
+    "f": "prod_price",
+    "v": {
+      "min": 1,
+      "max": 30
+    }
+  },

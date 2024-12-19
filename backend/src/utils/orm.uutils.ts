@@ -3,6 +3,7 @@ import { calculatorSkipPage } from "./caculator.utils";
 import { CONST_VAL } from "src/constants/value.contants";
 import { start } from "repl";
 import { IRange } from "src/interfaces/common/IFilterAction.interface";
+import { UtilConvert } from "./convert.ultils";
 
 export class UtilORM<T> {
     private queryBuilder: SelectQueryBuilder<T>;
@@ -24,29 +25,40 @@ export class UtilORM<T> {
         return this
     }
 
-    where(filter: Partial<Record<keyof T, string | number | IRange>>): this {
+    where(filter: Partial<Record<keyof T, string | number | IRange>>, isDeleted: string): this {
         let isFirstQuery = true;
+        const isDelete = UtilConvert.convertStringToBoolean(isDeleted); // Chuyển đổi giá trị isDeleted
 
         for (const key in filter) {
             const value = filter[key];
-            if (value !== undefined && value !== null) { // Kiểm tra null và undefined
+            if (value !== undefined && value !== null) {
                 if (typeof value === "object") {
-                    const arr = [value.min, value.max];
-                    this.queryBuilder.andWhere(
-                        `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
-                        { [`${key}_start`]: arr[0], [`${key}_end`]: arr[1] }
-                    );
+                    const { min, max } = value as IRange; // Ép kiểu rõ ràng
+                    if (min !== undefined && max !== undefined) { // Kiểm tra giá trị min/max
+                        if (isFirstQuery) {
+                            this.queryBuilder.where(
+                                `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end AND ${this.aliasName}.isDeleted = :isDelete`,
+                                { [`${key}_start`]: min, [`${key}_end`]: max, isDelete }
+                            );
+                            isFirstQuery = false;
+                        } else {
+                            this.queryBuilder.andWhere(
+                                `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end AND ${this.aliasName}.isDeleted = :isDelete`,
+                                { [`${key}_start`]: min, [`${key}_end`]: max, isDelete }
+                            );
+                        }
+                    }
                 } else {
                     if (isFirstQuery) {
                         this.queryBuilder.where(
-                            `${this.aliasName}.${key} = :${key}`,
-                            { [key]: value }
+                            `${this.aliasName}.${key} = :${key} AND ${this.aliasName}.isDeleted = :isDelete`,
+                            { [key]: value, isDelete }
                         );
                         isFirstQuery = false;
                     } else {
                         this.queryBuilder.andWhere(
-                            `${this.aliasName}.${key} = :${key}`,
-                            { [key]: value }
+                            `${this.aliasName}.${key} = :${key} AND ${this.aliasName}.isDeleted = :isDelete`,
+                            { [key]: value, isDelete }
                         );
                     }
                 }
@@ -55,6 +67,7 @@ export class UtilORM<T> {
 
         return this;
     }
+
 
 
 

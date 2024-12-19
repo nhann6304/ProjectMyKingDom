@@ -58,7 +58,7 @@ export class ProductsService {
             .select(fields)
             .skip({ limit, page })
             .take({ limit })
-            .where(objFilter)
+            .where(objFilter, isDeleted)
 
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
 
