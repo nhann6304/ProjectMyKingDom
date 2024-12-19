@@ -47,8 +47,6 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products, { nullable: false })
     pc_category: ProductCategoryEntity;
 
-
-
     @BeforeInsert()
     @BeforeUpdate()
     async generateSlug() {

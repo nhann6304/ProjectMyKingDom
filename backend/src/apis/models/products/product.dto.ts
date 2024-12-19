@@ -39,14 +39,23 @@ export class CreateProductDto extends PartialType(ProductsEntity) {
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Độ tuổi") })
     prod_agePlay: EAgeGroup;
 
+    @IsOptional()
+    @ApiProperty({ type: "number", required: false, minimum: 0, default: 1 })
+    discount?: number;
+
     @ApiProperty({ example: "54ccfb6d-a2f5-404f-a59b-d8a780143a8d" })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Danh mục sản phẩm") })
     productCate_Id: string;
 
-
     @IsOptional()
     @ApiProperty({ type: "number", required: false, minimum: 0, default: 1 })
     prod_quantity: number;
+}
 
+
+export class UpdateProductDto extends PartialType(CreateProductDto) {
+    @IsOptional()
+    @ApiProperty({ type: "number", required: false, minimum: 0, default: 1 })
+    discount?: number;
 
 }

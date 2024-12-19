@@ -1,9 +1,9 @@
 import { Repository, SelectQueryBuilder } from "typeorm";
-import { calculatorSkipPage } from "./caculator.utils";
 import { CONST_VAL } from "src/constants/value.contants";
 import { start } from "repl";
 import { IRange } from "src/interfaces/common/IFilterAction.interface";
 import { UtilConvert } from "./convert.ultils";
+import { UtilCalculator } from "./caculator.utils";
 
 export class UtilORM<T> {
     private queryBuilder: SelectQueryBuilder<T>;
@@ -89,7 +89,7 @@ export class UtilORM<T> {
 
     skip({ page, limit }: { page: number, limit: number }): this {
         this.queryBuilder.skip(
-            calculatorSkipPage({ limit, page })
+            UtilCalculator.calculatorSkipPage({ limit, page })
         );
         return this;
     }

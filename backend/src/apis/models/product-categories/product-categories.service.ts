@@ -2,11 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
-import { calculatorSkipPage } from 'src/utils/caculator.utils';
 import { Repository } from 'typeorm';
 import { CreateProductCategoryDto, UpdateProductCategoriesDto } from './product-category.dto';
 import { ProductCategoryEntity } from './product-category.entity';
 import { UtilConvert } from 'src/utils/convert.ultils';
+import { UtilCalculator } from 'src/utils/caculator.utils';
 
 @Injectable()
 export class ProductCategoriesService {
@@ -73,7 +73,7 @@ export class ProductCategoriesService {
             .leftJoinAndSelect('parent.children', 'children')
             .take(limit)
             .where('parent.parentId IS NULL')
-            .skip(calculatorSkipPage({ limit, page }))
+            .skip(UtilCalculator.calculatorSkipPage({ limit, page }))
             .select(arrFields)
             .distinct(true) // Đảm bảo không có bản ghi trùng lặp
             .getMany();
@@ -190,7 +190,6 @@ export class ProductCategoriesService {
     }
 
     async deletedProductCate(id: string) {
-        console.log(id);
         const productCate = await this.productCategoriesRepository.findOne({
             where: { id },
             relations: {

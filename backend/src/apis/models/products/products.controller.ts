@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RoleGuard } from 'src/guards/role.guard';
-import { CreateProductDto } from './product.dto';
+import { CreateProductDto, UpdateProductDto } from './product.dto';
 import { Request } from 'express';
 import { OK } from 'src/core/response.core';
 import { RES_MESS } from 'src/constants/constantMessRes.contant';
@@ -42,5 +42,66 @@ export class ProductsController {
       message: RES_MESS.FIND_ALL("Sản phẩm"),
       metadata: items
     })
+  }
+
+  @Patch("update/:id")
+  @ApiOperation({ summary: "Cập nhập sản phẩm" })
+  @UseGuards(AuthGuard, RoleGuard)
+  async update(
+    @Param("id") id: string,
+    @Req() req: Request,
+    @Body() updateData: UpdateProductDto
+  ) {
+    const items = await this.productsService.updateProduct({ id, req, updateData })
+
+    return new OK({
+      message: RES_MESS.UPDATE("Sản phẩm"),
+      metadata: items
+    })
+  }
+
+
+  @Patch("sort-delete/:id")
+  @ApiOperation({ summary: "Xóa mềm sản phẩm" })
+  @UseGuards(AuthGuard, RoleGuard)
+  async sortDelete(
+    @Param("id") id: string,
+    @Req() req: Request
+  ) {
+
+    await this.productsService.sortDeleted({ req, id })
+
+    return new OK({
+      message: RES_MESS.SORT_DELETED("Sản phẩm"),
+    })
+  }
+
+
+  @Patch("restore/:id")
+  @ApiOperation({ summary: "Khôi phục Sản phẩm" })
+  @UseGuards(AuthGuard, RoleGuard)
+  async restoreDelete(
+    @Param("id") id: string,
+  ) {
+
+    await this.productsService.restoreDelete({ id })
+
+    return new OK({
+      message: RES_MESS.RESTORE_DELETE("Sản phẩm"),
+    })
+  }
+
+  @Delete("deleted/:id")
+  @ApiOperation({ summary: "Xóa sản phẩm" })
+  @UseGuards(AuthGuard, RoleGuard)
+  async deletedProduct(
+    @Param("id") id: string
+  ) {
+    await this.productsService.deleteProduct(id);
+
+    return new OK({
+      message: RES_MESS.DELETE("Sản phẩm")
+    })
+
   }
 }
