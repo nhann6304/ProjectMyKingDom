@@ -1,6 +1,6 @@
 import * as sharp from 'sharp';
 import * as path from 'path';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { promises as fs } from 'fs';
@@ -13,6 +13,19 @@ export class ImagesService {
     @InjectRepository(ImageEntity)
     private readonly imagesRepositories: Repository<ImageEntity>,
   ) { }
+
+
+
+
+  async findById({ id }: { id: string }) {
+    const data = await this.imagesRepositories.findOne({
+      where: { id },
+      // relations: {
+      //   pc_category: true
+      // }
+    })
+    return data
+  }
 
 
   async create({
@@ -47,8 +60,6 @@ export class ImagesService {
       await fs.writeFile(filePath, file.buffer);
 
       // Lưu database
-      console.log(file);
-
       const createData = await this.imagesRepositories.create({
         img_key: "",
         img_path: filePath,
@@ -58,7 +69,6 @@ export class ImagesService {
         img_width: width,
         img_url: `${HOST_SERVER}/${file.originalname}`,
         img_alt: file.originalname.split(".")[0],
-        // updatedAt: null,
         createdBy: me
       })
 
@@ -68,4 +78,67 @@ export class ImagesService {
     const imageUpload = await Promise.all(uploadPromise);
     return imageUpload
   }
+
+
+  async sortDeleted({ id, req }: { req: Request, id: string }) {
+    const me = req['user']
+
+    const findImage = await this.findById({ id });
+
+    if (!findImage) {
+      throw new BadRequestException("Hình ảnh không tồn tại");
+    }
+
+    if (findImage.isDeleted) {
+      throw new BadRequestException("Hình ảnh đã được xóa");
+
+    }
+
+    await this.imagesRepositories.update(id, {
+      isDeleted: true,
+      deletedBy: me,
+      deletedAt: new Date()
+    })
+
+    return true
+  }
+
+  async restoreDelete({ id }: { id: string }) {
+
+    const findImage = await this.findById({ id });
+
+    if (!findImage) {
+      throw new BadRequestException("Hình ảnh không tồn tại");
+    }
+
+    if (!findImage.isDeleted) {
+      throw new BadRequestException("Hình ảnh đã được khôi phục");
+    }
+
+    await this.imagesRepositories.update(id, {
+      isDeleted: false,
+      deletedAt: null
+    })
+
+    return true
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+
+    const findImage = await this.imagesRepositories.findOne({ where: { id }, });
+
+
+    if (!findImage) {
+      throw new BadRequestException("Hình ảnh không tồn tại");
+    }
+
+    if (findImage.isDeleted === false) {
+      throw new BadRequestException("Hình ảnh không nằm trong thùng rác");
+    }
+
+    await this.imagesRepositories.delete(id);
+
+    return true
+  }
+
 }

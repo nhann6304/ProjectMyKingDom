@@ -62,16 +62,18 @@ export class ProductsService {
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
 
-        const objFilter = UtilConvert.convertJsonToObject(filter)
-
+        const objFilter = UtilConvert.convertJsonToObject(filter);
         const ALIAS_NAME = "product";
 
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .leftJoinAndSelect(["pc_category"])
             .select(fields)
             .skip({ limit, page })
-            .take({ limit })
-            .where(objFilter, isDeleted)
+            .take({ limit });
+
+        if (objFilter !== undefined) {
+            result.where(objFilter, isDeleted);
+        }
 
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
 
@@ -79,10 +81,13 @@ export class ProductsService {
             queryBuilder.getMany(),
             queryBuilder.getCount(),
         ]);
+
         return {
             items,
-        }
+            totalItems,
+        };
     }
+
 
 
     async updateProduct({ id, req, updateData }: { updateData: UpdateProductDto, req: Request, id: string }) {

@@ -7,24 +7,27 @@ export class UtilConvert {
         const result = val === "true"
         return result
     }
-
     static convertJsonToObject(val: IFilter) {
         let obj: { [key: string]: any } = {};
 
-        const parseObj = JSON.parse(`${val}`) as Partial<IFilter | IFilter[]>;
+        if (val !== undefined) {
+            const parseObj = JSON.parse(`${val}`) as Partial<IFilter | IFilter[]>;
 
-        if (Array.isArray(parseObj)) {
-            for (let key in parseObj) {
-                if (Object.prototype.hasOwnProperty.call(parseObj, key)) {
-                    const item = parseObj[key] as IFilter;
-                    if (item && item.f && item.v !== undefined) {
-                        obj[item.f] = item.v;
+            if (Array.isArray(parseObj)) {
+                for (let key in parseObj) {
+                    if (Object.prototype.hasOwnProperty.call(parseObj, key)) {
+                        const item = parseObj[key] as IFilter;
+                        if (item && item.f && item.v !== undefined) {
+                            obj[item.f] = item.v;
+                        }
                     }
                 }
+            } else {
+                obj = { [parseObj.f]: parseObj.v };
             }
-        } else {
-            obj = { [parseObj.f]: parseObj.v };
         }
+
+
         return obj;
     }
 

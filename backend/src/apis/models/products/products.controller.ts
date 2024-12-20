@@ -36,6 +36,7 @@ export class ProductsController {
     @Query() query: AQueries
   ) {
 
+
     const items = await this.productsService.findAllProduct({ query })
 
     return new OK({
@@ -59,7 +60,6 @@ export class ProductsController {
       metadata: items
     })
   }
-
 
   @Patch("sort-delete/:id")
   @ApiOperation({ summary: "Xóa mềm sản phẩm" })
