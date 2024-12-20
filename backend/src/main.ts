@@ -19,7 +19,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalFilters(new TypeOrmExceptionFilter());
   app.enableCors({
-    origin: [process.env.CLIENT_HOST_CORS],
+    // origin: [process.env.CLIENT_HOST_CORS],
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });

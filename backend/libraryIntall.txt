@@ -19,10 +19,16 @@ npm i @types/nodemailer
 npm i slug
 npm i @types/slug
 
+- Hình ảnh
+npm i multer
+npm i --save-dev @types/multer
+npm i --save @nestjs/serve-static
+npm i sharp
 
 
- nest g resource products  --no-spec
- nest g guard otp
+
+nest g resource products  --no-spec
+nest g guard otp
 
 
 
