@@ -3,7 +3,6 @@ import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
 import { IProductCategory } from "src/interfaces/models/product-categories.interface";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { ProductsEntity } from "../products/product.entity";
-import { UserEntity } from "../users/user.entity";
 
 @Entity("product-categories")
 export class ProductCategoryEntity extends ABaseModel implements IProductCategory {

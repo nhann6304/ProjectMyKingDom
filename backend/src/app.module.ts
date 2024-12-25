@@ -4,11 +4,12 @@ import mysqlConfig from './config/mysql.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersModule } from './apis/models/users/users.module';
 import { AuthModule } from './apis/common/auth/auth.module';
-import { ProductCategoriesModule } from './apis/models/product-categories/product-categories.module';
-import { ProductsModule } from './apis/models/products/products.module';
+import { ProductsModule } from './apis/models/product-management/products/products.module';
 import { ImagesModule } from './apis/common/images/images.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CartsModule } from './apis/models/product-management/carts/carts.module';
+import { ProductCategoriesModule } from './apis/models/product-management/product-categories/product-categories.module';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     //Product    
     ProductCategoriesModule,
     ProductsModule,
-
+    CartsModule,
+    //
     ImagesModule
 
   ],

@@ -7,7 +7,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RoleGuard } from 'src/guards/role.guard';
 import { OtpModule } from 'src/apis/common/otp/otp.module';
 import { TokenModule } from 'src/apis/common/token/token.module';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '../../users/users.module';
 
 @Module({
   imports: [

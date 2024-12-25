@@ -5,6 +5,7 @@ export class RES_MESS {
         return `Tạo ${value} thành công`
     }
 
+
     static FIND_ALL(value: string) {
         return `Lấy toàn bộ ${value} thành công`
     }

@@ -2,9 +2,11 @@ import { ABaseModel } from 'src/abstracts/common/ABaseModel.abstracts';
 import { ERole } from 'src/enums/ERole.enum';
 import { EStatusUser } from 'src/enums/EStatusUser.enum';
 import { IAddress, IUser } from 'src/interfaces/common/IUser.interface';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { AddressEntity } from '../address/address.entity';
 import { EGender } from 'src/enums/EGender.enum';
+import { ICart } from 'src/interfaces/models/cart.interface';
+import { CartEntity } from '../product-management/carts/cart.entity';
 
 @Entity('users')
 export class UserEntity extends ABaseModel implements IUser {
@@ -35,6 +37,9 @@ export class UserEntity extends ABaseModel implements IUser {
 
     @OneToMany(() => AddressEntity, (address) => address.user, { cascade: true })
     user_address?: AddressEntity[];
+
+    @OneToOne(() => CartEntity, (cart) => cart.cart_users, { cascade: true })
+    user_cart: CartEntity;
 
     @Column({ nullable: true })
     user_avatar?: string;

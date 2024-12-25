@@ -11,13 +11,19 @@ import { EAgeGroup } from 'src/enums/EAge.enum';
 import { IFilter } from 'src/interfaces/common/IFilterAction.interface';
 import { UtilConvert } from 'src/utils/convert.ultils';
 import { UtilCalculator } from 'src/utils/caculator.utils';
+import { CartsService } from '../carts/carts.service';
+import { IUser } from 'src/interfaces/common/IUser.interface';
+import { UserEntity } from '../../users/user.entity';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(ProductsEntity)
         private productRepository: Repository<ProductsEntity>,
-        private productCategoriesService: ProductCategoriesService
+        @InjectRepository(ProductsEntity)
+        private productCategoriesService: ProductCategoriesService,
+        private cardsService: CartsService
+
     ) { }
 
 
@@ -58,6 +64,27 @@ export class ProductsService {
 
         return result;
     }
+
+    async addToCart({ req, id }: { req: Request, id: string }) {
+        const me = req['user'] as UserEntity;
+        const findProduct = await this.productRepository.find({ where: { id } });
+
+        const findCart = await this.cardsService.findCart({ user: me })
+
+        if (!findCart) {
+            const resultCart = await this.cardsService.createCart({ product: findProduct, user: me })
+        }
+
+
+
+        return true
+
+    }
+
+
+
+
+
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
