@@ -2,10 +2,11 @@ import * as slug from "slug";
 import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
 import { EAgeGroup } from "src/enums/EAge.enum";
 import { IProduct } from "src/interfaces/models/product.interface";
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToMany, ManyToOne } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { ProductCategoryEntity } from "../product-categories/product-category.entity";
 import { UserEntity } from "../../users/user.entity";
 import { CartEntity } from "../carts/cart.entity";
+import { CartDetailsEntity } from "../cart-details/cart-details.entity";
 
 @Entity("products")
 export class ProductsEntity extends ABaseModel implements IProduct {
@@ -48,8 +49,11 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products, { nullable: false })
     pc_category: ProductCategoryEntity;
 
-    @ManyToMany(() => CartEntity, (cart) => cart.cart_product, { nullable: true })
+    @ManyToMany(() => CartEntity, (cart) => cart.cart_products, { nullable: true })
     prod_cart: CartEntity | null
+
+    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.product)
+    cartProducts: CartDetailsEntity[];
 
     @BeforeInsert()
     @BeforeUpdate()

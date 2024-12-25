@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { CartDetailsEntity } from 'src/apis/models/product-management/cart-details/cart-details.entity';
 import { UserEntity } from 'src/apis/models/users/user.entity';
 
 

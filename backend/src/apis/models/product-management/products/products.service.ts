@@ -20,12 +20,10 @@ export class ProductsService {
     constructor(
         @InjectRepository(ProductsEntity)
         private productRepository: Repository<ProductsEntity>,
-        @InjectRepository(ProductsEntity)
         private productCategoriesService: ProductCategoriesService,
         private cardsService: CartsService
 
     ) { }
-
 
     async findById({ id }: { id: string }) {
         const data = await this.productRepository.findOne({
@@ -67,24 +65,17 @@ export class ProductsService {
 
     async addToCart({ req, id }: { req: Request, id: string }) {
         const me = req['user'] as UserEntity;
-        const findProduct = await this.productRepository.find({ where: { id } });
+        const findProduct = await this.productRepository.findOne({ where: { id } });
 
-        const findCart = await this.cardsService.findCart({ user: me })
-
-        if (!findCart) {
-            const resultCart = await this.cardsService.createCart({ product: findProduct, user: me })
+        if (!findProduct) {
+            throw new BadRequestException("Không tìm thấy sản phẩm");
         }
 
-
+        await this.cardsService.createCart({ user: me, productItem: findProduct });
 
         return true
 
     }
-
-
-
-
-
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;

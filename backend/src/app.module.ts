@@ -10,6 +10,7 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CartsModule } from './apis/models/product-management/carts/carts.module';
 import { ProductCategoriesModule } from './apis/models/product-management/product-categories/product-categories.module';
+import { CartDetailsModule } from './apis/models/product-management/cart-details/cart-details.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { ProductCategoriesModule } from './apis/models/product-management/produc
     ProductsModule,
     CartsModule,
     //
-    ImagesModule
+    ImagesModule,
+    CartDetailsModule
 
   ],
   controllers: [],

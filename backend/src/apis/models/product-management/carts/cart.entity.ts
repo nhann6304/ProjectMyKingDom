@@ -1,23 +1,17 @@
-import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
-import { IUser } from "src/interfaces/common/IUser.interface";
-import { ICart } from "src/interfaces/models/cart.interface";
-import { IProduct } from "src/interfaces/models/product.interface";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "../../users/user.entity";
-import { ProductsEntity } from "../products/product.entity";
+import { CartDetailsEntity } from "../cart-details/cart-details.entity";
+import { ICart } from "src/interfaces/models/cart.interface";
 
 @Entity("carts")
-export class CartEntity extends ABaseModel implements ICart {
+export class CartEntity implements ICart {
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-    @Column('int', { default: 1 })
-    cart_quantity: number;
-
-    @ManyToMany(() => ProductsEntity, (product) => product.prod_cart)
-    @JoinTable()
-    cart_product: IProduct[];
+    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.cart)
+    cart_products: CartDetailsEntity[];
 
     @OneToOne(() => UserEntity, (user) => user.user_cart)
     @JoinColumn({ name: "user_id" })
-    cart_users: IUser;
-
+    cart_users: UserEntity;
 }

@@ -13,13 +13,16 @@ import { ProductCategoriesService } from '../product-categories/product-categori
 import { CartsModule } from '../carts/carts.module';
 import { CartEntity } from '../carts/cart.entity';
 import { CartsService } from '../carts/carts.service';
+import { CartDetailsModule } from '../cart-details/cart-details.module';
+import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ProductsEntity, ProductCategoryEntity, CartEntity]),
+    TypeOrmModule.forFeature([ProductsEntity, ProductCategoryEntity, CartEntity, CartDetailsEntity]),
     UsersModule,
     TokenModule,
     CartsModule,
+    CartDetailsModule,
     ProductCategoriesModule
   ],
   controllers: [ProductsController],
