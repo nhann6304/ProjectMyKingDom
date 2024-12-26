@@ -68,12 +68,22 @@ export class UtilORM<T> {
         return this;
     }
 
+    whereUser(userId: string): this {
+        this.queryBuilder
+            .where('cart.cart_users.id = :userId', { userId }); // Điều kiện lấy theo userId
 
+        return this
+    }
 
-
-    select(fields: Array<T> = []): this {
+    select(fields: Array<T> = [], fieldOption: Array<string> = []): this {
         let arrFields: Array<string> = [];
         arrFields.push(`${this.aliasName}.id`);
+
+        // fieldOption là các trường k dính tới bảng này
+        for (let f = 0; f < fieldOption.length; f++) {
+            arrFields.push(fieldOption[f]);
+        }
+
         if (Array.isArray(fields)) {
             for (let i = 0; i < fields.length; i++) {
                 arrFields.push((`${this.aliasName}.${fields[i]}`))
@@ -81,6 +91,8 @@ export class UtilORM<T> {
         } else {
             arrFields.push(`${this.aliasName}.${fields}`)
         }
+
+        console.log(arrFields);
 
         this.queryBuilder.select(arrFields)
 

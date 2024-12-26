@@ -1,6 +1,3 @@
 
 
-export class CreateCartDto {
-
-
-}
+export class UpdateCartDto { }

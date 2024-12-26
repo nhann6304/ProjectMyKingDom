@@ -28,30 +28,12 @@ export class ProductsController {
     })
   }
 
-  @Patch("add-to-card/:id")
-  @ApiOperation({ summary: "Thêm sản phẩm vào giỏ hàng" })
-  @UseGuards(AuthGuard)
-  async addProductToCart(
-    @Param("id") id: string,
-    @Req() req: Request
-  ) {
-
-    await this.productsService.addToCart({ req, id })
-
-    return new OK({
-      message: RES_MESS.UPDATE("Giỏ hàng")
-    })
-  }
-
-
   @Get("find-all")
   @ApiOperation({ summary: "Lấy toàn bộ sản phẩm" })
   @UseGuards(AuthGuard)
   async findAll(
     @Query() query: AQueries
   ) {
-
-
     const items = await this.productsService.findAllProduct({ query })
 
     return new OK({

@@ -63,20 +63,6 @@ export class ProductsService {
         return result;
     }
 
-    async addToCart({ req, id }: { req: Request, id: string }) {
-        const me = req['user'] as UserEntity;
-        const findProduct = await this.productRepository.findOne({ where: { id } });
-
-        if (!findProduct) {
-            throw new BadRequestException("Không tìm thấy sản phẩm");
-        }
-
-        await this.cardsService.createCart({ user: me, productItem: findProduct });
-
-        return true
-
-    }
-
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
 
