@@ -44,22 +44,22 @@ export class CartsService {
       await this.cartRepository.save(newCart);
 
       const newDetailProduct = this.cartDetailsRepository.create({
-        cart: newCart,
-        product: findProduct,
+        cart_detail: newCart,
+        product_detail: findProduct,
         quantity,
         total_price: findProduct.prod_price * quantity,
       });
       await this.cartDetailsRepository.save(newDetailProduct);
     } else {
-      const existingProduct = cart.cart_products.find((cp) => cp.product.id === findProduct.id);
+      const existingProduct = cart.cart_products.find((cp) => cp.product_detail.id === findProduct.id);
       if (existingProduct) {
         existingProduct.quantity += quantity;
         existingProduct.total_price = existingProduct.quantity * findProduct.prod_price;
         await this.cartDetailsRepository.save(existingProduct);
       } else {
         const newDetailProduct = this.cartDetailsRepository.create({
-          cart: cart,
-          product: findProduct,
+          cart_detail: cart,
+          product_detail: findProduct,
           quantity,
           total_price: findProduct.prod_price * quantity,
         });
@@ -82,7 +82,7 @@ export class CartsService {
     }
 
     const findCartDetail = await this.cartDetailsRepository.findOne({
-      where: { product: { id: findProduct.id } },
+      where: { product_detail: { id: findProduct.id } },
       relations: ['product'],
     });
 
@@ -107,7 +107,7 @@ export class CartsService {
     const ALIAS_NAME = "cart_detail"
 
     const result = new UtilORM<CartDetailsEntity>(this.cartDetailsRepository, ALIAS_NAME)
-      .leftJoinAndSelect(["cart", "product"])
+      .leftJoinAndSelect(["cart_detail", "product_detail"])
       .select(fields, ["product"])
       .skip({ limit, page })
       .take({ limit })

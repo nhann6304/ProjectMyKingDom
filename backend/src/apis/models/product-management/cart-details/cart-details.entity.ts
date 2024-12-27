@@ -9,11 +9,11 @@ export class CartDetailsEntity {
 
     @ManyToOne(() => CartEntity, (cart) => cart.cart_products, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'cart_id' })  // Tên cột ngoại khóa trong bảng CartDetails
-    cart: CartEntity;
+    cart_detail: CartEntity;
 
     @ManyToOne(() => ProductsEntity, (product) => product.cartProducts, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'product_id' })  // Tên cột ngoại khóa trong bảng CartDetails
-    product: ProductsEntity;
+    product_detail: ProductsEntity;
 
     @Column({ type: 'int', default: 1 })
     quantity: number;

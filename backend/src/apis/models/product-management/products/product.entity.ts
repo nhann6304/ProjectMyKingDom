@@ -52,7 +52,7 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @ManyToMany(() => CartEntity, (cart) => cart.cart_products, { nullable: true })
     prod_cart: CartEntity | null
 
-    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.product)
+    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.product_detail)
     cartProducts: CartDetailsEntity[];
 
     @BeforeInsert()

@@ -8,7 +8,7 @@ export class CartEntity implements ICart {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.cart)
+    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.cart_detail)
     cart_products: CartDetailsEntity[];
 
     @OneToOne(() => UserEntity, (user) => user.user_cart)
