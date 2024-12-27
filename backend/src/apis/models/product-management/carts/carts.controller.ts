@@ -63,9 +63,11 @@ export class CartsController {
   @UseGuards(AuthGuard)
 
   async deletedCartProduct(
-    @Param("id") id: string
+    @Param("id") id: string,
+    @Req() req: Request
   ) {
-    console.log(id);
+
+    await this.cartsService.deleteProductToCart({ id, req });
 
 
     return new OK({

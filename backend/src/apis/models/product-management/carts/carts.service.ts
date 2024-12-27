@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { UserEntity } from '../../users/user.entity';
 import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { ProductsEntity } from '../products/product.entity';
@@ -121,6 +121,19 @@ export class CartsService {
 
     return items
 
+  }
+
+  async deleteProductToCart({ id, req }: { id: string, req: Request }) {
+    const me = req['user'] as UserEntity
+
+    const cartUser = await this.cartRepository.findOne({
+      where: { cart_users: { id: me.id } },
+      relations: ['cart_products', 'cart_products.product'],
+    });
+
+    await this.cartDetailsRepository.delete(id);
+
+    return true
   }
 
 }
