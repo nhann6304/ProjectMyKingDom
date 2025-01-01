@@ -1,0 +1,30 @@
+@use '@/app/globals.scss' as *;
+
+.admin-home-layout {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    // Left and Right sections default width
+    &-left,
+    &-right {
+        width: 100%;
+    }
+
+    // Đổi hướng flex thành column cho màn hình nhỏ hơn 768px
+    @include resTL-768() {
+        flex-direction: column;
+    }
+
+    // Thay đổi width của Left và Right cho màn hình lớn hơn 1024px
+    @include resLAP-1024() {
+        &-left {
+            width: 66.6667%; // 2/3 chiều rộng
+        }
+
+        &-right {
+            width: 33.3333%; // 1/3 chiều rộng
+        }
+    }
+}

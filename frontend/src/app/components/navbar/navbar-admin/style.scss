@@ -1,0 +1,118 @@
+@use '@/app/globals.scss' as *;
+
+.navbar-admin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        border-radius: 999px; // Bo tròn toàn bộ
+        border: 1.5px solid #d1d5db; // Màu xám nhạt
+        padding: 0 0.5rem;
+
+        input {
+            width: 20rem;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            outline: none;
+
+            &::placeholder {
+                color: #9ca3af; // Màu chữ nhạt
+            }
+        }
+
+        img {
+            width: 1.4rem;
+            height: 1.4rem;
+        }
+    }
+
+    .icon-container {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        justify-content: flex-end;
+        width: 100%;
+
+        .icon {
+            background: #ffffff;
+            border-radius: 50%;
+            width: 1.75rem;
+            height: 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
+
+            &.with-notification {
+                .notification-badge {
+                    position: absolute;
+                    top: -0.75rem;
+                    right: -0.75rem;
+                    width: 1.25rem;
+                    height: 1.25rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #9333ea; // Màu tím
+                    color: #ffffff;
+                    border-radius: 50%;
+                    font-size: 0.75rem;
+                }
+            }
+        }
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+
+        .user-name {
+            font-size: 1rem;
+            line-height: 1rem;
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 0.625rem; // 10px
+            color: #9ca3af; // Màu xám chữ
+        }
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+
+    @include resLAP-1024() {
+        .search-bar {
+            display: flex;
+        }
+
+        .icon-container .icon.with-notification .notification-badge {
+            display: flex;
+        }
+    }
+
+    @include resTL-768() {
+        .search-bar {
+            display: none;
+        }
+
+
+    }
+}

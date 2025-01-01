@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-white: #F7F8FA;
+}
+
+
+body {
+  // font-family: 'Roboto', sans-serif;
+  font-family: "Inter", sans-serif !important;
+  font-size: 1.6rem;
+}
+
+
+$MB: 425px;
+$TL: 768px;
+$LAP: 1024px;
+$BLAP: 1440px;
+
+@mixin resMB-425 () {
+  @media screen and (max-width: $MB) {
+    @content;
+  }
+}
+
+@mixin resTL-768() {
+  @media screen and (max-width: $TL) {
+    @content;
+  }
+}
+
+@mixin resLAP-1024() {
+  @media screen and (max-width: $LAP) {
+    @content;
+  }
+}
+
+@mixin resBLAP-1440() {
+  @media screen and (max-width: $BLAP) {
+    @content;
+  }
+}

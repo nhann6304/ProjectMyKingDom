@@ -1,0 +1,97 @@
+@use '@/app/globals.scss' as *;
+
+.dashboard-layout {
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+
+    .dashboard-sidebar {
+        width: 14%;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 1rem;
+
+            img {
+
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                transition: transform 0.3s ease;
+            }
+
+            .logo-text {
+                font-size: 1.4rem;
+                font-weight: 500;
+                transition: opacity 0.3s ease;
+            }
+        }
+    }
+
+    .dashboard-content {
+        width: 86%;
+        background-color: var(--color-white);
+        // overflow: scroll;
+    }
+
+    @include resBLAP-1440() {
+        .dashboard-sidebar {
+            width: 8%;
+
+        }
+
+        .dashboard-content {
+            width: 84%;
+        }
+    }
+
+    @include resLAP-1024() {
+        .dashboard-sidebar {
+            width: 16%;
+
+            .logo {
+                .logo-text {
+                    display: none;
+                }
+
+                img {
+                    transform: scale(0.9);
+                }
+            }
+        }
+
+        .dashboard-content {
+            width: 84%;
+        }
+    }
+
+    @include resTL-768() {
+        .dashboard-sidebar {
+            width: 14%;
+
+            .logo {
+                img {
+                    transform: scale(0.8);
+                }
+            }
+        }
+
+        .dashboard-content {
+            width: 92%;
+        }
+    }
+
+    @include resMB-425() {
+        .dashboard-sidebar {
+
+            .logo {
+                img {
+                    transform: scale(1.8);
+                }
+            }
+        }
+    }
+}
