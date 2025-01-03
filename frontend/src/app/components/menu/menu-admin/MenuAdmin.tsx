@@ -12,7 +12,7 @@ const MenuContainerStyled = styled.div`
     .menu-section {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1rem;
         padding: 0 1rem;
 
         .menu-title {
@@ -20,7 +20,7 @@ const MenuContainerStyled = styled.div`
             color: #9ca3af; 
             font-weight: 300;
             margin: 5px 0;
-            font-size : 1.2rem;
+            font-size : 2rem;
 
             @media screen and (min-width: 1024px) { 
                 display: block;
@@ -33,7 +33,7 @@ const MenuContainerStyled = styled.div`
             justify-content: center;
             gap: 1rem; 
             color: #6b7280; 
-            padding: 0.5rem 0; 
+            padding: 5px 0; 
             border-radius: 0.375rem; 
 
             @media screen and (min-width: 1024px) { 
@@ -45,11 +45,12 @@ const MenuContainerStyled = styled.div`
             }
 
             img {
-                width: 20px;
-                height: 20px;
+                width: 2.4rem;
+                height: 2.4rem;
             }
 
             span {
+                font-size: 1.6rem;
                 display: none;
                 
                 @media screen and (min-width: 1024px) { 

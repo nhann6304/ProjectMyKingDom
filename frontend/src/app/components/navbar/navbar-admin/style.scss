@@ -5,46 +5,49 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
+    width: 100%;
 
     .search-bar {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 1rem;
-        border-radius: 999px; // Bo tròn toàn bộ
-        border: 1.5px solid #d1d5db; // Màu xám nhạt
-        padding: 0 0.5rem;
+        gap: 1rem;
+        border-radius: 2rem;
+        border: 1.5px solid var(--color-gray-300);
+        padding: 0 1rem;
 
         input {
-            width: 20rem;
+            height: 3rem;
+            width: 15rem;
             padding: 0.5rem;
+            font-size: 2.2rem;
             background: transparent;
             border: none;
             outline: none;
+            font-size: 1.4rem;
 
             &::placeholder {
-                color: #9ca3af; // Màu chữ nhạt
+                color: #9ca3af;
             }
         }
 
         img {
-            width: 1.4rem;
-            height: 1.4rem;
+            width: 1.6rem;
+            height: 1.6rem;
         }
     }
 
     .icon-container {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 2rem;
         justify-content: flex-end;
         width: 100%;
 
         .icon {
             background: #ffffff;
             border-radius: 50%;
-            width: 1.75rem;
-            height: 1.75rem;
+            width: 2.5rem;
+            height: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -52,24 +55,24 @@
             position: relative;
 
             img {
-                width: 20px;
-                height: 20px;
+                width: 2rem;
+                height: 2rem;
             }
 
             &.with-notification {
                 .notification-badge {
                     position: absolute;
-                    top: -0.75rem;
-                    right: -0.75rem;
-                    width: 1.25rem;
-                    height: 1.25rem;
+                    top: -0.5rem;
+                    right: -0.5rem;
+                    width: 1.6rem;
+                    height: 1.6rem;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     background: #9333ea; // Màu tím
                     color: #ffffff;
                     border-radius: 50%;
-                    font-size: 0.75rem;
+                    font-size: 0.9rem;
                 }
             }
         }
@@ -81,26 +84,27 @@
         text-align: right;
 
         .user-name {
-            font-size: 1rem;
-            line-height: 1rem;
+            font-size: 1.6rem;
+            line-height: 1.2rem;
             font-weight: 500;
         }
 
         .user-role {
-            font-size: 0.625rem; // 10px
+            font-size: 1.2rem; // 12px
             color: #9ca3af; // Màu xám chữ
         }
     }
 
     .avatar {
-        width: 36px;
-        height: 36px;
+        width: 3.5rem;
+        height: 3.5rem;
         border-radius: 50%;
     }
 
     @include resLAP-1024() {
         .search-bar {
             display: flex;
+            gap: 1rem;
         }
 
         .icon-container .icon.with-notification .notification-badge {
@@ -112,7 +116,5 @@
         .search-bar {
             display: none;
         }
-
-
     }
 }
