@@ -1,0 +1,17 @@
+.container-chart {
+    background: white;
+    height: 100%;
+    padding: 1rem;
+
+    .chart-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+    }
+}

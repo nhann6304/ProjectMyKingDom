@@ -1,12 +1,18 @@
 @use '@/app/globals.scss' as *;
 
 .dashboard-layout {
-    height: 100vh;
+    height: auto;
     display: flex;
     justify-content: space-between;
+    position: relative;
 
     .dashboard-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
         width: 14%;
+        background: #ffff;
 
         .logo {
             display: flex;
@@ -16,7 +22,6 @@
             padding: 1rem;
 
             img {
-
                 width: 32px;
                 height: 32px;
                 object-fit: contain;
@@ -32,19 +37,19 @@
     }
 
     .dashboard-content {
+        margin-left: 14%;
         width: 86%;
         background-color: var(--color-white);
-        // overflow: scroll;
     }
 
     @include resBLAP-1440() {
         .dashboard-sidebar {
             width: 8%;
-
         }
 
         .dashboard-content {
-            width: 84%;
+            margin-left: 8%;
+            width: 92%;
         }
     }
 
@@ -64,6 +69,7 @@
         }
 
         .dashboard-content {
+            margin-left: 16%;
             width: 84%;
         }
     }
@@ -80,18 +86,22 @@
         }
 
         .dashboard-content {
-            width: 92%;
+            margin-left: 14%;
+            width: 86%;
         }
     }
 
     @include resMB-425() {
         .dashboard-sidebar {
-
             .logo {
                 img {
                     transform: scale(1.8);
                 }
             }
+        }
+
+        .dashboard-content {
+            margin-left: 14%;
         }
     }
 }

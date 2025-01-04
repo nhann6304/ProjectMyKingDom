@@ -14,7 +14,7 @@
         gap: 1rem;
 
 
-        .section-chart {
+        .section-top-chart {
             display: flex;
             gap: 2rem;
 
@@ -30,6 +30,11 @@
             }
         }
 
+        .section-bottom-chart {
+            width: 100%;
+            height: 50rem;
+        }
+
         .user-cards {
             display: flex;
             gap: 1rem;
@@ -40,7 +45,9 @@
 
     &-right {
         width: 33.3333%;
-
+        display: flex;
+        flex-direction: column;
+        gap: 3.2rem;
     }
 
     @include resLAP-1024() {
@@ -49,11 +56,32 @@
         &-left {
             width: 100%;
 
-            .section-chart {
-                // flex-direction: column;
+            .section-top-chart {
 
                 .chart-count {
                     width: 33.3333%;
+                }
+            }
+        }
+
+        &-right {
+            width: 100%;
+        }
+    }
+
+    @include resMB-425() {
+        &-left {
+            width: 100%;
+
+            .section-top-chart {
+                flex-direction: column;
+
+                .chart-count {
+                    width: 100%;
+                }
+
+                .chart-attendance {
+                    width: 100%;
                 }
             }
         }

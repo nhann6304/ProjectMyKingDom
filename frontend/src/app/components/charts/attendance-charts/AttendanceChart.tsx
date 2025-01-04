@@ -1,4 +1,5 @@
 "use client";
+import "./style.scss"
 import moreDark from "@/app/assets/common/icons/moreDark.png";
 import Image from "next/image";
 import {
@@ -53,9 +54,9 @@ export default function AttendanceChart() {
     ];
 
     return (
-        <div className="bg-white rounded-lg p-4 h-full">
-            <div className="flex justify-between items-center">
-                <h1 className="text-lg font-semibold">Attendance</h1>
+        <div className="container-chart">
+            <div className="chart-title">
+                <h1>Attendance</h1>
                 <Image src={moreDark} alt="moreDark" width={20} height={20} />
             </div>
             <ResponsiveContainer width="100%" height="90%">
@@ -64,10 +65,10 @@ export default function AttendanceChart() {
                     <XAxis
                         dataKey="name"
                         axisLine={true}
-                        tick={{ fill: "#d1d5db" }}
+                        tick={{ fill: "#d1d5db", fontSize: "1.4rem", fontWeight: 500 }}
                         tickLine={false}
                     />
-                    <YAxis axisLine={true} tick={{ fill: "#d1d5db" }} tickLine={false} />
+                    <YAxis axisLine={true} tick={{ fill: "#d1d5db", fontSize: "1.2rem", fontWeight: 500 }} tickLine={false} />
                     <Tooltip
                         contentStyle={{
                             borderRadius: "10px",
@@ -81,9 +82,8 @@ export default function AttendanceChart() {
                         align="left"
                         verticalAlign="top"
                         wrapperStyle={{
-                            paddingTop: "20px",
-                            paddingBottom: "2rem",
-                            fontSize: "1.8rem",
+                            padding: "2rem",
+                            fontSize: "1.6rem",
                             textTransform: "capitalize",
                         }}
                     />

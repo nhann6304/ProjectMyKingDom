@@ -1,0 +1,35 @@
+.react-calendar {
+    width: 100% !important;
+    border: none !important;
+    font-size: 1.4rem;
+    font-family: "Inter", sans-serif !important;
+}
+
+.react-calendar__tile--active {
+    background-color: #C3EBFA !important;
+    color: black !important;
+}
+
+.react-calendar__navigation__label_labelText {
+    font-weight: 600;
+}
+
+.react-calendar__navigation {
+    button {
+        font-size: 1.4rem;
+        text-transform: capitalize;
+        text-decoration: none;
+    }
+
+    .react-calendar__navigation__arrow {
+        font-size: 2.2rem;
+    }
+}
+
+//SCSS thường
+.container-calendar {
+    background: var(--color-white);
+    padding: 5px;
+    // background-color: red;
+    border-radius: 1rem;
+}
