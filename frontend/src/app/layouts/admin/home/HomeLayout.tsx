@@ -4,8 +4,8 @@ import UserCard from "@/app/components/cards/CardUser";
 import CountChart from "@/app/components/charts/count-charts/CountChart";
 import AttendanceChart from "@/app/components/charts/attendance-charts/AttendanceChart";
 import FinanceChart from "@/app/components/charts/finance-charts/FinanceChart";
-import EventCalendar from "@/app/components/calendars/EventCalendar";
 import Announcements from "@/app/components/notifications/announcements/Announcements";
+import EventCalendar from "@/app/components/calendars/event-calendar/EventCalendar";
 
 export default function AdminHomeLayout() {
     return (

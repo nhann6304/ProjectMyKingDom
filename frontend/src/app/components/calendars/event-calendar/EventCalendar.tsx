@@ -51,11 +51,9 @@ export default function EventCalendar() {
             <div className="container-event-content">
                 {eventsData.map((event) => (
                     <div
-                        // className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-red-600 even:border-t-green-500"
                         className="event-top"
                         key={event.id}
                     >
-                        {/* <div className="flex items-center justify-between"> */}
                         <div className="box-content">
                             <h1>{event.title}</h1>
                             <span className="text-gray-300 text-xs">{event.time}</span>

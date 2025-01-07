@@ -35,20 +35,20 @@ export const menuItems: Array<IMenuNavBar> = [
         items: [
             {
                 icon: home,
-                label: "Home",
+                label: "Thống kê",
                 href: "/admin/home",
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
                 icon: student,
-                label: "Staff",
+                label: "Nhân viên",
                 href: "/admin/users",
                 visible: ["admin", "teacher"],
             },
             {
                 icon: student,
-                label: "Students",
-                href: "/list/students",
+                label: "Sản phẩm",
+                href: "/admin/product",
                 visible: ["admin", "teacher"],
             },
             {
@@ -141,5 +141,49 @@ export const menuItems: Array<IMenuNavBar> = [
                 visible: ["admin", "teacher", "student", "parent"],
             },
         ],
+    },
+];
+
+const today = new Date(); // Lấy ngày hiện tại
+const currentMonth = today.getMonth(); // Tháng hiện tại
+const currentYear = today.getFullYear(); // Năm hiện tại
+const currentDate = today.getDate(); // Ngày hiện tại
+
+export const calendarEvents = [
+    {
+        title: "Math",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 8, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 8, 45),
+    },
+    {
+        title: "English",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 9, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 9, 45),
+    },
+    {
+        title: "Biology",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 10, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 10, 45),
+    },
+    {
+        title: "Physics",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 11, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 11, 45),
+    },
+    {
+        title: "Chemistry",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 13, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 13, 45),
+    },
+    {
+        title: "History",
+        allDay: false,
+        start: new Date(currentYear, currentMonth, currentDate, 14, 0),
+        end: new Date(currentYear, currentMonth, currentDate, 14, 45),
     },
 ];
