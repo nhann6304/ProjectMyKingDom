@@ -1,5 +1,7 @@
+import UserLayout from "@/app/layouts/admin/users/UserLayout";
+
 export default function UserPage() {
     return (
-        <div>User Page</div>
+        <UserLayout />
     )
 }

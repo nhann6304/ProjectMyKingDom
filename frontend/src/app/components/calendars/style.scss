@@ -27,9 +27,70 @@
 }
 
 //SCSS thường
-.container-calendar {
-    background: var(--color-white);
+.container {
+    background-color: white;
     padding: 5px;
-    // background-color: red;
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+
+    &-event {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+    }
+
+    // 
+    &-event-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .event-top {
+            padding: 1.4rem;
+            border: 1px solid var(--color-gray-300);
+            border-top-width: 3px;
+            border-radius: 5px;
+
+            &:nth-of-type(odd) {
+                border-top-color: var(--color-purple-600);
+            }
+
+            &:nth-of-type(even) {
+                border-top-color: var(--color-green-600);
+            }
+
+            .box-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                h1 {
+                    font-size: 1.6rem;
+                    color: var(--color-gray-500);
+                    font-weight: 600;
+                }
+
+                span {
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                    color: var(--color-gray-400);
+                }
+            }
+
+            .content-description {
+                font-size: 1.2rem;
+                padding: 5px 0;
+                color: var(--color-gray-500);
+
+            }
+
+        }
+    }
+
 }

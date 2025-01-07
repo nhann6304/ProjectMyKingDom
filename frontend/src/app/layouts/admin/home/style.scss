@@ -16,23 +16,23 @@
 
         .section-top-chart {
             display: flex;
-            gap: 2rem;
-
+            height: auto;
+            gap: 1rem;
 
             .chart-count {
                 width: 33.3333%;
-                height: 40rem;
+                height: 100%;
             }
 
             .chart-attendance {
+                height: 100%;
                 width: 66.6667%;
-                height: 40rem;
             }
         }
 
         .section-bottom-chart {
             width: 100%;
-            height: 50rem;
+            height: 100%;
         }
 
         .user-cards {
@@ -47,7 +47,7 @@
         width: 33.3333%;
         display: flex;
         flex-direction: column;
-        gap: 3.2rem;
+        gap: 1rem;
     }
 
     @include resLAP-1024() {

@@ -4,7 +4,7 @@ import more from "@/app/assets/common/icons/more.png";
 import styled from "styled-components";
 
 const UserCardStyled = styled.div`
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
   padding: 1rem;
   flex: 1;
   min-width: 130px;
@@ -28,7 +28,7 @@ const UserCardStyled = styled.div`
       padding: 5px 1.8rem;
       align-items: center;
       text-align: center;
-      border-radius: 10rem;
+      border-radius: 8rem;
       color: var(--color-green-500);
       background-color: var(--color-white);
       border: 1px solid var(--color-gray-200);

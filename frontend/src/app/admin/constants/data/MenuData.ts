@@ -1,30 +1,28 @@
-import home from "@/app/assets/common/icons/home.png"
-import teacher from "@/app/assets/common/icons/teacher.png"
-import student from "@/app/assets/common/icons/student.png"
-import parent from "@/app/assets/common/icons/parent.png"
-import subject from "@/app/assets/common/icons/subject.png"
-import classed from "@/app/assets/common/icons/class.png"
-import lesson from "@/app/assets/common/icons/lesson.png"
-import exam from "@/app/assets/common/icons/exam.png"
-import assignment from "@/app/assets/common/icons/assignment.png"
-import result from "@/app/assets/common/icons/result.png"
-import attendance from "@/app/assets/common/icons/attendance.png"
-import calendar from "@/app/assets/common/icons/calendar.png"
-import message from "@/app/assets/common/icons/message.png"
-import profile from "@/app/assets/common/icons/profile.png"
-import setting from "@/app/assets/common/icons/setting.png"
-import logout from "@/app/assets/common/icons/logout.png"
-import announcement from "@/app/assets/common/icons/announcement.png"
+import home from "@/app/assets/common/icons/home.png";
+import teacher from "@/app/assets/common/icons/teacher.png";
+import student from "@/app/assets/common/icons/student.png";
+import parent from "@/app/assets/common/icons/parent.png";
+import subject from "@/app/assets/common/icons/subject.png";
+import classed from "@/app/assets/common/icons/class.png";
+import lesson from "@/app/assets/common/icons/lesson.png";
+import exam from "@/app/assets/common/icons/exam.png";
+import assignment from "@/app/assets/common/icons/assignment.png";
+import result from "@/app/assets/common/icons/result.png";
+import attendance from "@/app/assets/common/icons/attendance.png";
+import calendar from "@/app/assets/common/icons/calendar.png";
+import message from "@/app/assets/common/icons/message.png";
+import profile from "@/app/assets/common/icons/profile.png";
+import setting from "@/app/assets/common/icons/setting.png";
+import logout from "@/app/assets/common/icons/logout.png";
+import announcement from "@/app/assets/common/icons/announcement.png";
 import { StaticImageData } from "next/image";
-
-
 
 type MenuItem = {
     icon: string | StaticImageData; // Đường dẫn tới icon
     label: string; // Tên hiển thị của menu
     href: string; // Đường dẫn của menu
     visible: string[]; // Các vai trò (roles) được phép nhìn thấy menu
-}
+};
 
 interface IMenuNavBar {
     title: string;
@@ -38,13 +36,13 @@ export const menuItems: Array<IMenuNavBar> = [
             {
                 icon: home,
                 label: "Home",
-                href: "/",
+                href: "/admin/home",
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
-                icon: teacher,
-                label: "Teachers",
-                href: "/list/teachers",
+                icon: student,
+                label: "Staff",
+                href: "/admin/users",
                 visible: ["admin", "teacher"],
             },
             {

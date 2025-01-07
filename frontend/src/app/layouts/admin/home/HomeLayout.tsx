@@ -5,6 +5,7 @@ import CountChart from "@/app/components/charts/count-charts/CountChart";
 import AttendanceChart from "@/app/components/charts/attendance-charts/AttendanceChart";
 import FinanceChart from "@/app/components/charts/finance-charts/FinanceChart";
 import EventCalendar from "@/app/components/calendars/EventCalendar";
+import Announcements from "@/app/components/notifications/announcements/Announcements";
 
 export default function AdminHomeLayout() {
     return (
@@ -20,12 +21,11 @@ export default function AdminHomeLayout() {
                 <div className="section-top-chart">
                     {/* COUNT CHART */}
                     <div className="chart-count">
-                        {/* <div className="w-full lg:w-1/3 h-[450px]"> */}
                         <CountChart />
+
                     </div>
                     {/* ATTENDANCE CHART */}
                     <div className="chart-attendance">
-                        {/* <div className="w-full lg:w-2/3 h-[450px]"> */}
                         <AttendanceChart />
                     </div>
                 </div>
@@ -37,6 +37,7 @@ export default function AdminHomeLayout() {
 
             <div className="admin-layout-right">
                 <EventCalendar />
+                <Announcements />
             </div>
         </div>
     );

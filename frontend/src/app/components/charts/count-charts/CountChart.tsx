@@ -30,12 +30,6 @@ const data = [
     },
 ];
 
-const style = {
-    top: "50%",
-    right: 0,
-    transform: "translate(0, -50%)",
-    lineHeight: "24px",
-};
 
 export default function CountChart() {
     return (
@@ -45,7 +39,7 @@ export default function CountChart() {
                 <Image src={moreDark} alt="moreDark" height={20} width={20} />
             </div>
 
-            <div className="chart-container">
+            <div className="chart-box">
                 <ResponsiveContainer>
                     <RadialBarChart
                         cx="50%"
@@ -66,6 +60,7 @@ export default function CountChart() {
                     className="image-center"
                 />
             </div>
+
 
             <div className="chart-bottom">
                 <div className="item">
