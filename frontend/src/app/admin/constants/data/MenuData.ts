@@ -42,7 +42,7 @@ export const menuItems: Array<IMenuNavBar> = [
             {
                 icon: student,
                 label: "Nhân viên",
-                href: "/admin/users",
+                href: "/admin/list/users",
                 visible: ["admin", "teacher"],
             },
             {

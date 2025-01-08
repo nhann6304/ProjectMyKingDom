@@ -1,0 +1,112 @@
+.rbc-btn-group {
+    &:first-child {
+
+        display: none !important;
+    }
+
+    &:last-child {
+        font-size: 1.4rem !important;
+
+        button {
+            border: none !important;
+            background-color: #f1f0ff !important;
+            margin-left: 2px !important;
+        }
+    }
+}
+
+.rbc-toolbar {
+    button {
+        &.rbc-active {
+            background-color: #dbdafe !important;
+        }
+    }
+}
+
+.rbc-time-view {
+    border-color: #eee !important
+}
+
+.rbc-time-header {
+    display: none;
+}
+
+.rbc-toolbar-label {
+    text-align: right !important;
+    padding: 0 2rem !important;
+}
+
+.rbc-time-gutter {
+    &.rbc-time-column {
+        font-size: 1.4rem !important;
+
+        .rbc-timeslot-group {
+            padding: 0 2rem !important;
+            background-color: #f7fdff !important;
+        }
+    }
+}
+
+.rbc-day-slot {
+    font-size: 1.4rem !important;
+}
+
+.rbc-event {
+    border: none !important;
+    color: black !important;
+    padding: 1rem !important;
+    margin: 1rem !important;
+    width: 99% !important;
+
+    &:nth-child(1) {
+        background-color: #e2f8ff !important;
+    }
+
+    &:nth-child(2) {
+        background-color: var(--color-pink-200) !important;
+    }
+
+    &:nth-child(3) {
+        background-color: var(--color-green-200) !important;
+    }
+
+    &:nth-child(4) {
+        background-color: var(--color-gray-200) !important;
+    }
+
+    &:nth-child(5) {
+        background-color: var(--color-purple-200) !important;
+    }
+
+    &:nth-child(6) {
+        background-color: #f2f1ff !important;
+    }
+
+    &:nth-child(7) {
+        background-color: #fefce8 !important;
+    }
+
+    &:nth-child(8) {
+        background-color: #fdf2fb !important;
+    }
+
+    &-label {
+        color: var(--color-gray-400) !important;
+        margin-bottom: 5px;
+    }
+}
+
+//
+.rbc-header {
+    border-bottom: none !important;
+
+    .rbc-button-link {
+        span {
+            font-size: 1.4rem !important;
+        }
+    }
+}
+
+.rbc-row-content {
+    display: none !important;
+}

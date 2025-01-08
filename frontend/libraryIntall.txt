@@ -4,3 +4,9 @@ npm i react-calendar
 
 npm i react-big-calendar
 npm i @types/react-big-calendar
+
+
+
+// Tắt cổng đang chạy 
+netstat -ano | findstr :3000  ==> Lấy id ra 
+taskkill /PID 17136 /F

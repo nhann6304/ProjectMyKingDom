@@ -4,15 +4,14 @@ import message from "@/app/assets/common/icons/message.png"
 import announcement from "@/app/assets/common/icons/announcement.png"
 import avatar from "@/app/assets/common/icons/avatar.png"
 import "./style.scss"
+import InputSearch from "../../inputs/input-search";
 export default function NavbarAdmin() {
     return (
         <div className="navbar-admin">
             {/* SEARCH BAR */}
-            <div className="search-bar">
-                <Image src={search} alt="search" />
-                <input type="text" placeholder="Search...." />
+            <div className="box-search">
+                <InputSearch />
             </div>
-
             {/* ICONS AND USERS */}
             <div className="icon-container">
                 <div className="icon">
