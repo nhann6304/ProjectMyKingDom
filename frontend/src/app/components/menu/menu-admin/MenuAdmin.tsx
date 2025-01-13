@@ -1,6 +1,6 @@
 "use client";
 
-import { menuItems } from "@/app/admin/constants/data/MenuData";
+import { menuItems, roleUser } from "@/app/(home)/admin/constants/data/MenuData";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
@@ -63,8 +63,7 @@ const MenuContainerStyled = styled.div`
     }
   }
 `;
-// Phân quyền 
-const role = "admin";
+
 
 export default function MenuAdmin() {
   return (
@@ -73,7 +72,7 @@ export default function MenuAdmin() {
         <div className="menu-section" key={section.title}>
           <span className="menu-title">{section.title}</span>
           {section.items.map((item) => {
-            if (item.visible.includes(role)) {
+            if (item.visible.includes(roleUser)) {
               return (
                 <Link href={item.href} key={item.label} className="menu-item">
                   <Image

@@ -33,10 +33,10 @@ const SearchContainer = styled.div`
 `;
 
 export default function InputSearch() {
-    return (
-        <SearchContainer>
-            <Image src={search} alt="search" />
-            <input type="text" placeholder="Search...." />
-        </SearchContainer>
-    );
+  return (
+    <SearchContainer>
+      <Image src={search} alt="search" />
+      <input type="text" placeholder="Search...." />
+    </SearchContainer>
+  );
 }

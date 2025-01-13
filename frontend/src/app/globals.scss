@@ -42,6 +42,19 @@
   --color-green-600: #16a34a;
   --color-green-700: #15803d;
   --color-green-800: #166534;
+  // Blue
+  --color-blue-global: #041675;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-blue-950: #172554;
 }
 
 html {
@@ -49,7 +62,6 @@ html {
 }
 
 body {
-  // font-family: 'Roboto', sans-serif;
   font-family: "Inter", sans-serif !important;
 }
 
@@ -80,5 +92,19 @@ $BLAP: 1440px;
 @mixin resBLAP-1440() {
   @media screen and (max-width: $BLAP) {
     @content;
+  }
+}
+
+.container-pub {
+  @media screen and (min-width: 1400px) {
+    width: 1400px !important;
+  }
+
+  @media screen and (max-width: 1400px) {
+    width: 1200px !important;
+  }
+
+  @media screen and (max-width: 1200px) {
+    width: 95vw !important;
   }
 }

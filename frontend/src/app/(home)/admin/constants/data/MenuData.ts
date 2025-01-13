@@ -29,6 +29,9 @@ interface IMenuNavBar {
     items: MenuItem[];
 }
 
+// Phân quền user hiện tại đang là
+export const roleUser = "admin";
+
 export const menuItems: Array<IMenuNavBar> = [
     {
         title: "MENU",
@@ -187,3 +190,19 @@ export const calendarEvents = [
         end: new Date(currentYear, currentMonth, currentDate, 14, 45),
     },
 ];
+
+
+export const userData = [
+    {
+        id: 1,
+        userId: "1234567899",
+        name: "John Doe",
+        email: "huynhthanhnhan732004@gmail.com",
+        photo: "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/441901853_1262823381359147_4724735125941656324_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=9i5awffN3B8Q7kNvgEKrm15&_nc_oc=AdjDZLwuQxvaJn3QberSvUFlML6ibVG94K87RDbnJUrVFsR63G7dbW6L1a00TghJx4DsBk0OIik-d9l2Xj-fa0Et&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AUAXmvWDTMxUXyj35T18xlP&oh=00_AYBIjLrwdxt_WE0XYPhGRZSQ10JxYIKjK6vuP3qZLx3Alg&oe=6786AB98",
+        phone: "123321123",
+        subject: ["content", "dev"],
+        classes: ["1B", "2C", "3C"],
+        address: "123 HO CHI MINH VIET NAM"
+    },
+
+]

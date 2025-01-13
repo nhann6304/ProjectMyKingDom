@@ -64,8 +64,11 @@ const nextConfig = {
         hostname: "dummyimage.com",
         pathname: "**",
       },
+      {
+        hostname: "scontent.fsgn8-4.fna.fbcdn.net",
+      },
     ],
-    domains: [],
+    domains: ["facebook.com"],
   },
 };
 
