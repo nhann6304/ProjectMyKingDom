@@ -1,0 +1,22 @@
+.login-container {
+    margin: 0 auto;
+    // background-color: red;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem 0;
+
+    .box-login {
+        width: 34rem;
+
+        .login-title {
+            text-align: center;
+            font-size: 4.8rem;
+            font-weight: 700;
+            color: #041675;
+            text-transform: capitalize;
+            font-family: Helvetica;
+        }
+
+    }
+
+}

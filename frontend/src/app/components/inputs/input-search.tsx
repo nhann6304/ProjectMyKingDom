@@ -1,25 +1,54 @@
 "use client";
+import { ItemIcon } from "@/app/assets/common/icon-public/svg/icon/iconItem";
 import search from "@/app/assets/common/icons/search.png";
 import Image from "next/image";
 import styled from "styled-components";
 
-const SearchContainer = styled.div`
+interface InputSearchProps {
+  size?: "small" | "medium" | "large";
+}
+
+const sizeStyles = {
+  small: {
+    inputHeight: "2rem",
+    inputWidth: "10rem",
+    imgSize: "1rem",
+  },
+  medium: {
+    inputHeight: "3rem",
+    inputWidth: "15rem",
+    imgSize: "1.6rem",
+  },
+  large: {
+    inputHeight: "4.8rem",
+    inputWidth: "100%",
+    imgSize: "2rem",
+  },
+};
+
+const SearchContainer = styled.div<{
+  $inputHeight: string;
+  $inputWidth: string;
+  $imgSize: string;
+}>`
   display: flex;
   align-items: center;
   width: auto;
-  padding: 0 1rem;
-  border-radius: 2rem;
+  width: 100%;
+  padding: 0 1.6rem;
+  border-radius: 4rem;
   border: 1.5px solid var(--color-gray-300);
   gap: 1rem;
+  background: white;
+
   input {
-    height: 3rem;
-    width: 15rem;
+    height: ${(props) => props.$inputHeight};
+    width: ${(props) => props.$inputWidth};
     padding: 0.5rem;
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     background: transparent;
     border: none;
     outline: none;
-    font-size: 1.4rem;
 
     &::placeholder {
       color: #9ca3af;
@@ -27,15 +56,27 @@ const SearchContainer = styled.div`
   }
 
   img {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: ${(props) => props.$imgSize};
+    height: ${(props) => props.$imgSize};
+  }
+
+  svg {
+    width: ${(props) => props.$imgSize};
+    height: ${(props) => props.$imgSize};
   }
 `;
 
-export default function InputSearch() {
+export default function InputSearch({ size = "medium" }: InputSearchProps) {
+  const { inputHeight, inputWidth, imgSize } = sizeStyles[size];
+
   return (
-    <SearchContainer>
-      <Image src={search} alt="search" />
+    <SearchContainer
+      $inputHeight={inputHeight}
+      $inputWidth={inputWidth}
+      $imgSize={imgSize}
+    >
+      {/* <Image src={search} alt="search" /> */}
+      <ItemIcon />
       <input type="text" placeholder="Search...." />
     </SearchContainer>
   );

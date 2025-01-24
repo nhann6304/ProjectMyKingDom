@@ -1,4 +1,4 @@
-import CenterNav from "./center-nav/CenterNav";
+import BottomNav from "./bottom-nav/BottomNav";
 import TopNavPublic from "./top-nav/TopNav";
 
 export default function NavbarPublic() {
@@ -7,7 +7,7 @@ export default function NavbarPublic() {
             {/* TOP NAV */}
             <TopNavPublic />
             {/* CENTER NAV */}
-            <CenterNav />
+            <BottomNav />
             {/* BOTTOM NAV */}
             {/* Bottom Nav Public */}
         </div>

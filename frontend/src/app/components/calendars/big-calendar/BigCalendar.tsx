@@ -4,7 +4,7 @@ import "./style.scss"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer, View, Views } from "react-big-calendar";
 import { useState } from "react";
-import { calendarEvents } from "@/app/admin/constants/data/MenuData";
+import { calendarEvents } from "@/app/(home)/admin/constants/data/MenuData";
 const localizer = momentLocalizer(moment);
 
 const BigCalendar = () => {
