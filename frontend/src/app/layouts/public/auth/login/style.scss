@@ -6,7 +6,7 @@
     padding: 4rem 1.5rem 0;
 
     .box-login {
-        width: 34rem;
+        width: 35rem;
 
         .login-title {
             text-align: center;
@@ -15,6 +15,12 @@
             color: #041675;
             text-transform: capitalize;
             font-family: Helvetica;
+        }
+
+        .login-form {
+            .box-form-password {
+                margin-top: 3rem;
+            }
         }
 
     }
