@@ -1,4 +1,4 @@
-import LoginLayout from "@/app/layouts/public/auth/login/LoginLayout";
+import LoginLayout from "@/layouts/public/auth/login/LoginLayout";
 
 export default async function LoginPage() {
     return (

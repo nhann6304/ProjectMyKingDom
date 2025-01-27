@@ -2,10 +2,10 @@
 import Link from "next/link";
 import "./style.scss";
 import Image from "next/image";
-import logo from "@/app/assets/common/logo/logo-res.png";
-import MenuAdmin from "@/app/components/menu/menu-admin/MenuAdmin";
-import NavbarAdmin from "@/app/components/navbar/navbar-admin/NavbarAdmin";
-import UserLayout from "@/app/layouts/admin/users/UserLayout";
+import MenuAdmin from "@/components/menu/menu-admin/MenuAdmin";
+import NavbarAdmin from "@/components/navbar/navbar-admin/NavbarAdmin";
+//
+import logo from "@/assets/common/logo/logo-res.png";
 export default function DashboardLayout({
     children,
 }: Readonly<{

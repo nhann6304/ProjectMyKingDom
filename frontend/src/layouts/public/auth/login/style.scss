@@ -1,0 +1,80 @@
+.login-container {
+    margin: 0 auto;
+    // background-color: red;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem 0;
+
+    .box-login {
+        width: 35rem;
+
+        .login-title {
+            text-align: center;
+            font-size: 4.8rem;
+            font-weight: 700;
+            color: #041675;
+            text-transform: capitalize;
+            font-family: Helvetica;
+        }
+
+        .login-form {
+            .box-form-password {
+                margin-top: 3rem;
+            }
+        }
+
+        .button-submit {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            .custom-button {
+                align-items: center;
+                width: calc(20vw - 19rem);
+                height: 5rem;
+                background: var(--color-background-global);
+                color: var(--color-white);
+                font-weight: 700;
+                border: none;
+                letter-spacing: 0.04em;
+                border-radius: 1.2rem;
+                font-size: 1.9rem;
+                text-transform: capitalize;
+                margin: 4rem 1.7rem 1.2rem 1.7rem;
+            }
+
+            .text-forgot {
+                font-size: 1.4rem;
+                color: #041675;
+                font-weight: 600;
+                text-decoration: underline;
+            }
+        }
+
+        .text-question-account {
+            display: flex;
+            justify-content: center;
+            padding-top: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            span {
+                display: block;
+                font-style: normal;
+                font-weight: 300;
+                font-size: 1.4rem;
+                color: var(--color-black);
+            }
+
+            .register-account {
+                color: var(--color-background-global);
+                font-size: 1.4rem;
+                font-weight: 700;
+                text-decoration: underline;
+            }
+        }
+    }
+}

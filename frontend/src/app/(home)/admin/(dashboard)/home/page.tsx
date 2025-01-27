@@ -1,4 +1,4 @@
-import AdminHomeLayout from "@/app/layouts/admin/home/HomeLayout";
+import AdminHomeLayout from "@/layouts/admin/home/HomeLayout";
 
 export default function AdminHomePage() {
     return (

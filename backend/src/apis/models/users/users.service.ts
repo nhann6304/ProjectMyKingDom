@@ -37,7 +37,7 @@ export class UsersService {
     if (result) {
       return result;
     } else {
-      throw new BadRequestException(`Không tìm thấy User với ${key} = ${value}`);
+      throw new BadRequestException(`Người dùng ${value} không tồn tại`);
     }
   }
 

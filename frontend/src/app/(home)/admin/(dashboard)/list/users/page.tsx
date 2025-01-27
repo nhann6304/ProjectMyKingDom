@@ -1,4 +1,4 @@
-import ListUsersLayout from "@/app/layouts/admin/lists/list-user/ListUserLayout";
+import ListUsersLayout from "@/layouts/admin/lists/list-user/ListUserLayout";
 
 export default function ListUsersPage() {
     return (
