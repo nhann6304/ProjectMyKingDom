@@ -1,36 +1,44 @@
 "use client"
+import { register } from "@/apis/auth.apis"
 import "./style.scss"
 import { InputForm } from "@/components/inputs/input-form"
 import { IUser } from "@/interfaces/common/IUser.interface"
 import { validateEmail } from "@/utils/validation.util"
+import { Button } from "antd"
+import { useTransition } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 
+interface IUserRegister extends IUser {
+    confirm_password: string
+}
 
 export default function RegisterLayout() {
+    const [pending, startTransition] = useTransition();
     const {
         reset,
         setValue,
         control,
         handleSubmit,
-        register,
+        watch,
         formState: { errors },
-    } = useForm<IUser>()
+    } = useForm<IUserRegister>()
 
-    const onSubmit: SubmitHandler<any> = (data) => {
-        // startTransition(async () => {
-        //     const responseLogin = await login(data);
+    const password = watch("user_password");
+    const onSubmit: SubmitHandler<IUserRegister> = (data) => {
 
-        //     if (responseLogin.statusCode === 400) {
-        //         console.log(responseLogin.message);
-        //     } else {
+        const { confirm_password, ...dataRegister } = data;
 
-        //         console.log(responseLogin.message);
+        startTransition(async () => {
+            const responseLogin = await register(dataRegister);
 
-        //     }
+            if (responseLogin.statusCode === 400) {
+                console.log(responseLogin.message);
+            } else {
+                console.log(responseLogin.message);
 
-        // })
-
-        console.log("Dữ liệu form:", data);
+            }
+            console.log("data::", dataRegister);
+        })
     };
 
     return (
@@ -39,7 +47,7 @@ export default function RegisterLayout() {
                 <h1 className="register-title">Đăng Ký</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="register-from">
                     <div className="box-form-input">
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
                             name="user_last_name"
                             label="Tên"
@@ -49,7 +57,7 @@ export default function RegisterLayout() {
                     </div>
 
                     <div className="box-form-input">
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
                             name="user_first_name"
                             label="Họ"
@@ -59,7 +67,7 @@ export default function RegisterLayout() {
                     </div>
 
                     <div className="box-form-input">
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
                             name="user_phone"
                             label="Số điện thoại"
@@ -69,7 +77,7 @@ export default function RegisterLayout() {
                     </div>
 
                     <div className="box-form-input">
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
                             name="user_gender"
                             label="Giới tính"
@@ -79,25 +87,51 @@ export default function RegisterLayout() {
                         />
                     </div>
 
+                    <div className="box-form-input">
+                        <InputForm<IUserRegister>
+                            control={control}
+                            name="user_email"
+                            label="Email"
+                            errors={errors}
+                            required
+                            extraValidate={(val: string) =>
+                                validateEmail(val) || "Sai định dạng email"
+                            }
+                        />
+                    </div>
+
                     <div className="box-form-double">
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
                             name="user_password"
                             label="Mật khẩu"
                             errors={errors}
+                            type="password"
                             required
                         />
 
-                        <InputForm<IUser>
+                        <InputForm<IUserRegister>
                             control={control}
-                            name="user_password"
+                            name="confirm_password"
                             label="Nhập lại mật khẩu"
                             errors={errors}
+                            type="password"
+                            extraValidate={(value) => value === password || "Mật khẩu không khớp"}
                             required
                         />
                     </div>
 
-                    <button type="submit">Gửi</button>
+                    <div className="button-submit">
+                        <Button
+                            className="custom-button"
+                            htmlType="submit"
+                            type="default"
+                            size="large"
+                            block
+                        >
+                            Đăng nhập
+                        </Button>
+                    </div>
 
                 </form>
             </div>

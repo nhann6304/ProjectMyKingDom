@@ -148,7 +148,7 @@ export function InputForm<T extends FieldValues>({
               validate: extraValidate,
             }}
             render={({ field }) => (
-              <div className="flex items-center">
+              <div className="flex items-center justify-between w-full">
                 {type !== "select" ? (
                   <input
                     id={name.toString()}

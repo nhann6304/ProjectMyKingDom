@@ -53,7 +53,7 @@ export default function LoginLayout() {
                             placeholder="Nhập email"
                             background="#e8f0fe"
                             extraValidate={(val: string) =>
-                                validateEmail(val) || "Sai email"
+                                validateEmail(val) || "Sai định dạng email"
                             }
                         />
                     </div>

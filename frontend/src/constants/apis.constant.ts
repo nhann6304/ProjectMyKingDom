@@ -3,7 +3,8 @@ export const CONST_APIS = {
 
     FEATURES: {
         AUTH: {
-            LOGIN: "login"
+            LOGIN: "login",
+            REGISTER: "register"
         },
 
         COMMON: {

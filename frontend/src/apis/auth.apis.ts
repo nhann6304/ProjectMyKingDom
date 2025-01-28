@@ -27,5 +27,17 @@ export async function login(payload: Pick<IUser, "user_email" | "user_password">
     return result
 }
 
+export async function register(payload: Partial<IUser>) {
+    const result = await api<IBaseResponse<IUser>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.REGISTER}`,
+        options: {
+            method: CONST_METHODS.POST,
+            body: JSON.stringify(payload),
+        },
+    });
+
+    return result
+}
+
 
 
