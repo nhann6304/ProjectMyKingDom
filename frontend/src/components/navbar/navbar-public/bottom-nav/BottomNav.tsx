@@ -15,6 +15,7 @@ import { IoMenu } from "react-icons/io5";
 import { TruckLive, AccountIcon, CardIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
+import Link from "next/link";
 interface IOption {
     content: string;
     icon: React.ReactNode;
@@ -94,12 +95,12 @@ export default function BottomNav() {
                         </button>
                     </div>
 
-                    <div className="option-item">
+                    <Link href={"/auth/login"} className="option-item">
                         <button>
                             <AccountIcon />
                             <h2>Đăng nhập</h2>
                         </button>
-                    </div>
+                    </Link>
 
                     <div className="option-item">
                         <button>

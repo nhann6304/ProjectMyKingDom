@@ -21,9 +21,11 @@ export async function login(payload: Pick<IUser, "user_email" | "user_password">
         cookies().set(CONST_VALUES.TOKEN, result.metadata.token, {
             httpOnly: true,
             secure: true,
-            maxAge: 15 * 24 * 60 * 60 * 1000  // 15 ngày
+            maxAge: 15 * 24 * 60 * 60 * 1000
         })
     }
-
     return result
 }
+
+
+

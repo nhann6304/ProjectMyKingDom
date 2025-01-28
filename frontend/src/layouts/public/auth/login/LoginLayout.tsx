@@ -51,6 +51,7 @@ export default function LoginLayout() {
                             errors={errors}
                             required
                             placeholder="Nhập email"
+                            background="#e8f0fe"
                             extraValidate={(val: string) =>
                                 validateEmail(val) || "Sai email"
                             }
@@ -64,6 +65,7 @@ export default function LoginLayout() {
                             label="Mật khẩu"
                             errors={errors}
                             type="password"
+                            background="#e8f0fe"
                             required
                             placeholder="Mật khẩu"
                         />
@@ -84,7 +86,7 @@ export default function LoginLayout() {
                     </div>
                     <div className="text-question-account">
                         <span>Chưa có tài khoản?</span>
-                        <Link className="register-account" href={"#"} >Đăng ký tài khoản</Link>
+                        <Link className="register-account" href={"/auth/register"} >Đăng ký tài khoản</Link>
                     </div>
                 </form>
             </div>

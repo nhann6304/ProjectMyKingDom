@@ -1,0 +1,36 @@
+.register-container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem 0;
+
+    .box-register {
+        width: 55rem;
+
+        .register-title {
+            text-align: center;
+            font-size: 4.8rem;
+            font-weight: 700;
+            color: #041675;
+            text-transform: capitalize;
+            font-family: Helvetica;
+        }
+
+        .register-from {
+            .box-form-input {
+                margin: 2rem 0;
+            }
+
+            .box-form-double {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+
+                div {
+                    display: flex;
+                }
+            }
+        }
+    }
+}
