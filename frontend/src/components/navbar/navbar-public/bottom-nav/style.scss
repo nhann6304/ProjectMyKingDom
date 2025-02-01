@@ -318,8 +318,6 @@
             height: 5rem;
             display: flex;
             align-items: center;
-            // gap: 2rem;
-            // border: none;
             background-color: var(--color-background-global);
             padding: 0 1rem 2rem;
             gap: 1rem;
@@ -360,6 +358,13 @@
 
             .box-option {
                 gap: 0;
+
+                .option-item {
+                    &:last-child {
+                        display: none;
+                    }
+                }
+
             }
         }
     }

@@ -192,6 +192,7 @@ export default function BottomNav() {
                 title="Basic Drawer"
                 placement={placement}
                 closable={false}
+                size="default"
                 onClose={onClose}
                 open={open}
                 key={placement}

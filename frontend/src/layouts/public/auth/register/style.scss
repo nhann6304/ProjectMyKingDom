@@ -31,6 +31,79 @@
                     display: flex;
                 }
             }
+
+            .box-form-clause {
+                margin-top: 2rem;
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                height: 18px;
+
+                .clause-text-box {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+
+                    p {
+                        font-size: 1.3rem;
+                        color: #041675;
+                        font-weight: 600;
+                        white-space: nowrap;
+                    }
+
+                    a {
+                        font-size: 1.3rem;
+                        white-space: nowrap;
+                        color: #4664e1;
+                        font-weight: 600;
+                    }
+
+                }
+
+
+                .ant-checkbox-inner {
+                    width: 18px !important;
+                    height: 18px !important;
+                    transform: scale(1.5);
+                    position: relative;
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        // padding: 5px;
+                        height: 100%;
+                        width: 100%;
+                        border-radius: 2px;
+                        border: 1px solid #1677ff;
+                    }
+
+                }
+            }
+
+            .text-question-account {
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                margin-bottom: 5px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                span {
+                    display: block;
+                    font-style: normal;
+                    font-weight: 300;
+                    font-size: 1.6rem;
+                    color: var(--color-black);
+                }
+
+                .register-account {
+                    color: var(--color-background-global);
+                    font-size: 1.4rem;
+                    font-weight: 600;
+                }
+            }
         }
     }
 }
