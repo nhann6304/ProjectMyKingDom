@@ -34,16 +34,19 @@ export default function RegisterLayout() {
     const onSubmit: SubmitHandler<IUserRegister> = (data) => {
 
         const { confirm_password, ...dataRegister } = data;
-        startTransition(async () => {
-            const responseLogin = await register(dataRegister);
-
-            if (responseLogin.statusCode === 400) {
-                toast.error(responseLogin.message)
-            } else {
-                toast.error(responseLogin.message)
-                router.replace("/", { scroll: true });
-            }
-        })
+        if (checked === true) {
+            startTransition(async () => {
+                const responseLogin = await register(dataRegister);
+                if (responseLogin.statusCode === 400) {
+                    toast.error(responseLogin.message)
+                } else {
+                    toast.error(responseLogin.message)
+                    router.replace("/", { scroll: true });
+                }
+            })
+        } else {
+            toast.error("Vui lòng chấp nhận Điều khoản sử dụng và Chính sách ")
+        }
     };
 
     const onChange: CheckboxProps['onChange'] = (e) => {
