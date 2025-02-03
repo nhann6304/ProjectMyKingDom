@@ -77,9 +77,9 @@ export default function BottomNav() {
             <div className="section-top container-pub">
                 <div className="section-top-mobile">
                     {/* LOGO */}
-                    <div className="box-logo">
+                    <Link href={"/"} className="box-logo">
                         <Image src={logo} alt="logo" />
-                    </div>
+                    </Link>
                     {/* THANH SEARCH */}
                     <div className="box-search">
                         <InputSearch size="large" />

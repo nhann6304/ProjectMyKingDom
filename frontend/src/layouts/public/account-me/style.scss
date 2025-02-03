@@ -1,3 +1,5 @@
+@use '@/app/globals.scss' as *;
+
 .account-container {
     margin: 0 auto;
     display: flex;
@@ -26,7 +28,7 @@
             .info-option {
                 background-color: var(--color-gray-200);
                 overflow: hidden;
-                border-radius: 1.6rem 1.6rem 0 0;
+                border-radius: 1.6rem;
                 overflow: hidden;
 
                 .option-header {
@@ -43,11 +45,102 @@
 
                     }
                 }
+
+                .option-body {
+                    .option-box {
+                        padding: 1.6rem;
+
+                        &-item {
+                            font-size: 1.4rem;
+                            padding: 8px 16px;
+                            color: var(--color-black);
+                            font-weight: 700;
+                            border-radius: 8px;
+
+                            &:not(:first-child) {
+                                margin-top: 1.6rem;
+                            }
+
+                            &:hover {
+                                cursor: pointer;
+                                background-color: var(--color-white);
+                            }
+                        }
+
+                    }
+
+                    .option-responsive {
+                        display: none;
+                    }
+                }
             }
 
             .info-desc {
-                background-color: yellow;
+                padding: 1.6rem;
+                border: 2px solid var(--color-gray-200);
+                height: 90%;
+                border-radius: 1.6rem;
+
+                .desc-title {
+                    color: #041675;
+                    margin-bottom: 2.4rem;
+                    font-size: 1.6rem;
+                    font-weight: 700;
+                    text-transform: capitalize;
+                }
+
+                .dest-box-content {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 2rem;
+
+                    .content-item {
+                        .content-label {
+                            font-size: 1.4rem;
+                            color: var(--color-gray-300);
+                        }
+
+                        h1 {
+                            margin-top: 8px;
+                            font-size: 1.4rem;
+                            font-weight: 600;
+                        }
+                    }
+                }
+
             }
         }
     }
+
+    @include resLAP-1024() {
+        .box-account {
+            .account-title {
+                font-size: 2.5rem;
+                margin-bottom: 4rem;
+            }
+
+            .box-information {
+                display: flex;
+                flex-direction: column;
+
+                .info-option {
+                    .option-body {
+                        .option-box {
+                            display: none;
+                        }
+
+                        .option-responsive {
+                            display: block;
+                            padding: 1.6rem;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
 }

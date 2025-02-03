@@ -12,3 +12,8 @@ export interface IResponseLogin {
     token: string;
     user: IUser;
 }
+
+export interface IResponseSendEmail {
+    user: IUser,
+    otp: string
+}

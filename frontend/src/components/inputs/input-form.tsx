@@ -16,7 +16,7 @@ type TTypeInput = "number" | "password" | "text" | "checkbox" | "select";
 interface IProdsInputField<T> {
   name: keyof T;
   type?: TTypeInput;
-  label: string;
+  label?: string;
   placeholder?: string;
   background?: string;
   required?: boolean;

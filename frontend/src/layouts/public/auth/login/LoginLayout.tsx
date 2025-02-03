@@ -1,13 +1,13 @@
-"use client"
-import "./style.scss"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { useTransition } from "react"
-import { Button } from "antd"
-import Link from "next/link"
-import { login } from "@/apis/auth.apis"
-import { InputForm } from "@/components/inputs/input-form"
-import { IUser } from "@/interfaces/common/IUser.interface"
-import { validateEmail } from "@/utils/validation.util"
+"use client";
+import "./style.scss";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useTransition } from "react";
+import { Button } from "antd";
+import Link from "next/link";
+import { login } from "@/apis/auth.apis";
+import { InputForm } from "@/components/inputs/input-form";
+import { IUser } from "@/interfaces/common/IUser.interface";
+import { validateEmail } from "@/utils/validation.util";
 interface IAuthLogin extends Pick<IUser, "user_email" | "user_password"> { }
 export default function LoginLayout() {
     const [isPending, startTransition] = useTransition();
@@ -19,7 +19,7 @@ export default function LoginLayout() {
         handleSubmit,
         register,
         formState: { errors },
-    } = useForm<IAuthLogin>()
+    } = useForm<IAuthLogin>();
 
     const onSubmit: SubmitHandler<IAuthLogin> = (data) => {
         startTransition(async () => {
@@ -28,12 +28,9 @@ export default function LoginLayout() {
             if (responseLogin.statusCode === 400) {
                 console.log(responseLogin.message);
             } else {
-
                 console.log(responseLogin.message);
-
             }
-
-        })
+        });
 
         console.log("Dữ liệu form:", data);
     };
@@ -82,14 +79,18 @@ export default function LoginLayout() {
                             Đăng nhập
                         </Button>
 
-                        <Link className="text-forgot" href={"#"} >Quên mật khẩu?</Link>
+                        <Link className="text-forgot" href={"#"}>
+                            Quên mật khẩu?
+                        </Link>
                     </div>
                     <div className="text-question-account">
                         <span>Chưa có tài khoản?</span>
-                        <Link className="register-account" href={"/auth/register"} >Đăng ký tài khoản</Link>
+                        <Link className="register-account" href={"/auth/register"}>
+                            Đăng ký tài khoản
+                        </Link>
                     </div>
                 </form>
             </div>
         </section>
-    )
+    );
 }

@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { CONST_APIS } from "../constants/apis.constant";
 import { CONST_METHODS } from "../constants/methods.constant";
 import { api } from "../helpers";
-import { IBaseResponse, IResponseLogin } from "../interfaces/common/IBaseResponse.interface";
+import { IBaseResponse, IResponseLogin, IResponseSendEmail } from "../interfaces/common/IBaseResponse.interface";
 import { IUser } from "../interfaces/common/IUser.interface";
 import { CONST_VALUES } from "../constants/values.constant";
 
@@ -24,6 +24,18 @@ export async function login(payload: Pick<IUser, "user_email" | "user_password">
             maxAge: 15 * 24 * 60 * 60 * 1000
         })
     }
+    return result
+}
+
+
+export async function sendEmail(payload: Pick<IUser, "user_email">) {
+    const result = await api<IBaseResponse<IResponseSendEmail>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.SEND_OTP}`,
+        options: {
+            method: CONST_METHODS.POST,
+            body: JSON.stringify(payload),
+        },
+    })
     return result
 }
 

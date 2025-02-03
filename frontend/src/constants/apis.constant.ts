@@ -4,7 +4,8 @@ export const CONST_APIS = {
     FEATURES: {
         AUTH: {
             LOGIN: "login",
-            REGISTER: "register"
+            REGISTER: "register",
+            SEND_OTP: "send-otp"
         },
 
         COMMON: {
