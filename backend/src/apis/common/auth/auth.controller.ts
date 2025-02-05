@@ -106,7 +106,7 @@ export class AuthController {
     })
   }
 
-  @Post("reset-passowrd")
+  @Post("reset-password")
   @ApiOperation({ summary: "Thay đổi mật khẩu" })
   async resetPassword(
     @Body() resetPassData: resetPasswordDto,

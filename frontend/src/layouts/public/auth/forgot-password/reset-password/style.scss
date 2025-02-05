@@ -1,0 +1,42 @@
+.reset-pass-container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 4rem 1.5rem 0;
+
+    .box-reset {
+        width: calc(100% - 80rem);
+
+        &-instruct {
+            display: flex;
+            width: 30vw;
+            margin: 2rem auto 0 auto;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+
+            .instruct-text {
+                font-size: 1.6rem;
+                color: black;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .reset-title {
+        text-align: center;
+        font-size: 4.8rem;
+        font-weight: 700;
+        color: #041675;
+        text-transform: capitalize;
+        font-family: Helvetica;
+    }
+
+
+
+    .reset-form {
+        .box-form-reset {
+            margin-top: 3rem;
+        }
+    }
+}

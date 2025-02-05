@@ -4,7 +4,7 @@ import Link from "next/link";
 import styled from "styled-components";
 
 interface IPropsButton {
-    title: string
+  title: string
 }
 
 const ButtonContainer = styled.div`
@@ -34,17 +34,17 @@ const ButtonContainer = styled.div`
 `;
 
 export default function ButtonForm({ title }: IPropsButton) {
-    return (
-        <ButtonContainer>
-            <Button
-                className="custom-button"
-                htmlType="submit"
-                type="default"
-                size="large"
-                block
-            >
-                {title}
-            </Button>
-        </ButtonContainer>
-    );
+  return (
+    <ButtonContainer>
+      <Button
+        className="custom-button"
+        htmlType="submit"
+        type="default"
+        size="large"
+        block
+      >
+        {title}
+      </Button>
+    </ButtonContainer>
+  );
 }

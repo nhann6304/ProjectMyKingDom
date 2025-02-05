@@ -119,7 +119,7 @@ export class AuthService {
         const isOtp = await PasswordHelper.comparePassword(optUser.otp, otpData.otp);
 
         if (!isOtp) {
-            throw new BadRequestException("Mã opt không trùng khớp hãy kiểm tra email của bạn!!!");
+            throw new BadRequestException("Mã otp không trùng khớp hãy kiểm tra email của bạn!!!");
         }
         return optUser
     }

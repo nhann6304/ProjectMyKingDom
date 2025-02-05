@@ -1,10 +1,11 @@
 import { EGender } from "@/enums/EGender.enum";
 import { ERole } from "@/enums/ERole.enum";
 import { EStatusUser } from "@/enums/EStatusUser.enum";
+import { IBaseModel } from "./IBaseResponse.interface";
 
 
 
-export interface IUser {
+export interface IUser extends IBaseModel {
     user_first_name: string;   // Tên người dùng
     user_last_name: string;    // Họ người dùng
     user_role: ERole;          // Vai trò người dùng

@@ -5,7 +5,9 @@ export const CONST_APIS = {
         AUTH: {
             LOGIN: "login",
             REGISTER: "register",
-            SEND_OTP: "send-otp"
+            SEND_OTP: "send-otp",
+            VERIFY_OTP: "verify-otp",
+            RESET_PASSWORD: "reset-password",
         },
 
         COMMON: {
