@@ -1,3 +1,5 @@
+@use '@/app/globals.scss' as *;
+
 .reset-pass-container {
     margin: 0 auto;
     display: flex;
@@ -37,6 +39,16 @@
     .reset-form {
         .box-form-reset {
             margin-top: 3rem;
+        }
+    }
+
+    @include resLAP-1024() {
+        .box-reset {
+            width: calc(100% - 30rem);
+        }
+
+        .reset-title {
+            font-size: 4.4rem;
         }
     }
 }
