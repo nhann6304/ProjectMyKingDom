@@ -11,18 +11,22 @@ import {
     useForm,
 } from "react-hook-form";
 import { IVerifyOtp } from "@/interfaces/common/IBaseResponse.interface";
-import { useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { verifyOtp } from "@/apis/auth.apis";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/loading/Loading";
+import { formatTime } from "@/utils";
 
 interface IProps {
     userId?: string;
 }
-
+const valueCountDown = 900;
 export default function OtpLayout({ userId }: IProps) {
     const router = useRouter();
+    const countdownRef = useRef(valueCountDown);
+    const [countdown, setCountdown] = useState(valueCountDown);
+    const [isExpired, setIsExpired] = useState(false);
     const [isPending, startTransition] = useTransition();
     const {
         reset,
@@ -32,6 +36,19 @@ export default function OtpLayout({ userId }: IProps) {
         watch,
         formState: { errors },
     } = useForm<IVerifyOtp>();
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            if (countdownRef.current > 0) {
+                countdownRef.current -= 1;
+                setCountdown(countdownRef.current);
+            } else {
+                clearInterval(timer);
+                setIsExpired(true);
+            }
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     const onSubmit: SubmitHandler<IVerifyOtp> = (data) => {
         const otpValue = data.otp;
@@ -82,6 +99,14 @@ export default function OtpLayout({ userId }: IProps) {
                                     />
                                 )}
                             />
+
+                            <div className="count-down-time">
+                                {isExpired ? (
+                                    <p className="time-end">00:00</p>
+                                ) : (
+                                    <p>{`${formatTime(countdown)}`}</p>
+                                )}
+                            </div>
                         </div>
 
                         <div className="button-submit">

@@ -342,6 +342,25 @@
         }
     }
 
+    @include resTL-768() {
+
+        .section-top {
+            &-mobile {
+                gap: 0;
+            }
+        }
+
+        .section-bottom {
+            .box-option {
+                .option-item {
+                    .nation-language {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
     @include resMB-425() {
         .section-top {
             margin: 0 4px;
@@ -353,18 +372,16 @@
                 .box-logo {
                     width: 15rem;
                 }
-
             }
 
             .box-option {
                 gap: 0;
 
                 .option-item {
-                    &:last-child {
+                    .nation-language {
                         display: none;
                     }
                 }
-
             }
         }
     }

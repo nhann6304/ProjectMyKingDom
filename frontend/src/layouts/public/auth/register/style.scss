@@ -1,3 +1,5 @@
+@use '@/app/globals.scss' as *;
+
 .register-container {
     margin: 0 auto;
     display: flex;
@@ -71,7 +73,6 @@
                         content: "";
                         position: absolute;
                         inset: 0;
-                        // padding: 5px;
                         height: 100%;
                         width: 100%;
                         border-radius: 2px;
@@ -105,5 +106,38 @@
                 }
             }
         }
+
     }
+
+    @include resTL-768() {
+        .box-register {
+            width: auto;
+
+            .register-from {
+
+                .clause-text-box {
+                    flex-direction: column;
+
+                }
+
+                .box-form-clause {
+                    flex-direction: column;
+                    height: auto;
+                }
+            }
+        }
+    }
+
+    @include resMB-425() {
+        padding: 5px 1.5rem 0;
+
+        .box-register {
+            width: 35rem;
+
+            .register-title {
+                font-size: 4rem;
+            }
+        }
+    }
+
 }

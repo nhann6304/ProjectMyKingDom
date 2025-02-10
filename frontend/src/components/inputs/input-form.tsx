@@ -82,7 +82,6 @@ const InputContainer = styled.div<{ background?: string }>`
         padding: 0 8px;
       }
     }
-    /* Xóa viền khi focus hoặc active */
     .selected-item.ant-select-focused .ant-select-selector,
     .selected-item .ant-select-selector:focus,
     .selected-item .ant-select-selector:active {

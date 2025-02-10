@@ -43,12 +43,28 @@
     }
 
     @include resLAP-1024() {
+        padding-top: 5px;
+
         .box-reset {
-            width: calc(100% - 30rem);
+            width: auto;
         }
 
         .reset-title {
-            font-size: 4.4rem;
+            font-size: 4rem;
+        }
+    }
+
+    @include resMB-425() {
+        .box-reset {
+            &-instruct {
+                width: auto;
+
+                .instruct-text {
+                    font-size: 1.4rem;
+                    color: black;
+                    font-weight: 400;
+                }
+            }
         }
     }
 }
