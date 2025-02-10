@@ -10,10 +10,14 @@ import { IUser } from "@/interfaces/common/IUser.interface";
 import { validateEmail } from "@/utils/validation.util";
 import toast from "react-hot-toast";
 import Loading from "@/components/loading/Loading";
+import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import { IResponseLogin } from "@/interfaces/common/IBaseResponse.interface";
+import { useRouter } from "next/navigation";
 interface IAuthLogin extends Pick<IUser, "user_email" | "user_password"> { }
 export default function LoginLayout() {
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
-
+    const { signin: signinZustand } = useUserCurrent();
     const {
         reset,
         setValue,
@@ -29,14 +33,13 @@ export default function LoginLayout() {
 
             if (responseLogin.statusCode === 400) {
                 toast.error(responseLogin.message);
-                console.log(responseLogin.message);
             } else {
                 toast.success(responseLogin.message);
-                console.log(responseLogin.message);
+                console.log(responseLogin.metadata);
+                signinZustand(responseLogin?.metadata as any);
+                router.replace("/", { scroll: true });
             }
         });
-
-        console.log("Dữ liệu form:", data);
     };
 
     return (
