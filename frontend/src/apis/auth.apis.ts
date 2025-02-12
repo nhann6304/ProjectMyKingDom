@@ -13,6 +13,10 @@ import {
 } from "../interfaces/common/IBaseResponse.interface";
 import { IUser } from "../interfaces/common/IUser.interface";
 import { CONST_VALUES } from "../constants/values.constant";
+import { revalidateTag } from "next/cache";
+
+const USER = 'USER';
+
 
 export async function register(payload: Partial<IUser>) {
     const result = await api<IBaseResponse<IUser>>({
@@ -58,7 +62,13 @@ export async function sendEmail(payload: Pick<IUser, "user_email">) {
     return result;
 }
 
-export async function verifyOtp({ params, payload }: { params: string; payload: IVerifyOtp }) {
+export async function verifyOtp({
+    params,
+    payload,
+}: {
+    params: string;
+    payload: IVerifyOtp;
+}) {
     const result = await api<IBaseResponse<any>>({
         url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.VERIFY_OTP}/${params}`,
         options: {
@@ -78,10 +88,18 @@ export async function resetPassword(payload: IResetPassData) {
         },
     });
     return result;
-
 }
 
+export async function logout() {
+    const result = await api<IBaseResponse<any>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.LOGOUT}`,
+        options: {
+            method: CONST_METHODS.GET,
+        },
+    });
 
+    cookies().delete(CONST_VALUES.TOKEN)
+    // revalidateTag(USER)
 
-
-
+    return result;
+}

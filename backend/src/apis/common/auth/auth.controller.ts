@@ -59,7 +59,7 @@ export class AuthController {
   }
 
 
-  @Get("Log-out")
+  @Get("log-out")
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: "Đăng xuất" })
   async logout(

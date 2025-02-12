@@ -57,3 +57,13 @@ export const CardIcon = () => {
         </svg>
     )
 }
+
+export const ArrowRight = () => {
+    return (
+        <svg className="icon icon-caret" xmlns="http://www.w3.org/2000/svg" width="13" height="8" viewBox="0 0 13 8" fill="none">
+            <path d="M5.79627 6.93934L1.41759 2.56066C0.472647 1.61571 1.1419 0 2.47825 0H11.2356C12.572 0 13.2412 1.61571 12.2963 2.56066L7.91759 6.93934C7.33181 7.52513 6.38206 7.52513 5.79627 6.93934Z" fill="currentColor"></path>
+        </svg>
+    )
+}
+
+

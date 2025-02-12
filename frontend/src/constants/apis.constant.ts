@@ -7,6 +7,7 @@ export const CONST_APIS = {
             REGISTER: "register",
             SEND_OTP: "send-otp",
             VERIFY_OTP: "verify-otp",
+            LOGOUT: "log-out",
             RESET_PASSWORD: "reset-password",
         },
 

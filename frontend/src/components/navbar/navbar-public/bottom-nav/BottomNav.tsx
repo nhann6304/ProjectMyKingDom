@@ -16,6 +16,7 @@ import { TruckLive, AccountIcon, CardIcon } from "@/assets/common/icon-public/sv
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
 import Link from "next/link";
+import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
 interface IOption {
     content: string;
     icon: React.ReactNode;
@@ -63,7 +64,7 @@ const itemsProduct: MenuProps["items"] = [
 export default function BottomNav() {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
-
+    const { userCurrent } = useUserCurrent()
     const showDrawer = () => {
         setOpen(true);
     };
@@ -95,12 +96,23 @@ export default function BottomNav() {
                         </button>
                     </div>
 
-                    <Link href={"/auth/login"} className="option-item">
-                        <button>
-                            <AccountIcon />
-                            <h2>Đăng nhập</h2>
-                        </button>
-                    </Link>
+                    {userCurrent && (
+                        <Link href={"/account"} className="option-item">
+                            <button>
+                                <AccountIcon />
+                                <h2>Tài khoản</h2>
+                            </button>
+                        </Link>
+                    )}
+
+                    {!userCurrent && (
+                        <Link href={"/auth/login"} className="option-item">
+                            <button>
+                                <AccountIcon />
+                                <h2>Đăng nhập</h2>
+                            </button>
+                        </Link>
+                    )}
 
                     <div className="option-item">
                         <button>

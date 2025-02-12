@@ -1,12 +1,8 @@
-"use client"
-
-import { useUserCurrent } from "@/stores/userCurrent/userCurrent"
+import HomePageLayout from "@/layouts/public/home-page/HomePageLayout";
 
 export default function HomePage() {
-    const { userCurrent } = useUserCurrent();
     return (
-        <>
-            HomePage {userCurrent.user.user_email}
-        </>
+        <HomePageLayout />
+
     )
 }
