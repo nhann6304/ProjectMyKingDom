@@ -1,65 +1,10 @@
+@use "@/app/globals.scss" as *;
+
 .home-container {
     width: 100%;
     height: calc(100vh - 20rem);
     padding: 0 10rem;
     margin-top: 1rem;
-
-    .box-carousel {
-        position: relative;
-
-        .slick-slider {
-            padding: 0 4rem;
-        }
-
-        .slick-list {
-            border-radius: 2rem;
-            overflow: hidden;
-        }
-
-        .slick-dots {
-            li {
-                margin: 0 !important;
-
-                button {
-                    &::before {
-                        font-size: 1rem;
-                        color: var(--color-background-global);
-                    }
-                }
-            }
-        }
-
-        .custom-prev-arrow,
-        .custom-next-arrow {
-            border: 3px solid var(--color-background-global);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            z-index: 1;
-            cursor: pointer;
-            color: var(--color-background-global);
-            padding: 5px;
-            border-radius: 50%;
-            transition: background 0.3s;
-        }
-
-        .custom-prev-arrow {
-            left: 100%;
-        }
-
-        .custom-next-arrow {
-            right: 100%;
-        }
-
-        .slick-slide {
-            display: flex;
-            justify-content: center;
-
-            img {
-                width: 100vw;
-            }
-        }
-    }
 
     .box-btn-option {
         display: flex;
@@ -77,8 +22,47 @@
             text-transform: capitalize;
         }
 
-        .product-btn-more {}
+        // .product-btn-more {
+        //     display: none;
+        // }
+
+        .custom-carousel {
+
+            .slick-slide {
+                padding: 0 4px;
+
+                div {
+                    width: 100%;
+                }
+            }
+        }
     }
+
+    @include resLAP-1024() {
+        .box-product-item {
+            .product-item-title {
+                text-align: center;
+                font-size: 4.8rem;
+                font-weight: 700;
+                color: #041675;
+                text-transform: capitalize;
+            }
+
+            .custom-carousel {
+                width: calc(100% - 2rem);
+                margin: 0 auto;
+
+                .slick-slide {
+                    padding: 0 4px;
+
+                    div {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
 
 
 }
