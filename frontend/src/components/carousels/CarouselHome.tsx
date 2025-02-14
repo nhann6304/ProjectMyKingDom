@@ -7,26 +7,26 @@ import Slider, { Settings } from "react-slick";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 interface IProps {
-    settings: Settings;
-    children: React.ReactNode;
-    className?: string; // Thêm props className
+  settings: Settings;
+  children: React.ReactNode;
+  className?: string; // Thêm props className
 }
 
 export default function CarouselHome({
-    settings,
-    children,
-    className,
+  settings,
+  children,
+  className,
 }: IProps) {
-    const sliderRef = useRef<Slider | null>(null); // Tạo ref cho Slider
+  const sliderRef = useRef<Slider | null>(null); // Tạo ref cho Slider
 
-    const CarouselContainer = styled.div`
+  const CarouselContainer = styled.div`
     position: relative;
     .slick-slider {
       padding: 0 4rem;
     }
 
     .slick-list {
-      border-radius: 2rem;
+      /* border-radius: 2rem; */
       overflow: hidden;
     }
 
@@ -74,34 +74,34 @@ export default function CarouselHome({
     }
   `;
 
-    // Component mũi tên trái
-    const PrevArrow = () => (
-        <div
-            className="custom-prev-arrow"
-            onClick={() => sliderRef.current?.slickPrev()}
-        >
-            <IoIosArrowForward size={30} />
-        </div>
-    );
+  // Component mũi tên trái
+  const PrevArrow = () => (
+    <div
+      className="custom-prev-arrow"
+      onClick={() => sliderRef.current?.slickPrev()}
+    >
+      <IoIosArrowForward size={30} />
+    </div>
+  );
 
-    // Component mũi tên phải
-    const NextArrow = () => (
-        <div
-            className="custom-next-arrow"
-            onClick={() => sliderRef.current?.slickNext()}
-        >
-            <IoIosArrowBack size={30} />
-        </div>
-    );
+  // Component mũi tên phải
+  const NextArrow = () => (
+    <div
+      className="custom-next-arrow"
+      onClick={() => sliderRef.current?.slickNext()}
+    >
+      <IoIosArrowBack size={30} />
+    </div>
+  );
 
-    return (
-        <CarouselContainer className={className}>
-            <Slider ref={sliderRef} {...settings}>
-                {children}
-            </Slider>
-            {/* Điều khiển bằng ref */}
-            <PrevArrow />
-            <NextArrow />
-        </CarouselContainer>
-    );
+  return (
+    <CarouselContainer className={className}>
+      <Slider ref={sliderRef} {...settings}>
+        {children}
+      </Slider>
+      {/* Điều khiển bằng ref */}
+      <PrevArrow />
+      <NextArrow />
+    </CarouselContainer>
+  );
 }

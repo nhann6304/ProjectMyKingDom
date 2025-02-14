@@ -19,14 +19,20 @@ export default function HomePageLayout() {
 
     // Component mũi tên trái
     const PrevArrow = () => (
-        <div className="custom-prev-arrow" onClick={() => sliderRef.current?.slickPrev()}>
+        <div
+            className="custom-prev-arrow"
+            onClick={() => sliderRef.current?.slickPrev()}
+        >
             <IoIosArrowForward size={30} />
         </div>
     );
 
     // Component mũi tên phải
     const NextArrow = () => (
-        <div className="custom-next-arrow" onClick={() => sliderRef.current?.slickNext()}>
+        <div
+            className="custom-next-arrow"
+            onClick={() => sliderRef.current?.slickNext()}
+        >
             <IoIosArrowBack size={30} />
         </div>
     );
@@ -41,12 +47,13 @@ export default function HomePageLayout() {
     };
 
     const settingsProduct: Settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 1,
         arrows: false,
+
     };
 
     return (
@@ -77,13 +84,14 @@ export default function HomePageLayout() {
             </div>
             {/* Product box */}
             <div className="box-product-item">
-                <h1 className="product-item-title">Ưu Đãi Độc Quyền Online Từ 08-14/2</h1>
+                <h1 className="product-item-title">
+                    Ưu Đãi Độc Quyền Online Từ 08-14/2
+                </h1>
                 <div className="product-btn-more">
                     <ButtonCommon title="Xem thêm" icon hoverBg={false} />
                 </div>
-
                 {/* Carousel Product */}
-                <CarouselHome className="custom-carousel" settings={settingsProduct} >
+                <CarouselHome className="custom-carousel" settings={settingsProduct}>
                     <div className="card-item">
                         <CardProduct />
                     </div>
@@ -101,7 +109,6 @@ export default function HomePageLayout() {
                     </div>
                 </CarouselHome>
             </div>
-
         </div>
     );
 }

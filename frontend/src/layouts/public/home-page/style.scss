@@ -27,12 +27,19 @@
         // }
 
         .custom-carousel {
-
             .slick-slide {
                 padding: 0 4px;
 
                 div {
                     width: 100%;
+                }
+            }
+
+            .card-item {
+                border-radius: 2rem;
+
+                &:hover {
+                    box-shadow: 2px 2px 16px #cf102d33;
                 }
             }
         }
@@ -62,7 +69,4 @@
             }
         }
     }
-
-
-
 }
