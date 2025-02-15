@@ -38,6 +38,7 @@ export class ProductCategoriesController {
     queries: AQueries,
     @Req() req: Request,
   ) {
+    console.log(queries);
     const items = await this.productCategoriesService.findAll(queries, req)
     return new OK({
       message: RES_MESS.FIND_ALL("Danh mục sản phẩn"),

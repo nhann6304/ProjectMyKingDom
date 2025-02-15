@@ -5,19 +5,22 @@ import styled from "styled-components";
 import { useRef } from "react";
 import Slider, { Settings } from "react-slick";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-
+import Image from "next/image";
+import minionIcon from "../../assets/common/icon-public/svg/icon/minion.svg";
 interface IProps {
   settings: Settings;
   children: React.ReactNode;
+  scroll: boolean;
   className?: string; // Thêm props className
 }
 
 export default function CarouselHome({
   settings,
   children,
+  scroll,
   className,
 }: IProps) {
-  const sliderRef = useRef<Slider | null>(null); // Tạo ref cho Slider
+  const sliderRef = useRef<Slider | null>(null);
 
   const CarouselContainer = styled.div`
     position: relative;
@@ -40,6 +43,31 @@ export default function CarouselHome({
             color: var(--color-background-global);
           }
         }
+      }
+    }
+
+    .scroll-container {
+      padding: 4rem 0;
+      span {
+        margin: 0 auto;
+        display: block;
+        border-radius: 1rem;
+        width: 45vw;
+        height: 8px;
+        background-color: var(--color-background-global);
+      }
+
+      .minion-image {
+        position: absolute;
+        right: 0;
+        left: 25%;
+        height: 7rem;
+        width: 7rem;
+        object-fit: cover;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -45px;
+        z-index: 2;
       }
     }
 
@@ -102,6 +130,18 @@ export default function CarouselHome({
       {/* Điều khiển bằng ref */}
       <PrevArrow />
       <NextArrow />
+      {scroll && (
+        <div className="scroll-container">
+          <span></span>
+          <Image
+            src={minionIcon}
+            alt="Minion"
+            width={48}
+            height={48}
+            className="minion-image"
+          />
+        </div>
+      )}
     </CarouselContainer>
   );
 }

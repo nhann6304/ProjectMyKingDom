@@ -38,6 +38,12 @@ export interface IBaseModel {
     updatedAt: Date
 }
 
+
+export interface IGetManyItem<T> {
+    totalItems: number,
+    items: Array<T>;
+}
+
 export interface IResponseLogin {
     token: string;
     user: IUser;

@@ -65,9 +65,10 @@ export class ProductsService {
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
-
         const objFilter = UtilConvert.convertJsonToObject(filter);
         const ALIAS_NAME = "product";
+
+        console.log(objFilter);
 
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .leftJoinAndSelect(["pc_category"])

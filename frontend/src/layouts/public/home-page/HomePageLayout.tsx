@@ -17,26 +17,6 @@ import CardProduct from "@/components/cards/CardProduct";
 export default function HomePageLayout() {
     const sliderRef = useRef<Slider | null>(null); // Tạo ref cho Slider
 
-    // Component mũi tên trái
-    const PrevArrow = () => (
-        <div
-            className="custom-prev-arrow"
-            onClick={() => sliderRef.current?.slickPrev()}
-        >
-            <IoIosArrowForward size={30} />
-        </div>
-    );
-
-    // Component mũi tên phải
-    const NextArrow = () => (
-        <div
-            className="custom-next-arrow"
-            onClick={() => sliderRef.current?.slickNext()}
-        >
-            <IoIosArrowBack size={30} />
-        </div>
-    );
-
     const settings: Settings = {
         dots: true,
         infinite: true,
@@ -53,14 +33,13 @@ export default function HomePageLayout() {
         slidesToShow: 4,
         slidesToScroll: 1,
         arrows: false,
-
     };
 
     return (
         <div className="home-container">
             {/* carousel */}
             <div className="box-carousel">
-                <CarouselHome settings={settings}>
+                <CarouselHome scroll={false} settings={settings}>
                     <div>
                         <Image src={hinh} alt="hinh" />
                     </div>
@@ -91,7 +70,8 @@ export default function HomePageLayout() {
                     <ButtonCommon title="Xem thêm" icon hoverBg={false} />
                 </div>
                 {/* Carousel Product */}
-                <CarouselHome className="custom-carousel" settings={settingsProduct}>
+
+                <CarouselHome scroll className="custom-carousel" settings={settingsProduct}>
                     <div className="card-item">
                         <CardProduct />
                     </div>

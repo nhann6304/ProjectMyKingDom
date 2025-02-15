@@ -11,10 +11,17 @@ export const CONST_APIS = {
             RESET_PASSWORD: "reset-password",
         },
 
+
+
         COMMON: {
-            AUTH: "auth"
+            AUTH: "auth",
+            PRODUCTS: "products",
+            PRODUCTS_CATEGORIES: "product-categories"
         }
     },
+}
 
 
+export const CONST_API_COMMON = {
+    FIND_ALL: "find-all"
 }

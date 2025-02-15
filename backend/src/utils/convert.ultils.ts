@@ -27,7 +27,6 @@ export class UtilConvert {
             }
         }
 
-
         return obj;
     }
 

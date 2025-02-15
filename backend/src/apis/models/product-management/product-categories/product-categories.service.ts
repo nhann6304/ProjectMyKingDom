@@ -77,13 +77,11 @@ export class ProductCategoriesService {
             .select(arrFields)
             .distinct(true) // Đảm bảo không có bản ghi trùng lặp
             .getMany();
-
         const childIds = result
             .filter(parent => Array.isArray(parent.children))  // Kiểm tra nếu có mảng children
             .flatMap(parent => parent.children.map(child => child.id));  // Lấy danh sách các id từ mảng children
 
         const filteredResult = result.filter(parent => !childIds.includes(parent.id));
-
         const filterItemsWithChildren = (data: Array<ProductCategoryEntity>) => {
             return data
                 .filter((val) => val.isDeleted === UtilConvert.convertStringToBoolean(query.isDeleted))
@@ -96,7 +94,6 @@ export class ProductCategoriesService {
         };
 
         const items = filterItemsWithChildren(filteredResult);
-
         return items
     }
 
