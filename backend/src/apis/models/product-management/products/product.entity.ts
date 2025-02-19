@@ -47,6 +47,7 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     discount: number;
 
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products, { nullable: false })
+    @JoinColumn({ name: 'category_id' })
     pc_category: ProductCategoryEntity;
 
     @ManyToMany(() => CartEntity, (cart) => cart.cart_products, { nullable: true })

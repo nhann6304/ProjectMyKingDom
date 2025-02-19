@@ -17,18 +17,11 @@ import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
 import Link from "next/link";
 import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import { useProductStore } from "@/stores/productStores/productStores";
 interface IOption {
     content: string;
     icon: React.ReactNode;
 }
-
-const dropdownData = [
-    {
-        category: "Đồ chơi theo phim",
-        products: ["Siêu anh hùng", "Siêu Robot", "Siêu thú"],
-    },
-];
-
 
 const ListOption: IOption[] = [
     {
@@ -64,7 +57,11 @@ const itemsProduct: MenuProps["items"] = [
 export default function BottomNav() {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
-    const { userCurrent } = useUserCurrent()
+    const { userCurrent } = useUserCurrent();
+    const { productStore } = useProductStore();
+
+    console.log("productStore::", productStore);
+
     const showDrawer = () => {
         setOpen(true);
     };
@@ -72,6 +69,14 @@ export default function BottomNav() {
     const onClose = () => {
         setOpen(false);
     };
+
+
+    const dropdownData = [
+        {
+            category: "Đồ chơi theo phim",
+            products: ["Siêu anh hùng", "Siêu Robot", "Siêu thú"],
+        },
+    ];
 
     return (
         <div className="nav-container">

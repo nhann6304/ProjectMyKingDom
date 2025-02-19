@@ -123,14 +123,17 @@ export default function CarouselHome({
   );
 
   return (
-    <CarouselContainer className={className}>
-      <Slider ref={sliderRef} {...settings}>
-        {children}
-      </Slider>
-      {/* Điều khiển bằng ref */}
-      <PrevArrow />
-      <NextArrow />
-      {scroll && (
+    <>
+      <CarouselContainer className={className}>
+        <Slider ref={sliderRef} {...settings}>
+          {children}
+        </Slider>
+        {/* Điều khiển bằng ref */}
+        <PrevArrow />
+        <NextArrow />
+
+      </CarouselContainer>
+      {/* {scroll && (
         <div className="scroll-container">
           <span></span>
           <Image
@@ -141,7 +144,7 @@ export default function CarouselHome({
             className="minion-image"
           />
         </div>
-      )}
-    </CarouselContainer>
+      )} */}
+    </>
   );
 }

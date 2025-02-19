@@ -66,15 +66,13 @@ export class ProductsService {
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter);
-        const ALIAS_NAME = "product";
-
-        console.log(objFilter);
+        const ALIAS_NAME = "products";
 
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
-            .leftJoinAndSelect(["pc_category"])
             .select(fields)
             .skip({ limit, page })
-            .take({ limit });
+            .take({ limit })
+            .leftJoinAndSelect(["pc_category"])
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
@@ -92,8 +90,6 @@ export class ProductsService {
             totalItems,
         };
     }
-
-
 
     async updateProduct({ id, req, updateData }: { updateData: UpdateProductDto, req: Request, id: string }) {
         const me = req["user"];

@@ -13,7 +13,6 @@ import Loading from "@/components/loading/Loading";
 import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
 import { IResponseLogin } from "@/interfaces/common/IBaseResponse.interface";
 import { useRouter } from "next/navigation";
-import Draggable from "react-draggable";
 interface IAuthLogin extends Pick<IUser, "user_email" | "user_password"> { }
 export default function LoginLayout() {
     const router = useRouter();

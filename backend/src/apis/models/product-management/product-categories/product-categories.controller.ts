@@ -31,14 +31,13 @@ export class ProductCategoriesController {
   }
 
   @Get("find-all")
-  @ApiOperation({ summary: 'Láy toàn bộ danh mục sản phẩm' })
+  @ApiOperation({ summary: 'Lấy toàn bộ danh mục sản phẩm' })
   @UseGuards(AuthGuard)
   async findAll(
     @Query()
     queries: AQueries,
     @Req() req: Request,
   ) {
-    console.log(queries);
     const items = await this.productCategoriesService.findAll(queries, req)
     return new OK({
       message: RES_MESS.FIND_ALL("Danh mục sản phẩn"),

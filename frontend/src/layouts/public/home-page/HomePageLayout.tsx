@@ -7,15 +7,30 @@ import Slider, { Settings } from "react-slick";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiFillAlert } from "react-icons/ai";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import ButtonForm from "@/components/buttons/ButtonForm";
 import hinh from "@/assets/models/carousel/carousel-home/carosel.1.webp";
 import ButtonCommon from "@/components/buttons/ButtonCommon";
 import CarouselHome from "@/components/carousels/CarouselHome";
 import CardProduct from "@/components/cards/CardProduct";
+import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { findAllBLogCate } from "@/apis/product-management/product-categories.apis";
+import { useProductStore } from "@/stores/productStores/productStores";
 
-export default function HomePageLayout() {
-    const sliderRef = useRef<Slider | null>(null); // Tạo ref cho Slider
+
+interface IProps {
+    categories: Awaited<ReturnType<typeof findAllBLogCate>>
+}
+
+export default function HomePageLayout({ categories }: IProps) {
+    const { setProduct, productStore } = useProductStore();
+
+    useEffect(() => {
+        if (productStore) {
+            setProduct(categories?.metadata?.items as any);
+        }
+    }, [categories, productStore, setProduct]);
+
 
     const settings: Settings = {
         dots: true,

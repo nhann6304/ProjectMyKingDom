@@ -15,15 +15,14 @@ export class UtilORM<T> {
     }
 
     leftJoinAndSelect(fields: Array<keyof T>): this {
-        let arrFields: Array<string> = [];
-        for (let i = 0; i < fields.length; i++) {
-            arrFields.push(String(fields[i]));
-            this.queryBuilder.leftJoinAndSelect(
-                `${this.aliasName}.${String(fields[i])}`,
-                `${String(fields[i])}`)
+        for (const field of fields) {
+            const relationPath = `${this.aliasName}.${String(field)}`;
+            console.log("relationPath::", relationPath);
+            this.queryBuilder.leftJoinAndSelect(relationPath, String(field));
         }
-        return this
+        return this;
     }
+
 
     where(filter: Partial<Record<keyof T, string | number | IRange>>, isDeleted: string): this {
         let isFirstQuery = true;
@@ -70,7 +69,7 @@ export class UtilORM<T> {
 
     whereUser(userId: string): this {
         this.queryBuilder
-            .where('cart.cart_users.id = :userId', { userId }); // Điều kiện lấy theo userId
+            .where('cart.cart_users.id = :userId', { userId });
 
         return this
     }
@@ -91,8 +90,6 @@ export class UtilORM<T> {
         } else {
             arrFields.push(`${this.aliasName}.${fields}`)
         }
-
-        console.log(arrFields);
 
         this.queryBuilder.select(arrFields)
 

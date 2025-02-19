@@ -10,20 +10,12 @@ export default async function HomePage({ searchParams }: IPageProps) {
     if (searchParams && !searchParams?.page) searchParams.page = 1;
     if (searchParams && !searchParams?.isDeleted) searchParams.isDeleted = false;
     if (searchParams && !searchParams?.fields) {
-        searchParams.fields = ["pc_name", "pc_slug", "pc_description"] as Array<keyof IProductCategory>;
+        searchParams.fields = ["pc_name", "pc_slug", "pc_description"] as Array<
+            keyof IProductCategory
+        >;
     }
 
-    // console.log("Haahaha::", searchParams);
-    // if (searchParams && !searchParams?.fieldsWhereSelected) {
-    //     searchParams.fields = JSON.stringify([
-    //         "pc_name",
-    //     ] as Array<keyof IProductCategory>)
-    // }
-    // console.log("Link nè:::", `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS_CATEGORIES}/${CONST_API_COMMON.FIND_ALL}${convertOjbToString(searchParams)}`);
-    const result = await findAllBLogCate(searchParams);
-    console.log("result::", result);
-    return (
-        <HomePageLayout />
+    const resultCate = await findAllBLogCate(searchParams);
 
-    )
+    return <HomePageLayout categories={resultCate} />;
 }

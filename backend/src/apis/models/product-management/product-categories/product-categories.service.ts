@@ -94,7 +94,12 @@ export class ProductCategoriesService {
         };
 
         const items = filterItemsWithChildren(filteredResult);
-        return items
+
+
+        return {
+            items,
+            totalItems: items.length,
+        };
     }
 
 
