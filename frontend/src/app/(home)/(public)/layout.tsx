@@ -1,3 +1,4 @@
+"use client"
 import NavbarPublic from "@/components/navbar/navbar-public/NavbarPublic";
 
 export default function PublicLayout({

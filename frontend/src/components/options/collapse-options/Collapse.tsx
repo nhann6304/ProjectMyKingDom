@@ -1,15 +1,13 @@
 "use client";
-
 import { Checkbox, CollapseProps } from "antd";
-import { FC, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Collapse, Select } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { Collapse } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const CollapseContainer = styled.div`
-  padding: 1.6rem 0;
-
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--color-gray-200);
   .collapse-title {
     display: block;
     font-size: 1.8rem;
@@ -39,7 +37,7 @@ const CollapseContainer = styled.div`
         }
 
         .ant-collapse-content {
-            padding: 5px 0;
+          padding: 5px 0;
           &-box {
             padding: 0;
           }
@@ -54,20 +52,19 @@ const CheckBoxContainer = styled.div`
   padding: 5px 0;
 `;
 
-export default function CollapseOption() {
+function CollapseOptionWithSearchParams() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
+    const [checkedList, setCheckedList] = useState<string[]>([]);
 
-    // Lấy danh sách checkbox từ URL
-    const getCheckedFromURL = () => {
-        const checkedValues = searchParams.get("checked");
-        return checkedValues ? checkedValues.split(",") : [];
-    };
+    useEffect(() => {
+        if (searchParams) {
+            const checkedValues = searchParams.get("checked");
+            setCheckedList(checkedValues ? checkedValues.split(",") : []);
+        }
+    }, [searchParams]);
 
-    const [checkedList, setCheckedList] = useState<string[]>(getCheckedFromURL());
-
-    // Cập nhật URL khi checkbox thay đổi
     const handleCheckboxChange = (value: string) => {
         let newCheckedList = [...checkedList];
 
@@ -79,7 +76,6 @@ export default function CollapseOption() {
 
         setCheckedList(newCheckedList);
 
-        // Cập nhật URL
         const params = new URLSearchParams(searchParams);
         if (newCheckedList.length > 0) {
             params.set("checked", newCheckedList.join(","));
@@ -92,9 +88,8 @@ export default function CollapseOption() {
     const CheckBoxProduct = (
         <>
             {["option1", "option2", "option3", "option4", "option5"].map((option) => (
-                <CheckBoxContainer>
+                <CheckBoxContainer key={option}>
                     <Checkbox
-                        key={option}
                         checked={checkedList.includes(option)}
                         onChange={() => handleCheckboxChange(option)}
                     >
@@ -110,23 +105,19 @@ export default function CollapseOption() {
             key: "1",
             label: "This is panel header 1",
             children: CheckBoxProduct,
-            extra: <span>(200)</span>
+            extra: <span>(200)</span>,
         },
         {
             key: "2",
             label: "This is panel header 2",
-
             children: CheckBoxProduct,
-            extra: <span>(200)</span>
+            extra: <span>(200)</span>,
         },
     ];
-    //
-
 
     return (
         <CollapseContainer>
             <span className="collapse-title">Danh mục</span>
-
             <div className="container-collapse">
                 <Collapse
                     defaultActiveKey={["1"]}
@@ -135,5 +126,13 @@ export default function CollapseOption() {
                 />
             </div>
         </CollapseContainer>
+    );
+}
+
+export default function CollapseOption() {
+    return (
+        <Suspense fallback={<div>Loading filters...</div>}>
+            <CollapseOptionWithSearchParams />
+        </Suspense>
     );
 }

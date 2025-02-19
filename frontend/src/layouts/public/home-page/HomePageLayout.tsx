@@ -19,7 +19,7 @@ import { useProductStore } from "@/stores/productStores/productStores";
 
 
 interface IProps {
-    categories: Awaited<ReturnType<typeof findAllBLogCate>>
+    categories?: Awaited<ReturnType<typeof findAllBLogCate>>
 }
 
 export default function HomePageLayout({ categories }: IProps) {

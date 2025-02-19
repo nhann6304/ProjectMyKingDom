@@ -18,10 +18,13 @@ import InputSearch from "@/components/inputs/input-search";
 import Link from "next/link";
 import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
 import { useProductStore } from "@/stores/productStores/productStores";
+import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 interface IOption {
     content: string;
     icon: React.ReactNode;
 }
+
+type ICustomProductCate = IProductCategory & { children: IProductCategory[] } // Adđ thêm type vào
 
 const ListOption: IOption[] = [
     {
@@ -58,9 +61,12 @@ export default function BottomNav() {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
     const { userCurrent } = useUserCurrent();
+
     const { productStore } = useProductStore();
 
-    console.log("productStore::", productStore);
+    const product = productStore as ICustomProductCate[]
+
+
 
     const showDrawer = () => {
         setOpen(true);
@@ -152,19 +158,19 @@ export default function BottomNav() {
                         <FaChevronUp className="icon-hover" size={13} />
                         <DropdownNav>
                             <div className="drop-container">
-                                {dropdownData.map((item, index) => (
+                                {product.map((item, index) => (
                                     <div className="dropdown-item" key={index}>
                                         {/* Render mỗi item-content cho từng category */}
                                         <div className="item-content" key={index}>
                                             <div className="content-title">
-                                                <span className="content-category">{item.category}</span>
+                                                <span className="content-category">{item.pc_name}</span>
                                                 <IoMdArrowDropright size={24} />
                                             </div>
 
                                             <div className="content-value">
-                                                {item.products.map((product, productIndex) => (
+                                                {item.children.map((product, productIndex) => (
                                                     <span className="value-product" key={productIndex}>
-                                                        {product}
+                                                        {product.pc_name}
                                                     </span>
                                                 ))}
                                             </div>
