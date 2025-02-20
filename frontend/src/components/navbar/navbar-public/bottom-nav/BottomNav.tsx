@@ -1,24 +1,29 @@
 "use client";
-import "./style.scss";
+import { Drawer, DrawerProps, Dropdown, MenuProps } from "antd";
 import Image from "next/image";
-import { Button, Drawer, DrawerProps, Dropdown, MenuProps, Space } from "antd";
 import { useState } from "react";
+import "./style.scss";
 //
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
-import logo from "@/assets/common/icon-public/jpg/logo-254x76 (1).png";
-import vietnam from "@/assets/common/icon-public/jpg/co-nuoc-anh.svg.png";
+import { findAllBLogCate } from "@/apis/product-management/product-categories.apis";
 import anhquoc from "@/assets/common/icon-public/jpg/co-viet-nam.svg.png";
+import logo from "@/assets/common/icon-public/jpg/logo-254x76 (1).png";
+import { AccountIcon, CardIcon, TruckLive } from "@/assets/common/icon-public/svg/icon/iconItem";
+import DropdownNav from "@/components/dropdown/DropdownNav";
+import InputSearch from "@/components/inputs/input-search";
+import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import Link from "next/link";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
-import { TruckLive, AccountIcon, CardIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
-import DropdownNav from "@/components/dropdown/DropdownNav";
-import InputSearch from "@/components/inputs/input-search";
-import Link from "next/link";
-import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
-import { useProductStore } from "@/stores/productStores/productStores";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+
+
+interface IProps {
+    categories: Awaited<ReturnType<typeof findAllBLogCate>>
+}
+
 interface IOption {
     content: string;
     icon: React.ReactNode;
@@ -57,16 +62,16 @@ const itemsProduct: MenuProps["items"] = [
     },
 ];
 
-export default function BottomNav() {
+export default function BottomNav({ categories }: IProps) {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
     const { userCurrent } = useUserCurrent();
 
-    const { productStore } = useProductStore();
 
-    const product = productStore as ICustomProductCate[]
+    // const product = productStore as ICustomProductCate[]
 
 
+    const product = categories?.metadata?.items as ICustomProductCate[]
 
     const showDrawer = () => {
         setOpen(true);
@@ -158,7 +163,7 @@ export default function BottomNav() {
                         <FaChevronUp className="icon-hover" size={13} />
                         <DropdownNav>
                             <div className="drop-container">
-                                {product.map((item, index) => (
+                                {product?.map((item, index) => (
                                     <div className="dropdown-item" key={index}>
                                         {/* Render mỗi item-content cho từng category */}
                                         <div className="item-content" key={index}>
@@ -168,7 +173,7 @@ export default function BottomNav() {
                                             </div>
 
                                             <div className="content-value">
-                                                {item.children.map((product, productIndex) => (
+                                                {item?.children?.map((product, productIndex) => (
                                                     <span className="value-product" key={productIndex}>
                                                         {product.pc_name}
                                                     </span>

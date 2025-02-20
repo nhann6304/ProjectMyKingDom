@@ -32,7 +32,7 @@ export class ProductCategoriesController {
 
   @Get("find-all")
   @ApiOperation({ summary: 'Lấy toàn bộ danh mục sản phẩm' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async findAll(
     @Query()
     queries: AQueries,
