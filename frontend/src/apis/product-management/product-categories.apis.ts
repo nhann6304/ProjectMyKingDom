@@ -1,17 +1,18 @@
 "use server"
 
-import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
+import { CONST_APIS, CONST_API_COMMON } from "@/constants/apis.constant";
 import { CONST_METHODS } from "@/constants/methods.constant";
 import { api } from "@/helpers";
-import { IBaseResponse, IGetManyItem, IQueries } from "@/interfaces/common/IBaseResponse.interface";
+import { IQueries, IBaseResponse, IGetManyItem } from "@/interfaces/common/IBaseResponse.interface";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 import { convertOjbToString } from "@/utils";
 
 
 
+
 const TAG_NAME = {
-    BLOG_CATEGORY: " BLOG_CATEGORY",
-    BLOGS_CATEGORIES: " BLOGS_CATEGORIES",
+    PRODUCT_CATEGORY: " PRODUCT_CATEGORY",
+    PRODUCTS_CATEGORIES: " PRODUCTS_CATEGORIES",
 };
 
 export async function findAllBLogCate(queries?: IQueries) {
@@ -20,7 +21,7 @@ export async function findAllBLogCate(queries?: IQueries) {
         options: {
             method: CONST_METHODS.GET,
             next: {
-                tags: [TAG_NAME.BLOGS_CATEGORIES]
+                tags: [TAG_NAME.PRODUCTS_CATEGORIES]
             }
         }
     })

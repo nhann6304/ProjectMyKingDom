@@ -1,4 +1,5 @@
 "use client";
+import "./style.scss";
 import hinh from "@/assets/models/carousel/carousel-home/carosel.1.webp";
 import ButtonCommon from "@/components/buttons/ButtonCommon";
 import CardProduct from "@/components/cards/CardProduct";
@@ -7,10 +8,8 @@ import Image from "next/image";
 import { Settings } from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import "./style.scss";
 
 export default function HomePageLayout() {
-
     const settings: Settings = {
         dots: true,
         infinite: true,
@@ -65,7 +64,11 @@ export default function HomePageLayout() {
                 </div>
                 {/* Carousel Product */}
 
-                <CarouselHome scroll className="custom-carousel" settings={settingsProduct}>
+                <CarouselHome
+                    scroll
+                    className="custom-carousel"
+                    settings={settingsProduct}
+                >
                     <div className="card-item">
                         <CardProduct />
                     </div>

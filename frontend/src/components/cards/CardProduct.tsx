@@ -24,13 +24,13 @@ export default function CardProduct() {
       padding: 1rem;
       cursor: pointer;
       .box-product-item {
+        display: flex;
+        justify-content: center;
         img {
-          margin: 0 auto;
-          height: 100%;
+          padding: 1rem;
           object-position: center center;
-          width: 100%;
           transform: scale(1) !important;
-          max-width: 23.8rem;
+          max-width: 30rem;
           object-fit: contain;
         }
       }
@@ -149,7 +149,8 @@ export default function CardProduct() {
     <CardContainer>
       <div className="box-product">
         <div className="box-product-item">
-          <Image src={product} alt="product" />
+          {/* <Image height={500} width={500} src={"http://localhost:9000/uploads/minhvycafe.jpg"} alt="product" /> */}
+          <Image height={500} width={500} src={product} alt="product" />
         </div>
 
         {nhan && (
