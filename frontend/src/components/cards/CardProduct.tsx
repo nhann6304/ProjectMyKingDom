@@ -1,6 +1,6 @@
 import { Flex, Switch, Card, Avatar } from "antd";
 import styled from "styled-components";
-import product from "@/assets/common/icon-public/jpg/product.test.webp";
+import productImage from "@/assets/common/icon-public/jpg/product.test.webp";
 import {
   EditOutlined,
   EllipsisOutlined,
@@ -11,10 +11,15 @@ import Image from "next/image";
 import ButtonCommon from "../buttons/ButtonCommon";
 import ButtonForm from "../buttons/ButtonForm";
 import { HearNotBg } from "@/assets/common/icon-public/svg/icon/iconItem";
+import { IProduct } from "@/interfaces/models/products.interface";
 
 const nhan = true;
 
-export default function CardProduct() {
+interface IProps {
+  product?: IProduct;
+}
+
+export default function CardProduct({ product }: IProps) {
   const CardContainer = styled.div`
     height: auto;
     border: 1.5px solid var(--color-gray-200);
@@ -31,7 +36,8 @@ export default function CardProduct() {
           object-position: center center;
           transform: scale(1) !important;
           max-width: 30rem;
-          object-fit: contain;
+          max-height: 35rem;
+          object-fit: cover;
         }
       }
 
@@ -144,13 +150,12 @@ export default function CardProduct() {
       }
     }
   `;
-
   return (
     <CardContainer>
       <div className="box-product">
         <div className="box-product-item">
-          {/* <Image height={500} width={500} src={"http://localhost:9000/uploads/minhvycafe.jpg"} alt="product" /> */}
-          <Image height={500} width={500} src={product} alt="product" />
+          <Image height={500} width={500} src={product?.prod_thumb || "http://localhost:9000/uploads/minhvydalat.jpg"} alt="product" />
+          {/* <Image height={500} width={500} src={productImage} alt="product" /> */}
         </div>
 
         {nhan && (

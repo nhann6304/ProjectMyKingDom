@@ -7,17 +7,14 @@ import { FindAllProduct } from "@/apis/product-management/products.apis";
 import { IProduct } from "@/interfaces/models/products.interface";
 // GetProduct
 export default async function ProductPage({ searchParams }: IPageProps) {
-
     if (searchParams && !searchParams?.limit) searchParams.limit = 10;
-    if (searchParams && !searchParams?.page) searchParams.page = 1
+    if (searchParams && !searchParams?.page) searchParams.page = 1;
     if (searchParams && !searchParams?.isDeleted) searchParams.isDeleted = false;
     if (searchParams && !searchParams?.fields) {
-        searchParams.fields = ["prod_name", "prod_thumb"] as Array<keyof IProduct>
+        searchParams.fields = ["prod_name", "prod_thumb"] as Array<keyof IProduct>;
     }
 
-    const product = await FindAllProduct(searchParams);
-
-    // console.log(product?.metadata?.items);
+    const products = await FindAllProduct(searchParams);
 
     return (
         <div className="product-container container-pub">
@@ -28,7 +25,7 @@ export default async function ProductPage({ searchParams }: IPageProps) {
                 </div>
 
                 <div className="box-product">
-                    <ProductList product={product} />
+                    <ProductList products={products} />
                 </div>
             </div>
         </div>

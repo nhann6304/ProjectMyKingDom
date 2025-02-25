@@ -1,6 +1,9 @@
 import { EAgeGroup } from "@/enums/EAge.enum";
+import { IProductCategory } from "./product-categories.interface";
 
 export interface IProduct {
+    id?: any;
+    pc_category?: IProductCategory
     prod_name: string;
     prod_thumb: string;
     prod_company: string; // Thương hiệu

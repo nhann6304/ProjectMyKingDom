@@ -12,7 +12,13 @@ import categoryIcon from "@/assets/common/icon-public/svg/icon/cateIcon.svg";
 import listIcon from "@/assets/common/icon-public/svg/icon/listIcon.svg";
 import Image from "next/image";
 import CardProduct from "@/components/cards/CardProduct";
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import { FindAllProduct } from "@/apis/product-management/products.apis";
+
+interface IProps {
+    products: Awaited<ReturnType<typeof FindAllProduct>>;
+}
+
 const items: MenuProps["items"] = [
     {
         key: "1",
@@ -40,9 +46,10 @@ const items: MenuProps["items"] = [
     },
 ];
 
-export default function ProductList({ product }: any) {
+export default function ProductList({ products }: IProps) {
     const [seeGird, setSeeGird] = useState<boolean>(true);
-    console.log("Product::", product);
+    const listProduct = products?.metadata?.items;
+
     return (
         <div className="product-container">
             <header>
@@ -56,7 +63,7 @@ export default function ProductList({ product }: any) {
                         />
                     </Tooltip>
 
-                    <Tooltip arrow={false} title="Chế độ xem 2 lưới">
+                    <Tooltip arrow={false} title="Chế độ xem 3 lưới">
                         <Image
                             onClick={() => setSeeGird(true)}
                             src={listIcon}
@@ -86,7 +93,11 @@ export default function ProductList({ product }: any) {
                     className={`${seeGird ? "product-list-three-item" : "product-list-two-item"
                         }`}
                 >
-                    <CardProduct />
+                    {listProduct?.map((prod) => (
+                        <Fragment key={prod.id} >
+                            <CardProduct product={prod} />
+                        </Fragment>
+                    ))}
                 </div>
             </div>
         </div>
