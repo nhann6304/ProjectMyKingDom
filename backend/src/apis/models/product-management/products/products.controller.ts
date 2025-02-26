@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -14,91 +25,97 @@ import { ProductsEntity } from './product.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
-  @Post("create")
-  @ApiOperation({ summary: "Tạo sản phẩm" })
+  @Post('create')
+  @ApiOperation({ summary: 'Tạo sản phẩm' })
   @UseGuards(AuthGuard, RoleGuard)
   async createProduct(
     @Body() productData: CreateProductDto,
-    @Req() req: Request
+    @Req() req: Request,
   ) {
-    const items = await this.productsService.createProduct({ req, productData })
+    const items = await this.productsService.createProduct({
+      req,
+      productData,
+    });
     return new OK({
-      message: RES_MESS.CREATE("Sản phẩm"),
-      metadata: items
-    })
+      message: RES_MESS.CREATE('Sản phẩm'),
+      metadata: items,
+    });
   }
 
-  @Get("find-all")
-  @ApiOperation({ summary: "Lấy toàn bộ sản phẩm" })
+  @Get('find-all')
+  @ApiOperation({ summary: 'Lấy toàn bộ sản phẩm' })
   @UseGuards(AuthGuard)
-  async findAll(
-    @Query() query: AQueries
-  ) {
-    const items = await this.productsService.findAllProduct({ query })
+  async findAll(@Query() query: AQueries) {
+    const items = await this.productsService.findAllProduct({ query });
 
     return new OK({
-      message: RES_MESS.FIND_ALL("Sản phẩm"),
+      message: RES_MESS.FIND_ALL('Sản phẩm'),
+      metadata: items,
+    });
+  }
+
+  @Get('find-product-by-slug-cate/:slug')
+  @ApiOperation({ summary: 'Lấy sản phẩm bằng slug cate' })
+  @UseGuards(AuthGuard)
+  async findProductBySlug(@Param('slug') slug: string, @Req() req: Request) {
+    const items = await this.productsService.findProductBySlug(slug, req)
+
+    return new OK({
+      message: RES_MESS.FIND_BY_SLUG("Sản phẩm"),
       metadata: items
     })
   }
 
-  @Patch("update/:id")
-  @ApiOperation({ summary: "Cập nhập sản phẩm" })
+  @Patch('update/:id')
+  @ApiOperation({ summary: 'Cập nhập sản phẩm' })
   @UseGuards(AuthGuard, RoleGuard)
   async update(
-    @Param("id") id: string,
+    @Param('id') id: string,
     @Req() req: Request,
-    @Body() updateData: UpdateProductDto
+    @Body() updateData: UpdateProductDto,
   ) {
-    const items = await this.productsService.updateProduct({ id, req, updateData })
+    const items = await this.productsService.updateProduct({
+      id,
+      req,
+      updateData,
+    });
 
     return new OK({
-      message: RES_MESS.UPDATE("Sản phẩm"),
-      metadata: items
-    })
+      message: RES_MESS.UPDATE('Sản phẩm'),
+      metadata: items,
+    });
   }
 
-  @Patch("sort-delete/:id")
-  @ApiOperation({ summary: "Xóa mềm sản phẩm" })
+  @Patch('sort-delete/:id')
+  @ApiOperation({ summary: 'Xóa mềm sản phẩm' })
   @UseGuards(AuthGuard, RoleGuard)
-  async sortDelete(
-    @Param("id") id: string,
-    @Req() req: Request
-  ) {
-
-    await this.productsService.sortDeleted({ req, id })
+  async sortDelete(@Param('id') id: string, @Req() req: Request) {
+    await this.productsService.sortDeleted({ req, id });
 
     return new OK({
-      message: RES_MESS.SORT_DELETED("Sản phẩm"),
-    })
+      message: RES_MESS.SORT_DELETED('Sản phẩm'),
+    });
   }
 
-
-  @Patch("restore/:id")
-  @ApiOperation({ summary: "Khôi phục Sản phẩm" })
+  @Patch('restore/:id')
+  @ApiOperation({ summary: 'Khôi phục Sản phẩm' })
   @UseGuards(AuthGuard, RoleGuard)
-  async restoreDelete(
-    @Param("id") id: string,
-  ) {
-
-    await this.productsService.restoreDelete({ id })
+  async restoreDelete(@Param('id') id: string) {
+    await this.productsService.restoreDelete({ id });
 
     return new OK({
-      message: RES_MESS.RESTORE_DELETE("Sản phẩm"),
-    })
+      message: RES_MESS.RESTORE_DELETE('Sản phẩm'),
+    });
   }
 
-  @Delete("deleted/:id")
-  @ApiOperation({ summary: "Xóa sản phẩm" })
+  @Delete('deleted/:id')
+  @ApiOperation({ summary: 'Xóa sản phẩm' })
   @UseGuards(AuthGuard, RoleGuard)
-  async deletedProduct(
-    @Param("id") id: string
-  ) {
+  async deletedProduct(@Param('id') id: string) {
     await this.productsService.deleteProduct(id);
 
     return new OK({
-      message: RES_MESS.DELETE("Sản phẩm")
-    })
-
+      message: RES_MESS.DELETE('Sản phẩm'),
+    });
   }
 }

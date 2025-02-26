@@ -17,7 +17,7 @@ export class UtilORM<T> {
     leftJoinAndSelect(fields: Array<keyof T>): this {
         for (const field of fields) {
             const relationPath = `${this.aliasName}.${String(field)}`;
-            console.log("relationPath::", relationPath);
+            // console.log("relationPath::", relationPath);
             this.queryBuilder.leftJoinAndSelect(relationPath, String(field));
         }
         return this;

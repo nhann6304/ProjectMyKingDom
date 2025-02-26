@@ -16,7 +16,7 @@ const TAG_NAME = {
     PRODUCTS_CATEGORIES: " PRODUCTS_CATEGORIES",
 };
 
-export async function findAllBLogCate(queries?: IQueries) {
+export async function findAllProductCate(queries?: IQueries) {
     const result = await api<IBaseResponse<IGetManyItem<IProductCategory>>>({
         url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS_CATEGORIES
             }/${CONST_API_COMMON.FIND_ALL}${convertOjbToString(queries)}`,

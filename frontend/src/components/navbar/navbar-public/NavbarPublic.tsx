@@ -1,7 +1,7 @@
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 import BottomNav from "./bottom-nav/BottomNav";
 import TopNavPublic from "./top-nav/TopNav";
-import { findAllBLogCate } from "@/apis/product-management/product-categories.apis";
+import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
 
 export default async function NavbarPublic() {
     const searchParams: any = {}
@@ -15,7 +15,7 @@ export default async function NavbarPublic() {
         >;
     }
 
-    const resultCate = await findAllBLogCate(searchParams);
+    const resultCate = await findAllProductCate(searchParams);
     return (
         <div>
             {/* TOP NAV */}

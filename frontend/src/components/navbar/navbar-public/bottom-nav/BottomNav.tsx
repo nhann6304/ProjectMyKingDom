@@ -167,16 +167,16 @@ export default function BottomNav({ categories }: IProps) {
                                     <div className="dropdown-item" key={index}>
                                         {/* Render mỗi item-content cho từng category */}
                                         <div className="item-content" key={index}>
-                                            <div className="content-title">
+                                            <Link href={`/products/${item?.pc_slug}`} className="content-title">
                                                 <span className="content-category">{item.pc_name}</span>
                                                 <IoMdArrowDropright size={24} />
-                                            </div>
+                                            </Link>
 
                                             <div className="content-value">
-                                                {item?.children?.map((product, productIndex) => (
-                                                    <span className="value-product" key={productIndex}>
-                                                        {product.pc_name}
-                                                    </span>
+                                                {item?.children?.map((child, productIndex) => (
+                                                    <Link href={`/products/${item?.pc_slug}/${child?.pc_slug}`} className="value-product" key={productIndex}>
+                                                        {child.pc_name}
+                                                    </Link>
                                                 ))}
                                             </div>
                                         </div>

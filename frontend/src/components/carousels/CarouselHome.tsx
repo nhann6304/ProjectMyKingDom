@@ -13,7 +13,85 @@ interface IProps {
   scroll: boolean;
   className?: string; // Thêm props className
 }
+const CarouselContainer = styled.div`
+  position: relative;
+  .slick-slider {
+    padding: 0 4rem;
+  }
 
+  .slick-list {
+    /* border-radius: 2rem; */
+    overflow: hidden;
+  }
+
+  .slick-dots {
+    li {
+      margin: 0 !important;
+
+      button {
+        &::before {
+          font-size: 1rem;
+          color: var(--color-background-global);
+        }
+      }
+    }
+  }
+
+  .scroll-container {
+    padding: 4rem 0;
+    span {
+      margin: 0 auto;
+      display: block;
+      border-radius: 1rem;
+      width: 45vw;
+      height: 8px;
+      background-color: var(--color-background-global);
+    }
+
+    .minion-image {
+      position: absolute;
+      right: 0;
+      left: 25%;
+      height: 7rem;
+      width: 7rem;
+      object-fit: cover;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-top: -45px;
+      z-index: 2;
+    }
+  }
+
+  .custom-prev-arrow,
+  .custom-next-arrow {
+    border: 3px solid var(--color-background-global);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    cursor: pointer;
+    color: var(--color-background-global);
+    padding: 5px;
+    transition: background 0.3s;
+  }
+
+  .custom-prev-arrow {
+    left: 100%;
+  }
+
+  .custom-next-arrow {
+    right: 100%;
+  }
+
+  .slick-slide {
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 100vw;
+    }
+  }
+`;
 export default function CarouselHome({
   settings,
   children,
@@ -21,86 +99,6 @@ export default function CarouselHome({
   className,
 }: IProps) {
   const sliderRef = useRef<Slider | null>(null);
-
-  const CarouselContainer = styled.div`
-    position: relative;
-    .slick-slider {
-      padding: 0 4rem;
-    }
-
-    .slick-list {
-      /* border-radius: 2rem; */
-      overflow: hidden;
-    }
-
-    .slick-dots {
-      li {
-        margin: 0 !important;
-
-        button {
-          &::before {
-            font-size: 1rem;
-            color: var(--color-background-global);
-          }
-        }
-      }
-    }
-
-    .scroll-container {
-      padding: 4rem 0;
-      span {
-        margin: 0 auto;
-        display: block;
-        border-radius: 1rem;
-        width: 45vw;
-        height: 8px;
-        background-color: var(--color-background-global);
-      }
-
-      .minion-image {
-        position: absolute;
-        right: 0;
-        left: 25%;
-        height: 7rem;
-        width: 7rem;
-        object-fit: cover;
-        border-radius: 50%;
-        cursor: pointer;
-        margin-top: -45px;
-        z-index: 2;
-      }
-    }
-
-    .custom-prev-arrow,
-    .custom-next-arrow {
-      border: 3px solid var(--color-background-global);
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      z-index: 1;
-      cursor: pointer;
-      color: var(--color-background-global);
-      padding: 5px;
-      transition: background 0.3s;
-    }
-
-    .custom-prev-arrow {
-      left: 100%;
-    }
-
-    .custom-next-arrow {
-      right: 100%;
-    }
-
-    .slick-slide {
-      display: flex;
-      justify-content: center;
-
-      img {
-        width: 100vw;
-      }
-    }
-  `;
 
   // Component mũi tên trái
   const PrevArrow = () => (
@@ -131,7 +129,6 @@ export default function CarouselHome({
         {/* Điều khiển bằng ref */}
         <PrevArrow />
         <NextArrow />
-
       </CarouselContainer>
       {/* {scroll && (
         <div className="scroll-container">

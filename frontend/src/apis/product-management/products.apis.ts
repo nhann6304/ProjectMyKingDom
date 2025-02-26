@@ -28,3 +28,18 @@ export async function FindAllProduct(queries?: IQueries) {
     });
     return result;
 }
+
+
+export async function FindProductBySlugCate(slug: string) {
+    const result = await api<IBaseResponse<IGetManyItem<IProduct>>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS}/${CONST_API_COMMON.FIND_PRODUCT_SLUG_CATE}/${slug}`,
+        options: {
+            method: CONST_METHODS.GET,
+            next: {
+                tags: [TAG_NAME.PRODUCTS],
+            },
+        },
+    });
+    return result;
+}
+

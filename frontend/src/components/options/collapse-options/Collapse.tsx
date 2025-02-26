@@ -3,7 +3,7 @@ import { Checkbox, CollapseProps } from "antd";
 import { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Collapse } from "antd";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const CollapseContainer = styled.div`
   padding: 1.4rem 0;
@@ -54,35 +54,27 @@ const CheckBoxContainer = styled.div`
 
 function CollapseOptionWithSearchParams() {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const pathname = usePathname(); // Lấy đường dẫn hiện tại
+    const [checkedValue, setCheckedValue] = useState<string | null>(null);
 
-    const [checkedList, setCheckedList] = useState<string[]>([]);
-
+    // Lấy giá trị từ pathname khi component mount
     useEffect(() => {
-        if (searchParams) {
-            const checkedValues = searchParams.get("checked");
-            setCheckedList(checkedValues ? checkedValues.split(",") : []);
+        const pathSegments = pathname.split("/");
+        const lastSegment = pathSegments[pathSegments.length - 1];
+
+        // Kiểm tra xem có phải là 1 trong các option hợp lệ không
+        if (["option1", "option2", "option3", "option4", "option5"].includes(lastSegment)) {
+            setCheckedValue(lastSegment);
+        } else {
+            setCheckedValue(null);
         }
-    }, [searchParams]);
+    }, [pathname]);
 
     const handleCheckboxChange = (value: string) => {
-        let newCheckedList = [...checkedList];
+        const newPath = checkedValue === value ? "/products/lego" : `/products/lego/${value}`;
 
-        if (newCheckedList.includes(value)) {
-            newCheckedList = newCheckedList.filter((item) => item !== value);
-        } else {
-            newCheckedList.push(value);
-        }
-
-        setCheckedList(newCheckedList);
-
-        const params = new URLSearchParams(searchParams);
-        if (newCheckedList.length > 0) {
-            params.set("checked", newCheckedList.join(","));
-        } else {
-            params.delete("checked");
-        }
-        router.push(`?${params.toString()}`, { scroll: false });
+        setCheckedValue(checkedValue === value ? null : value);
+        router.push(newPath, { scroll: false });
     };
 
     const CheckBoxProduct = (
@@ -90,7 +82,7 @@ function CollapseOptionWithSearchParams() {
             {["option1", "option2", "option3", "option4", "option5"].map((option) => (
                 <CheckBoxContainer key={option}>
                     <Checkbox
-                        checked={checkedList.includes(option)}
+                        checked={checkedValue === option}
                         onChange={() => handleCheckboxChange(option)}
                     >
                         {option}

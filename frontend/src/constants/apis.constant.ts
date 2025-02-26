@@ -23,5 +23,6 @@ export const CONST_APIS = {
 
 
 export const CONST_API_COMMON = {
-    FIND_ALL: "find-all"
+    FIND_ALL: "find-all",
+    FIND_PRODUCT_SLUG_CATE: "find-product-by-slug-cate"
 }
