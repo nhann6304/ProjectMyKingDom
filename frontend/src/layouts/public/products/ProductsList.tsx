@@ -9,12 +9,12 @@ import { FaChevronDown } from "react-icons/fa";
 import categoryIcon from "@/assets/common/icon-public/svg/icon/cateIcon.svg";
 import listIcon from "@/assets/common/icon-public/svg/icon/listIcon.svg";
 import CardProduct from "@/components/cards/CardProduct";
-import { FindAllProduct } from "@/apis/product-management/products.apis";
+import { FindAllProduct, FindProductBySlugCate } from "@/apis/product-management/products.apis";
 import CollapseOption from "@/components/options/collapse-options/Collapse";
 import OptionItems from "@/components/options/options-items/OptionItems";
 //
 import Image from "next/image";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useTransition } from "react";
 import { Dropdown, MenuProps, Space, Tooltip } from "antd";
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import { useParams } from "next/navigation";
@@ -54,14 +54,18 @@ const items: MenuProps["items"] = [
 export default function ProductLayout({ products }: IProps) {
     const [seeGird, setSeeGird] = useState<boolean>(true);
     // const listProduct = products?.metadata?.items;
-
+    const [isLoading, startTransition] = useTransition();
     const params = useParams();
     const slug = params?.slug;
 
     //Gọi api khi slug thay đổi
-    useEffect(() => {
-        console.log("Slug từ url", slug);
-    }, [slug])
+    // useEffect(() => {
+    //     startTransition(async () => {
+    //         console.log(slug);
+    //         // const product = await FindProductBySlugCate(slug[0]);
+    //         // console.log(product);
+    //     })
+    // }, [slug])
 
     return (
         <div className="product-container container-pub">

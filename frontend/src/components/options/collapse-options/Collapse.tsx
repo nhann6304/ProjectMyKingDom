@@ -1,13 +1,13 @@
 "use client";
-import { Checkbox, CollapseProps } from "antd";
-import { Suspense, useEffect, useState } from "react";
+
+import { Checkbox, Collapse, CollapseProps } from "antd";
+import { useState } from "react";
 import styled from "styled-components";
-import { Collapse } from "antd";
-import { useRouter, usePathname } from "next/navigation";
 
 const CollapseContainer = styled.div`
   padding: 1.4rem 0;
   border-bottom: 1px solid var(--color-gray-200);
+
   .collapse-title {
     display: block;
     font-size: 1.8rem;
@@ -20,8 +20,8 @@ const CollapseContainer = styled.div`
 
   .container-collapse {
     max-height: 30rem;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: auto;
+
     .ant-collapse {
       background-color: transparent;
       border: none !important;
@@ -30,10 +30,7 @@ const CollapseContainer = styled.div`
         .ant-collapse-header {
           padding: 1rem 0;
           padding-right: 1rem;
-
-          &-text {
-            font-weight: 600;
-          }
+          font-weight: 600;
         }
 
         .ant-collapse-content {
@@ -49,63 +46,60 @@ const CollapseContainer = styled.div`
 
 const CheckBoxContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 5px 0;
 `;
 
-function CollapseOptionWithSearchParams() {
-    const router = useRouter();
-    const pathname = usePathname(); // Lấy đường dẫn hiện tại
+const collapseData = [
+    {
+        key: "1",
+        label: "Category 1",
+        extra: "(200)",
+        checkboxOptions: ["Option 1", "Option 2", "Option 3"],
+    },
+    {
+        key: "2",
+        label: "Category 2",
+        extra: "(150)",
+        checkboxOptions: ["Option A", "Option B", "Option C"],
+    },
+    {
+        key: "3",
+        label: "Category 3",
+        extra: "(300)",
+        checkboxOptions: ["Item X", "Item Y", "Item Z"],
+    },
+];
+
+export default function CollapseOption() {
     const [checkedValue, setCheckedValue] = useState<string | null>(null);
 
-    // Lấy giá trị từ pathname khi component mount
-    useEffect(() => {
-        const pathSegments = pathname.split("/");
-        const lastSegment = pathSegments[pathSegments.length - 1];
-
-        // Kiểm tra xem có phải là 1 trong các option hợp lệ không
-        if (["option1", "option2", "option3", "option4", "option5"].includes(lastSegment)) {
-            setCheckedValue(lastSegment);
-        } else {
-            setCheckedValue(null);
-        }
-    }, [pathname]);
-
     const handleCheckboxChange = (value: string) => {
-        const newPath = checkedValue === value ? "/products/lego" : `/products/lego/${value}`;
-
-        setCheckedValue(checkedValue === value ? null : value);
-        router.push(newPath, { scroll: false });
+        console.log(value);
+        setCheckedValue((prevValue) => (prevValue === value ? null : value));
     };
 
-    const CheckBoxProduct = (
-        <>
-            {["option1", "option2", "option3", "option4", "option5"].map((option) => (
-                <CheckBoxContainer key={option}>
-                    <Checkbox
-                        checked={checkedValue === option}
-                        onChange={() => handleCheckboxChange(option)}
-                    >
-                        {option}
-                    </Checkbox>
+    const items: CollapseProps["items"] = collapseData.map(
+        ({ key, label, extra, checkboxOptions }) => ({
+            key,
+            label,
+            children: (
+                <CheckBoxContainer>
+                    {checkboxOptions.map((option) => (
+                        <Checkbox
+                            key={option}
+                            checked={checkedValue === option}
+                            onChange={() => handleCheckboxChange(option)}
+                        >
+                            {option}
+                        </Checkbox>
+                    ))}
                 </CheckBoxContainer>
-            ))}
-        </>
+            ),
+            extra: <span>{extra}</span>,
+        })
     );
-
-    const items: CollapseProps["items"] = [
-        {
-            key: "1",
-            label: "This is panel header 1",
-            children: CheckBoxProduct,
-            extra: <span>(200)</span>,
-        },
-        {
-            key: "2",
-            label: "This is panel header 2",
-            children: CheckBoxProduct,
-            extra: <span>(200)</span>,
-        },
-    ];
 
     return (
         <CollapseContainer>
@@ -118,13 +112,5 @@ function CollapseOptionWithSearchParams() {
                 />
             </div>
         </CollapseContainer>
-    );
-}
-
-export default function CollapseOption() {
-    return (
-        <Suspense fallback={<div>Loading filters...</div>}>
-            <CollapseOptionWithSearchParams />
-        </Suspense>
     );
 }
