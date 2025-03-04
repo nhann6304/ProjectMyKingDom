@@ -42,7 +42,7 @@ export class ProductsService {
         productData: CreateProductDto;
     }) {
         const me = req['user'];
-        let finalPrice = productData.prod_price;
+        let finalPrice = 0;
         const findProductCate = await this.productCategoriesService.findOneByID(
             productData.productCate_Id,
         );
@@ -56,13 +56,16 @@ export class ProductsService {
                 discount_item: productData.discount,
                 price_item: productData.prod_price,
             });
+        } else {
+            finalPrice = productData.prod_price;
         }
+
 
         const newProduct = this.productRepository.create({
             createdBy: me,
             pc_category: findProductCate,
             ...productData,
-            prod_price: finalPrice,
+            prod_price_official: finalPrice,
         });
 
         const result = await this.productRepository.save(newProduct);
@@ -118,7 +121,9 @@ export class ProductsService {
             pc_category: { id: In(categoryIds) },
         });
 
-        return productItems;
+        return {
+            items: productItems,
+        };
     }
 
 

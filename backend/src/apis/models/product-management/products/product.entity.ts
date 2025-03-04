@@ -28,6 +28,9 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('decimal', { precision: 10, scale: 0 })
     prod_price: number;
 
+    @Column('decimal', { precision: 10, scale: 0 })
+    prod_price_official?: number;
+
     @Column('varchar', { length: 100 })
     prod_description: string;
 

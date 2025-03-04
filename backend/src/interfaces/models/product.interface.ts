@@ -7,6 +7,7 @@ export interface IProduct {
     prod_sku: string; // Mã hàng hóa
     prod_slug: string;
     prod_price: number;
+    prod_price_official?: number;
     prod_description: string;
     prod_quantity: number; // Số lượng tồn
     prod_nation: string; // Xuất xứ

@@ -1,8 +1,19 @@
 "use client";
 
 import { Checkbox, Collapse, CollapseProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { usePathname } from "next/navigation";
+import { useCollapseStore } from "@/stores/text";
+import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+
+interface ICategory extends IProductCategory {
+  children?: IProductCategory[]
+}
+
+interface IProps {
+  categories: ICategory[]
+}
 
 const CollapseContainer = styled.div`
   padding: 1.4rem 0;
@@ -51,66 +62,67 @@ const CheckBoxContainer = styled.div`
   padding: 5px 0;
 `;
 
-const collapseData = [
-    {
-        key: "1",
-        label: "Category 1",
-        extra: "(200)",
-        checkboxOptions: ["Option 1", "Option 2", "Option 3"],
-    },
-    {
-        key: "2",
-        label: "Category 2",
-        extra: "(150)",
-        checkboxOptions: ["Option A", "Option B", "Option C"],
-    },
-    {
-        key: "3",
-        label: "Category 3",
-        extra: "(300)",
-        checkboxOptions: ["Item X", "Item Y", "Item Z"],
-    },
-];
+export default function CollapseOption({ categories }: IProps) {
+  const pathname = usePathname();
+  const { collapseIndex, setCollapseIndex } = useCollapseStore();
+  const [checkedValue, setCheckedValue] = useState<{ category: string; slug: string } | null>(null);
 
-export default function CollapseOption() {
-    const [checkedValue, setCheckedValue] = useState<string | null>(null);
+  useEffect(() => {
+    const pathParts = pathname.split("/").slice(2); // Bỏ "/products"
+    if (pathParts.length === 2) {
+      setCheckedValue({ category: pathParts[0], slug: pathParts[1] });
+    } else {
+      setCheckedValue(null);
+    }
+  }, [pathname]);
 
-    const handleCheckboxChange = (value: string) => {
-        console.log(value);
-        setCheckedValue((prevValue) => (prevValue === value ? null : value));
-    };
+  const handleCheckboxChange = (event: React.MouseEvent, category: string, slug: string) => {
+    event.stopPropagation();
+    console.log(category);
 
-    const items: CollapseProps["items"] = collapseData.map(
-        ({ key, label, extra, checkboxOptions }) => ({
-            key,
-            label,
-            children: (
-                <CheckBoxContainer>
-                    {checkboxOptions.map((option) => (
-                        <Checkbox
-                            key={option}
-                            checked={checkedValue === option}
-                            onChange={() => handleCheckboxChange(option)}
-                        >
-                            {option}
-                        </Checkbox>
-                    ))}
-                </CheckBoxContainer>
-            ),
-            extra: <span>{extra}</span>,
-        })
-    );
+    if (checkedValue?.category === category && checkedValue?.slug === slug) {
+      setCheckedValue(null);
+      window.history.replaceState(null, "", "/products/all");
+    } else {
+      setCheckedValue({ category, slug });
+      window.history.replaceState(null, "", `/products/${category}/${slug}`);
+    }
+  };
 
-    return (
-        <CollapseContainer>
-            <span className="collapse-title">Danh mục</span>
-            <div className="container-collapse">
-                <Collapse
-                    defaultActiveKey={["1"]}
-                    expandIconPosition="end"
-                    items={items}
-                />
-            </div>
-        </CollapseContainer>
-    );
+  const handleCollapseChange = (keys: string | string[]) => {
+    setCollapseIndex(typeof keys === "string" ? [keys] : keys);
+  };
+
+  const items: CollapseProps["items"] = categories.map((cate, index) => ({
+    key: index,
+    label: cate?.pc_name,
+    children: (
+      <CheckBoxContainer>
+        {cate?.children?.map((child, index) => (
+          <Checkbox
+            key={index}
+            checked={checkedValue?.slug === child.pc_slug && checkedValue?.slug === child.pc_slug}
+            onClick={(e) => handleCheckboxChange(e, cate.pc_slug, child.pc_slug)}
+          >
+            {child.pc_name}
+          </Checkbox>
+        ))}
+      </CheckBoxContainer>
+    ),
+    extra: <span>{cate?.children?.length}</span>,
+  }))
+
+  return (
+    <CollapseContainer>
+      <span className="collapse-title">Danh mục</span>
+      <div className="container-collapse">
+        <Collapse
+          activeKey={collapseIndex}
+          onChange={handleCollapseChange}
+          expandIconPosition="end"
+          items={items}
+        />
+      </div>
+    </CollapseContainer>
+  );
 }

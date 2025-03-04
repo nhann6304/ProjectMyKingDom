@@ -12,12 +12,14 @@ import ButtonCommon from "../buttons/ButtonCommon";
 import ButtonForm from "../buttons/ButtonForm";
 import { HearNotBg } from "@/assets/common/icon-public/svg/icon/iconItem";
 import { IProduct } from "@/interfaces/models/products.interface";
-
-const nhan = true;
+import { convertDiscount, convertPriceToString } from "@/utils";
+import { FaPercent } from "react-icons/fa";
+const nhan = false;
 
 interface IProps {
   product?: IProduct;
 }
+
 const CardContainer = styled.div`
   height: auto;
   border: 1.5px solid var(--color-gray-200);
@@ -25,16 +27,37 @@ const CardContainer = styled.div`
   overflow: hidden;
   .box-product {
     padding: 1rem;
+    position: relative;
     cursor: pointer;
+
+    .box-product-discount {
+      position: absolute;
+      border-radius: 8px;
+      height: auto;
+      width: auto;
+      background-color: var(--color-background-global);
+      z-index: 2;
+      right: 5%;
+      top: 2%;
+
+      span {
+        display: block;
+        padding: 5px 1.6rem;
+        color: var(--color-white);
+        font-weight: 700;
+        font-size: 1.6rem;
+      }
+    }
+
     .box-product-item {
       display: flex;
       justify-content: center;
       img {
-        padding: 1rem;
+        padding: 5px;
         object-position: center center;
         transform: scale(1) !important;
         max-width: 30rem;
-        max-height: 35rem;
+        max-height: 30rem;
         object-fit: cover;
       }
     }
@@ -65,7 +88,7 @@ const CardContainer = styled.div`
         row-gap: 5px;
         .info-category {
           font-weight: 300;
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           line-height: 2rem;
           color: #8f8f8f;
           text-transform: capitalize;
@@ -75,11 +98,12 @@ const CardContainer = styled.div`
           -webkit-box-orient: vertical;
           display: -webkit-box;
           opacity: 0.8;
+          text-transform: uppercase;
         }
 
         .info-sku {
           font-weight: 300;
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           line-height: 2rem;
           text-transform: capitalize;
           color: #8f8f8f;
@@ -100,6 +124,7 @@ const CardContainer = styled.div`
         color: #041675;
         display: -webkit-box;
         overflow: hidden;
+        min-height: 4rem;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
@@ -108,7 +133,7 @@ const CardContainer = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 2rem;
+        margin-top: 1rem;
         font-weight: 700;
 
         .payable {
@@ -153,9 +178,21 @@ export default function CardProduct({ product }: IProps) {
   return (
     <CardContainer>
       <div className="box-product">
+        <div className="box-product-discount">
+          {Math.floor(product?.discount as number) !== 0 && (
+            <span>-{convertDiscount(product?.discount as number)}%</span>
+          )}
+        </div>
         <div className="box-product-item">
-          {/* <Image height={500} width={500} src={product?.prod_thumb || "http://localhost:9000/uploads/minhvydalat.jpg"} alt="product" /> */}
-          <Image height={500} width={500} src={productImage} alt="product" />
+          <Image
+            height={500}
+            width={500}
+            src={
+              product?.prod_thumb ||
+              "http://localhost:9000/uploads/minhvydalat.jpg"
+            }
+            alt="product"
+          />
         </div>
 
         {nhan && (
@@ -166,22 +203,25 @@ export default function CardProduct({ product }: IProps) {
 
         <div className="box-product-info">
           <div className="info-product-top">
-            <span className="info-category">LEGO MARKETING</span>
-            <span className="info-sku">SKU:MKT-5008978</span>
+            <span className="info-category">{product?.prod_company}</span>
+            <span className="info-sku">SKU:{product?.prod_sku}</span>
           </div>
 
-          <span className="info-product-name">
-            [Đồ chơi xe lắp ráp thể thao Ford Gt LEGO MARKETING 42154]
-          </span>
+          <span className="info-product-name">[{product?.prod_name}]</span>
 
           <div className="info-product-pay">
-            <span className="payable">584.000Đ</span>
-            <span className="pay-sale">584.000Đ</span>
+            <span className="payable">
+              {convertPriceToString(String(product?.prod_price_official))}
+            </span>
+            {product?.prod_price_official !== product?.prod_price && (
+              <span className="pay-sale">
+                {convertPriceToString(String(product?.prod_price))}
+              </span>
+            )}
           </div>
 
           <div className="info-control">
             <button className="btn-control">Thêm vào giỏ hàng</button>
-
             <span>
               <HearNotBg />
             </span>

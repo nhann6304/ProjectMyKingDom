@@ -6,7 +6,6 @@ import "./style.scss";
 //
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
-import { findAllBLogCate } from "@/apis/product-management/product-categories.apis";
 import anhquoc from "@/assets/common/icon-public/jpg/co-viet-nam.svg.png";
 import logo from "@/assets/common/icon-public/jpg/logo-254x76 (1).png";
 import { AccountIcon, CardIcon, TruckLive } from "@/assets/common/icon-public/svg/icon/iconItem";
@@ -18,10 +17,11 @@ import Link from "next/link";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
+import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
 
 
 interface IProps {
-    categories: Awaited<ReturnType<typeof findAllBLogCate>>
+    categories: Awaited<ReturnType<typeof findAllProductCate>>
 }
 
 interface IOption {

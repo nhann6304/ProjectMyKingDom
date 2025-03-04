@@ -6,8 +6,10 @@ export class UtilCalculator {
     }
 
     static calculatorDiscountPrice({ price_item, discount_item }: { price_item: number, discount_item: number }) {
-        const result = (price_item * (discount_item / 100))
-        return result
+        const discountAmount = price_item * (discount_item / 100); // Số tiền được giảm
+        const finalPrice = price_item - discountAmount; // Giá sau giảm
+        return finalPrice;
     }
+
 
 }
