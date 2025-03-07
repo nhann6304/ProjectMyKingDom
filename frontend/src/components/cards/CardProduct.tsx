@@ -14,6 +14,7 @@ import { HearNotBg } from "@/assets/common/icon-public/svg/icon/iconItem";
 import { IProduct } from "@/interfaces/models/products.interface";
 import { convertDiscount, convertPriceToString } from "@/utils";
 import { FaPercent } from "react-icons/fa";
+import Link from "next/link";
 const nhan = false;
 
 interface IProps {
@@ -26,6 +27,7 @@ const CardContainer = styled.div`
   border-radius: 2rem;
   overflow: hidden;
   .box-product {
+    display: block;
     padding: 1rem;
     position: relative;
     cursor: pointer;
@@ -177,7 +179,7 @@ const CardContainer = styled.div`
 export default function CardProduct({ product }: IProps) {
   return (
     <CardContainer>
-      <div className="box-product">
+      <Link href={`/products/details/${product?.prod_slug}`} className="box-product">
         <div className="box-product-discount">
           {Math.floor(product?.discount as number) !== 0 && (
             <span>-{convertDiscount(product?.discount as number)}%</span>
@@ -227,7 +229,7 @@ export default function CardProduct({ product }: IProps) {
             </span>
           </div>
         </div>
-      </div>
+      </Link>
     </CardContainer>
   );
 }

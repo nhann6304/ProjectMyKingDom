@@ -197,7 +197,8 @@
                     color: white;
                 }
 
-                span {
+                span,
+                a {
                     font-size: 1.8rem;
                     color: var(--color-white);
                     font-weight: 600;
@@ -275,7 +276,8 @@
                         color: var(--color-background-global);
                     }
 
-                    span {
+                    span,
+                    a {
                         font-size: 1.8rem;
                         color: var(--color-black);
                         font-weight: 600;

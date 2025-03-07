@@ -109,7 +109,7 @@ export default function CollapseOption({ categories }: IProps) {
         ))}
       </CheckBoxContainer>
     ),
-    extra: <span>{cate?.children?.length}</span>,
+    extra: <span>({cate?.children?.length})</span>,
   }))
 
   return (

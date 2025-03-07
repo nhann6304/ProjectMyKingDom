@@ -158,7 +158,7 @@ export default function BottomNav({ categories }: IProps) {
                     </div>
 
                     <div className="option-child">
-                        <span>Sản phẩm</span>
+                        <Link className="option-child-item" href={"/products/all"}>Sản phẩm</Link>
                         <FaChevronDown className="icon-default" size={13} />
                         <FaChevronUp className="icon-hover" size={13} />
                         <DropdownNav>

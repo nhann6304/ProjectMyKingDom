@@ -36,12 +36,12 @@ export default function OptionItems() {
     // Lấy danh sách checkbox đã chọn từ URL
     const [checkedValues, setCheckedValues] = useState<string[]>([]);
 
-    useEffect(() => {
-        if (searchParams) {
-            const checkedValuesFromUrl = searchParams.get("ageGroup");
-            setCheckedValues(checkedValuesFromUrl ? checkedValuesFromUrl.split(",") : []);
-        }
-    }, [searchParams]);
+    // useEffect(() => {
+    //     if (searchParams) {
+    //         const checkedValuesFromUrl = searchParams.get("ageGroup");
+    //         setCheckedValues(checkedValuesFromUrl ? checkedValuesFromUrl.split(",") : []);
+    //     }
+    // }, [searchParams]);
 
     const handleCheckboxChange = (value: string) => (e: any) => {
         const isChecked = e.target.checked;
@@ -53,9 +53,9 @@ export default function OptionItems() {
 
         const params = new URLSearchParams(searchParams);
         if (newCheckedValues.length > 0) {
-            params.set("ageGroup", newCheckedValues.join(","));
+            params.set("prod_agePlay", newCheckedValues.join(","));
         } else {
-            params.delete("ageGroup");
+            params.delete("prod_agePlay");
         }
 
         router.push(`?${params.toString()}`, { scroll: false });

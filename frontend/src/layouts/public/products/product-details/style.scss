@@ -1,0 +1,154 @@
+.detail-container {
+    height: auto;
+    width: auto;
+    margin: 4rem auto;
+
+    .box-detail {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        height: 100%;
+        width: 100%;
+        gap: 1rem;
+
+        &-left {
+            height: auto;
+            width: auto;
+            background-color: blue;
+            display: flex;
+            justify-content: center;
+
+            .image-big {
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }
+        }
+
+        &-right {
+            height: 50vh;
+            width: 100%;
+            // background-color: yellow;
+
+            .detail-prod {
+                display: flex;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1.5rem;
+
+                //
+                .box-prod-title {
+                    display: flex;
+                    align-items: flex-start;
+
+                    .name-prod {
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 24px;
+                        line-height: 32px;
+                        text-transform: capitalize;
+                        color: #111;
+                    }
+
+                    .icon-favourite {
+                        margin-top: 5px;
+                    }
+                }
+
+                //
+                .box-prod-origin {
+                    display: flex;
+                    gap: 3rem;
+                    align-items: center;
+
+                    .trademark {
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+
+                        &-title {
+                            font-style: normal;
+                            font-weight: 300;
+                            font-size: 1.4rem;
+                            line-height: 20px;
+                            color: #111;
+                            margin: 0;
+                        }
+
+                        &-name {
+                            font-style: normal;
+                            font-weight: 700;
+                            font-size: 1.4rem;
+                            line-height: 20px;
+                            color: #041675;
+                            text-decoration: underline;
+                        }
+                    }
+
+                    .sku {
+                        &-number {
+                            font-style: normal;
+                            font-weight: 300;
+                            font-size: 1.4rem;
+                            line-height: 20px;
+                            color: #111;
+                            margin: 0;
+                        }
+                    }
+                }
+
+                //
+                .box-prod-price {
+
+                    .price-normal,
+                    .price-official {
+                        display: grid;
+                        grid-template-columns: 0.5fr 2fr;
+                        align-items: center;
+                        padding-bottom: 1.5rem;
+
+                        &-title {
+                            font-style: normal;
+                            font-weight: 300;
+                            font-size: 1.4rem;
+                            line-height: 20px;
+                            color: #111;
+                            margin: 0;
+                        }
+
+                        &-value {
+                            font-style: normal;
+                            font-weight: 300;
+                            font-size: 18px;
+                            line-height: 24px;
+                            text-transform: capitalize;
+                            color: #cf102d;
+                            margin-right: 8px;
+                        }
+                    }
+                }
+
+                //
+                .box-prod-policy {
+                    .policy-items {
+                        display: flex;
+                        // align-items: center;
+
+                        // .item-icon {}
+
+                        .item-content {
+                            margin-left: 1.2rem;
+                            margin-bottom: 1.3rem;
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 1.4rem;
+                            line-height: 20px;
+                            color: #111;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

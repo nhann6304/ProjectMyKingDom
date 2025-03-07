@@ -2,6 +2,7 @@ import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { IUser } from "./IUser.interface";
 
 export interface IQueries<T = any> {
+    id?: string;
     limit?: number;
     page?: number;
     fields?: Array<T>

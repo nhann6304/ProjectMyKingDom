@@ -1,25 +1,29 @@
-import "./style.scss";
-import OptionItems from "@/components/options/options-items/OptionItems";
-import CollapseOption from "@/components/options/collapse-options/Collapse";
-import ProductList from "@/layouts/public/products/ProductsList";
-import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
-import {
-    FindAllProduct,
-    FindProductBySlugCate,
-} from "@/apis/product-management/products.apis";
-import { IProduct } from "@/interfaces/models/products.interface";
-import ProductLayout from "@/layouts/public/products/ProductsList";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import {
+    FindAllProduct
+} from "@/apis/product-management/products.apis";
+import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
+import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { IProduct } from "@/interfaces/models/products.interface";
+import "./style.scss";
+import ProductLayout from "@/layouts/public/products/products-lists/ProductsList";
 export default async function ProductPage({
     searchParams,
     params,
 }: IPageProps) {
-    if (!searchParams?.limit) searchParams.limit = 10;
-    if (!searchParams?.page) searchParams.page = 1;
-    if (!searchParams?.isDeleted) searchParams.isDeleted = false;
-    if (!searchParams?.fields) {
-        searchParams.fields = [
+
+    const keySearch = Object.keys(searchParams);
+
+    // Tạo object mới mà không chứa các key trong keySearch
+    const prodSearch = Object.fromEntries(
+        Object.entries(searchParams).filter(([key]) => !keySearch.includes(key))
+    );
+
+    if (!prodSearch?.limit) prodSearch.limit = 10;
+    if (!prodSearch?.page) prodSearch.page = 1;
+    if (!prodSearch?.isDeleted) prodSearch.isDeleted = false;
+    if (!prodSearch?.fields) {
+        prodSearch.fields = [
             "prod_name",
             "prod_thumb",
             "prod_company",
@@ -30,25 +34,16 @@ export default async function ProductPage({
         ] as Array<keyof IProduct>;
     }
 
-    // Tạo bản sao của searchParams nhưng chỉ thay đổi fields
+    // Tạo bản sao của prodSearch nhưng chỉ thay đổi fields
     const searchProductCate = {
-        ...searchParams,
+        ...prodSearch,
         fields: ["pc_name", "pc_slug"] as Array<keyof IProductCategory>,
     };
 
-    // if (params.slug) {
-    //     if (params?.slug?.length > 1) {
-    //         const products = await FindProductBySlugCate(params?.slug[params?.slug?.length - 1]);
-    //         console.log("Trên::", products);
-    //     } else {
-    //         const products = await FindProductBySlugCate(params?.slug[0]);
-    //         console.log("Dưới::", products);
-
-    //     }
-    // }
-
-    const products = await FindAllProduct(searchParams);
+    const products = await FindAllProduct(prodSearch);
     const productCategories = await findAllProductCate(searchProductCate);
-    // const products = {} as any;
-    return <ProductLayout products={products} categories={productCategories} />;
+
+    return (
+        <ProductLayout keySearch={keySearch} products={products} categories={productCategories} />
+    );
 }

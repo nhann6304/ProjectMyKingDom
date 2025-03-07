@@ -23,6 +23,7 @@ import { findAllProductCate } from "@/apis/product-management/product-categories
 interface IProps {
     products: Awaited<ReturnType<typeof FindAllProduct>>;
     categories: Awaited<ReturnType<typeof findAllProductCate>>
+    keySearch: string[];
 }
 
 const items: MenuProps["items"] = [
@@ -52,7 +53,7 @@ const items: MenuProps["items"] = [
     },
 ];
 
-export default function ProductLayout({ products, categories }: IProps) {
+export default function ProductLayout({ products, categories, keySearch }: IProps) {
     const [seeGird, setSeeGird] = useState<boolean>(true);
     const [isLoading, startTransition] = useTransition();
     const pathname = usePathname();
@@ -60,6 +61,7 @@ export default function ProductLayout({ products, categories }: IProps) {
     const [listProducts, setListProducts] = useState<IProduct[]>(
         products?.metadata?.items || []
     );
+    console.log("Con cac", keySearch);
     const searchParams = useSearchParams();
     const ageGroup = searchParams.get("ageGroup");
     // let listProducts: IProduct[] = [];
@@ -72,24 +74,24 @@ export default function ProductLayout({ products, categories }: IProps) {
     //Gọi api khi slug thay đổi
     useEffect(() => {
         console.log("slug", slug);
-        // startTransition(async () => {
-        //     if (slug[0] === "all") {
-        //         setListProducts(products?.metadata?.items || []);
-        //     } else if (slug.length >= 2) {
-        //         const result = await FindProductBySlugCate(slug[1]);
-        //         setListProducts(result?.metadata?.items || []);
-        //     } else {
-        //         const result = await FindProductBySlugCate(slug[0]);
-        //         setListProducts(result?.metadata?.items || []);
-        //     }
-        // });
+        startTransition(async () => {
+            if (slug[0] === "all") {
+                setListProducts(products?.metadata?.items || []);
+            } else if (slug.length >= 2) {
+                const result = await FindProductBySlugCate(slug[1]);
+                setListProducts(result?.metadata?.items || []);
+            } else {
+                const result = await FindProductBySlugCate(slug[0]);
+                setListProducts(result?.metadata?.items || []);
+            }
+        });
     }, [slug]);
 
     return (
         <div className="product-container container-pub">
             <div className="wrapper-container">
                 <div className="box-control">
-                    {/* <CollapseOption categories={categories?.metadata?.items || []} /> */}
+                    <CollapseOption categories={categories?.metadata?.items || []} />
                     <OptionItems />
                 </div>
 
