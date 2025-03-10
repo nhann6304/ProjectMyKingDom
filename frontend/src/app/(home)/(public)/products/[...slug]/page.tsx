@@ -30,6 +30,7 @@ export default async function ProductPage({
             "prod_sku",
             "prod_price",
             "discount",
+            "prod_slug",
             "prod_price_official",
         ] as Array<keyof IProduct>;
     }

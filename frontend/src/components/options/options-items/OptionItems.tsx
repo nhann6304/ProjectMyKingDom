@@ -1,10 +1,15 @@
 "use client";
 
-import { CONST_AGE_GROUP } from "@/constants/values.constant";
 import { Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
+import { CONST_AGE_GROUP, CONST_GENDER_VALUES } from "@/constants/values.constant";
+
+interface IProps {
+    title: string;
+    filterKey: string;
+}
 
 const OptionItemsContainer = styled.div`
   margin-top: 1.4rem;
@@ -28,51 +33,61 @@ const OptionItemsContainer = styled.div`
   }
 `;
 
-export default function OptionItems() {
+export default function OptionItems({ title, filterKey }: IProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const arrAgeGroup = Object.values(CONST_AGE_GROUP);
-
-    // Lấy danh sách checkbox đã chọn từ URL
     const [checkedValues, setCheckedValues] = useState<string[]>([]);
 
-    // useEffect(() => {
-    //     if (searchParams) {
-    //         const checkedValuesFromUrl = searchParams.get("ageGroup");
-    //         setCheckedValues(checkedValuesFromUrl ? checkedValuesFromUrl.split(",") : []);
-    //     }
-    // }, [searchParams]);
+    // Ánh xạ `filterKey` thành dữ liệu tương ứng
+    const getFilterValues = (type: string) => {
+        const mapping: Record<string, Record<string, string>> = {
+            prod_agePlay: CONST_AGE_GROUP,
+            prod_price: CONST_GENDER_VALUES
+        };
 
-    const handleCheckboxChange = (value: string) => (e: any) => {
+        return Object.entries(mapping[type] || {}).map(([key, value]) => ({
+            key,
+            value
+        }));
+    };
+
+    useEffect(() => {
+        const selectedKeys = searchParams.get(filterKey)?.split(",") || [];
+        setCheckedValues(selectedKeys);
+    }, [searchParams, filterKey]);
+
+    const handleCheckboxChange = (key: string) => (e: any) => {
         const isChecked = e.target.checked;
         let newCheckedValues = isChecked
-            ? [...checkedValues, value]
-            : checkedValues.filter((item) => item !== value);
+            ? [...checkedValues, key]
+            : checkedValues.filter((item) => item !== key);
 
         setCheckedValues(newCheckedValues);
 
         const params = new URLSearchParams(searchParams);
         if (newCheckedValues.length > 0) {
-            params.set("prod_agePlay", newCheckedValues.join(","));
+            params.set(filterKey, newCheckedValues.join(","));
         } else {
-            params.delete("prod_agePlay");
+            params.delete(filterKey);
         }
 
         router.push(`?${params.toString()}`, { scroll: false });
     };
 
+    // Lấy dữ liệu theo filterKey
+    const filterOptions = getFilterValues(filterKey);
+
     return (
         <OptionItemsContainer>
-            <span className="collapse-title">Danh mục</span>
-
+            <span className="collapse-title">{title}</span>
             <div className="box-option">
-                {arrAgeGroup.map((item) => (
+                {filterOptions.map(({ key, value }) => (
                     <Checkbox
-                        key={item}
-                        checked={checkedValues.includes(item)}
-                        onChange={handleCheckboxChange(item)}
+                        key={key}
+                        checked={checkedValues.includes(key)}
+                        onChange={handleCheckboxChange(key)}
                     >
-                        {item}
+                        {value}
                     </Checkbox>
                 ))}
             </div>

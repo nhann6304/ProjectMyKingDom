@@ -20,9 +20,10 @@ import { IProduct } from "@/interfaces/models/products.interface";
 import Loading from "@/components/loading/Loading";
 import OptionItems from "@/components/options/options-items/OptionItems";
 import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import ListFilterProd from "@/components/lists/ListFilterProd";
 interface IProps {
     products: Awaited<ReturnType<typeof FindAllProduct>>;
-    categories: Awaited<ReturnType<typeof findAllProductCate>>
+    categories: Awaited<ReturnType<typeof findAllProductCate>>;
     keySearch: string[];
 }
 
@@ -53,18 +54,20 @@ const items: MenuProps["items"] = [
     },
 ];
 
-export default function ProductLayout({ products, categories, keySearch }: IProps) {
+export default function ProductLayout({
+    products,
+    categories,
+    keySearch,
+}: IProps) {
     const [seeGird, setSeeGird] = useState<boolean>(true);
-    const [isLoading, startTransition] = useTransition();
-    const pathname = usePathname();
-    const [slug, setSlug] = useState<string[]>([]);
     const [listProducts, setListProducts] = useState<IProduct[]>(
         products?.metadata?.items || []
     );
-    console.log("Con cac", keySearch);
+    const [isLoading, startTransition] = useTransition();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
-    const ageGroup = searchParams.get("ageGroup");
-    // let listProducts: IProduct[] = [];
+    const [slug, setSlug] = useState<string[]>([]);
+    //
     useEffect(() => {
         startTransition(async () => {
             setSlug(pathname?.split("/").slice(2));
@@ -73,7 +76,6 @@ export default function ProductLayout({ products, categories, keySearch }: IProp
 
     //Gọi api khi slug thay đổi
     useEffect(() => {
-        console.log("slug", slug);
         startTransition(async () => {
             if (slug[0] === "all") {
                 setListProducts(products?.metadata?.items || []);
@@ -86,13 +88,15 @@ export default function ProductLayout({ products, categories, keySearch }: IProp
             }
         });
     }, [slug]);
-
+    //
     return (
         <div className="product-container container-pub">
             <div className="wrapper-container">
                 <div className="box-control">
+                    {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
                     <CollapseOption categories={categories?.metadata?.items || []} />
-                    <OptionItems />
+                    <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
+                    <OptionItems title={"Giá (Đ)"} filterKey="prod_price" />
                 </div>
 
                 <div className="box-product">
