@@ -74,7 +74,7 @@ export class ProductsService {
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
-        const objFilter = UtilConvert.convertJsonToObject(filter);
+        const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const ALIAS_NAME = 'products';
 
         const result = new UtilORM<ProductsEntity>(
@@ -106,8 +106,6 @@ export class ProductsService {
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { isDeleted, fields, limit, page, filter } = query;
         const ALIAS_NAME = 'products';
-        console.log(filter);
-        // console.log("Filter trước khi áp dụng:", filter);
 
         // 1️⃣ Tìm danh mục theo slug
         const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
@@ -119,7 +117,6 @@ export class ProductsService {
             categoryIds.push(...categoryItem.children.map((child) => child.id));
         }
 
-
         // 3️⃣ Lọc sản phẩm theo danh mục cha + con
         let productItems = await this.productRepository.find({
             where: {
@@ -129,19 +126,16 @@ export class ProductsService {
             take: limit || undefined,
             relations: ['pc_category'], // Lấy thêm thông tin danh mục
         });
-        // console.log("Sản phẩm trước khi áp dụng filter:", productItems);
 
         // 4️⃣ Nếu có filter, lọc lại sản phẩm theo filter
         if (filter) {
-            const objFilter = UtilConvert.convertJsonToObject(filter) || {};
-            // console.log("Filter đã parse:", objFilter);
+            const objFilter = UtilConvert.convertJsonToObject(filter as any) || {};
 
             productItems = productItems.filter(product => {
                 return Object.entries(objFilter).every(([key, value]) => {
                     return product[key] == value; // Chỉ giữ sản phẩm nào khớp với filter
                 });
             });
-
         }
 
         return {

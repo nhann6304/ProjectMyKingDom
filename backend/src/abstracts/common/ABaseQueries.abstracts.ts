@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsOptional, IsString, IsInt, IsArray } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { IQueries } from "src/interfaces/common/IBaseQueries.interface";
-import { FilterItem } from "./AFilterAction.abstracts";
+import { FilterItem, FilterQuery } from "./AFilterAction.abstracts";
 
 export class AQueries<T = any> implements Partial<IQueries<T>> {
     @IsOptional()
@@ -39,11 +39,11 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
 
     @IsOptional()
     @ApiProperty({
-        type: [FilterItem],
+        type: [FilterQuery],
         description: 'Danh sách các trường cần lọc',
         required: false,
     })
-    filter?: FilterItem;
+    filter?: FilterQuery[];
 
     @IsOptional()
     @ApiProperty({

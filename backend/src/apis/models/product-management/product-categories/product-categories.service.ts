@@ -70,7 +70,7 @@ export class ProductCategoriesService {
 
     async findAll(query: AQueries, req: Request) {
         const { fields, limit, page, filter, isDeleted } = query;
-        const objFilter = UtilConvert.convertJsonToObject(filter);
+        const objFilter = UtilConvert.convertJsonToObject(filter as any);
 
         let arrFields: Array<string> = [
             'parent.id',

@@ -103,7 +103,7 @@ export class CartsService {
       relations: ['cart_products', 'cart_products.product'],
     });
 
-    const objFilter = UtilConvert.convertJsonToObject(filter);
+    const objFilter = UtilConvert.convertJsonToObject(filter as any);
     const ALIAS_NAME = "cart_detail"
 
     const result = new UtilORM<CartDetailsEntity>(this.cartDetailsRepository, ALIAS_NAME)
