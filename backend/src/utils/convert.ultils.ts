@@ -14,7 +14,7 @@ export class UtilConvert {
     ): Record<string, any> {
         let obj: Record<string, any> = {};
 
-        if (!val) return obj; // Nếu null hoặc undefined, trả về object rỗng
+        if (!val) return obj;
 
         try {
             // Nếu val là JSON string thì parse
