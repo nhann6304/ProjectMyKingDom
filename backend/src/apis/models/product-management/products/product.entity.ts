@@ -1,14 +1,24 @@
-import * as slug from "slug";
-import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
-import { EAgeGroup } from "src/enums/EAge.enum";
-import { IProduct } from "src/interfaces/models/product.interface";
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany } from "typeorm";
-import { ProductCategoryEntity } from "../product-categories/product-category.entity";
-import { UserEntity } from "../../users/user.entity";
-import { CartEntity } from "../carts/cart.entity";
-import { CartDetailsEntity } from "../cart-details/cart-details.entity";
+import * as slug from 'slug';
+import { ABaseModel } from 'src/abstracts/common/ABaseModel.abstracts';
+import { EAgeGroup } from 'src/enums/EAge.enum';
+import { IProduct } from 'src/interfaces/models/product.interface';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
+} from 'typeorm';
+import { ProductCategoryEntity } from '../product-categories/product-category.entity';
+import { UserEntity } from '../../users/user.entity';
+import { CartEntity } from '../carts/cart.entity';
+import { CartDetailsEntity } from '../cart-details/cart-details.entity';
+import { EGender } from 'src/enums/EGender.enum';
 
-@Entity("products")
+@Entity('products')
 export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('varchar', { length: 255 })
     prod_name: string;
@@ -24,6 +34,13 @@ export class ProductsEntity extends ABaseModel implements IProduct {
 
     @Column('varchar', { length: 100, unique: true })
     prod_slug: string;
+
+    @Column({
+        type: "simple-array",
+        nullable: true,
+    })
+    prod_gender: EGender[];
+
 
     @Column('decimal', { precision: 10, scale: 0 })
     prod_price: number;
@@ -49,19 +66,26 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('decimal', { precision: 5, scale: 2, default: 0 })
     discount: number;
 
-    @ManyToOne(() => ProductCategoryEntity, (category) => category.products, { nullable: false })
+    @ManyToOne(() => ProductCategoryEntity, (category) => category.products, {
+        nullable: false,
+    })
     @JoinColumn({ name: 'category_id' })
     pc_category: ProductCategoryEntity;
 
-    @ManyToMany(() => CartEntity, (cart) => cart.cart_products, { nullable: true })
-    prod_cart: CartEntity | null
+    @ManyToMany(() => CartEntity, (cart) => cart.cart_products, {
+        nullable: true,
+    })
+    prod_cart: CartEntity | null;
 
-    @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.product_detail)
+    @OneToMany(
+        () => CartDetailsEntity,
+        (cartProduct) => cartProduct.product_detail,
+    )
     cartProducts: CartDetailsEntity[];
 
     @BeforeInsert()
     @BeforeUpdate()
     async generateSlug() {
-        this.prod_slug = slug(this.prod_name.toLocaleLowerCase(), "-");
+        this.prod_slug = slug(this.prod_name.toLocaleLowerCase(), '-');
     }
 }

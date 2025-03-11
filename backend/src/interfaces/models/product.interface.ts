@@ -1,4 +1,5 @@
 import { EAgeGroup } from "src/enums/EAge.enum";
+import { EGender } from "src/enums/EGender.enum";
 
 export interface IProduct {
     prod_name: string;
@@ -9,6 +10,7 @@ export interface IProduct {
     prod_price: number;
     prod_price_official?: number;
     prod_description: string;
+    prod_gender: EGender[]
     prod_quantity: number; // Số lượng tồn
     prod_nation: string; // Xuất xứ
     prod_agePlay: EAgeGroup; //  Độ tuổi

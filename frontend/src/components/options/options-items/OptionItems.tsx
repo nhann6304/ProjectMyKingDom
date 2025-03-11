@@ -4,7 +4,11 @@ import { Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CONST_AGE_GROUP, CONST_GENDER_VALUES } from "@/constants/values.constant";
+import {
+    CONST_AGE_GROUP,
+    CONST_GENDER_VALUES,
+    CONST_PRICE_VALUES,
+} from "@/constants/values.constant";
 
 interface IProps {
     title: string;
@@ -13,6 +17,8 @@ interface IProps {
 
 const OptionItemsContainer = styled.div`
   margin-top: 1.4rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
 
   .collapse-title {
     display: block;
@@ -36,18 +42,19 @@ const OptionItemsContainer = styled.div`
 export default function OptionItems({ title, filterKey }: IProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const [isOpen, setIsOpen] = useState<boolean>(true); //Đóng mở
     const [checkedValues, setCheckedValues] = useState<string[]>([]);
-
     // Ánh xạ `filterKey` thành dữ liệu tương ứng
     const getFilterValues = (type: string) => {
-        const mapping: Record<string, Record<string, string>> = {
+        const mapping: Record<string, Record<string | number, string | number>> = {
             prod_agePlay: CONST_AGE_GROUP,
-            prod_price: CONST_GENDER_VALUES
+            prod_price: CONST_PRICE_VALUES,
+            prod_gender: CONST_GENDER_VALUES,
         };
 
         return Object.entries(mapping[type] || {}).map(([key, value]) => ({
             key,
-            value
+            value,
         }));
     };
 
@@ -80,17 +87,19 @@ export default function OptionItems({ title, filterKey }: IProps) {
     return (
         <OptionItemsContainer>
             <span className="collapse-title">{title}</span>
-            <div className="box-option">
-                {filterOptions.map(({ key, value }) => (
-                    <Checkbox
-                        key={key}
-                        checked={checkedValues.includes(key)}
-                        onChange={handleCheckboxChange(key)}
-                    >
-                        {value}
-                    </Checkbox>
-                ))}
-            </div>
+            {isOpen && (
+                <div className="box-option">
+                    {filterOptions.map(({ key, value }) => (
+                        <Checkbox
+                            key={key}
+                            checked={checkedValues.includes(key)}
+                            onChange={handleCheckboxChange(key)}
+                        >
+                            {value}
+                        </Checkbox>
+                    ))}
+                </div>
+            )}
         </OptionItemsContainer>
     );
 }

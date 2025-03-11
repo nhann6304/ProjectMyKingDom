@@ -104,27 +104,47 @@ export class ProductsService {
         };
     }
 
-    async findProductBySlug(slug: string, req: Request) {
-        const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
+    async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
+        const { isDeleted, fields, limit, page, filter } = query;
+        const objFilter = UtilConvert.convertJsonToObject(filter) || {};
+        const ALIAS_NAME = 'products';
 
+        console.log("objFilter::", objFilter);
+
+        // Lấy danh mục theo slug
+        const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
         if (!categoryItem) return {} as any;
 
         // Lấy danh sách ID của danh mục cha + con
         const categoryIds = [categoryItem.id];
-
         if (categoryItem.children?.length > 0) {
             categoryIds.push(...categoryItem.children.map(child => child.id));
         }
 
-        // Tìm sản phẩm thuộc tất cả các danh mục đã lấy
-        const productItems = await this.productRepository.findBy({
-            pc_category: { id: In(categoryIds) },
-        });
+        // Thêm điều kiện lọc theo danh mục vào objFilter
+        objFilter['pc_category.id'] = In(categoryIds);
+
+        // Query sản phẩm theo danh mục
+        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
+            .select(fields)
+            .skip({ limit, page })
+            .take({ limit })
+            .leftJoinAndSelect(['pc_category'])
+            .where(objFilter, isDeleted); // Truyền filter đã chứa điều kiện `pc_category.id`
+
+        const queryBuilder = result.build();
+
+        const [items, totalItems] = await Promise.all([
+            queryBuilder.getMany(),
+            queryBuilder.getCount(),
+        ]);
 
         return {
-            items: productItems,
+            items,
+            totalItems,
         };
     }
+
 
 
     async updateProduct({

@@ -57,8 +57,8 @@ export class ProductsController {
   @Get('find-product-by-slug-cate/:slug')
   @ApiOperation({ summary: 'Lấy sản phẩm bằng slug cate' })
   @UseGuards(AuthGuard)
-  async findProductBySlug(@Param('slug') slug: string, @Req() req: Request) {
-    const items = await this.productsService.findProductBySlug(slug, req)
+  async findProductBySlug(@Param('slug') slug: string, @Query() query: AQueries) {
+    const items = await this.productsService.findProductBySlug(slug, query)
 
     return new OK({
       message: RES_MESS.FIND_BY_SLUG("Sản phẩm"),

@@ -4,7 +4,7 @@ import { Checkbox, Collapse, CollapseProps } from "antd";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { usePathname } from "next/navigation";
-import { useCollapseStore } from "@/stores/text";
+import { useCollapseStore } from "@/stores/collapse/collapse.store";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 
 interface ICategory extends IProductCategory {

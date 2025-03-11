@@ -19,7 +19,17 @@ export const CONST_AGE_GROUP: Record<EAgeGroup, string> = {
     [EAgeGroup.OVER_TWELVE_YEARS]: "Hơn 12 tuổi",
 };
 
-// export const CONST_PRICE_VALUES:Record<>
+export const CONST_PRICE_VALUES: Record<string, string> = {
+    "0-200000": "Dưới 200.000 Đ",
+    "200000-500000": "200.000 Đ - 500.000 Đ",
+    "500000-1000000": "500.000 Đ - 1.000.000 Đ",
+    "1000000-2000000": "1.000.000 Đ - 2.000.000 Đ",
+    "2000000-4000000": "2.000.000 Đ - 4.000.000 Đ",
+    "4000001-Infinity": "Trên 4.000.000 Đ",
+};
+
+
+
 
 
 

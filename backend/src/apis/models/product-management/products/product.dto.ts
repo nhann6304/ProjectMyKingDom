@@ -3,8 +3,9 @@ import { EAgeGroup } from 'src/enums/EAge.enum';
 import { ProductsEntity } from './product.entity';
 import { ProductCategoryEntity } from '../product-categories/product-category.entity';
 import { IProduct } from 'src/interfaces/models/product.interface';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { CONST_ERROR } from 'src/constants';
+import { EGender } from 'src/enums/EGender.enum';
 
 export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({
@@ -40,6 +41,16 @@ export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({ example: EAgeGroup.UNDER_ONE_YEAR, required: true })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Độ tuổi') })
     prod_agePlay: EAgeGroup;
+
+    @ApiProperty({
+        example: [EGender.MALE, EGender.FEMALE], // Cho phép cả 2 giới tính
+        required: true,
+        isArray: true,
+    })
+    @IsArray({ message: "Giới tính phải là một danh sách" }) // Kiểm tra là mảng
+    @ArrayNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Giới tính khuyên dùng cho sản phẩm") }) // Không được để trống
+    @IsEnum(EGender, { each: true, message: "Giới tính không hợp lệ" }) // Mỗi phần tử phải là `EGender`
+    prod_gender: EGender[];
 
     @IsOptional()
     @ApiProperty({ type: 'number', required: false, minimum: 0, default: 1 })

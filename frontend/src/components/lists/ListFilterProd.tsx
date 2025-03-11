@@ -26,6 +26,7 @@ const ListFilterContainer = styled.header`
     }
 
     .filter-deleted {
+      cursor: pointer;
       font-size: 1.2rem;
       font-weight: 500;
     }
@@ -134,13 +135,18 @@ export default function ListFilterProd({ keySearch }: IProps) {
     // Cập nhật URL mà không reload trang
     router.replace(`/products/all?${params.toString()}`);
   };
+  //
+  const handleDeleteAll = () => {
+    router.replace(`/products/all`);
+
+  }
 
   //
   return (
     <ListFilterContainer>
       <div className="box-header">
         <span className="filter-text">Lọc theo</span>
-        <span className="filter-deleted">Xóa tất cả</span>
+        <span className="filter-deleted" onClick={() => handleDeleteAll()}>Xóa tất cả</span>
       </div>
 
       <div className="box-value-filter">

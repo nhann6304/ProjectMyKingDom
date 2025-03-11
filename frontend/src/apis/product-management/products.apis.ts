@@ -18,7 +18,8 @@ const TAG_NAME = {
 
 export async function FindAllProduct(queries?: IQueries) {
     const result = await api<IBaseResponse<IGetManyItem<IProduct>>>({
-        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS}/${CONST_API_COMMON.FIND_ALL}${convertOjbToString(queries)}`,
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS}/${CONST_API_COMMON.FIND_ALL
+            }${convertOjbToString(queries)}`,
         options: {
             method: CONST_METHODS.GET,
             next: {
@@ -29,10 +30,9 @@ export async function FindAllProduct(queries?: IQueries) {
     return result;
 }
 
-
-export async function FindProductBySlugCate(slug: string) {
+export async function FindProductBySlugCate(slug: string, queries?: IQueries) {
     const result = await api<IBaseResponse<IGetManyItem<IProduct>>>({
-        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS}/${CONST_API_COMMON.FIND_PRODUCT_SLUG_CATE}/${slug}`,
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.PRODUCTS}/${CONST_API_COMMON.FIND_PRODUCT_SLUG_CATE}/${slug}${convertOjbToString(queries)}`,
         options: {
             method: CONST_METHODS.GET,
             next: {
@@ -42,4 +42,3 @@ export async function FindProductBySlugCate(slug: string) {
     });
     return result;
 }
-
