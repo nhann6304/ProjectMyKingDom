@@ -60,7 +60,6 @@ export class ProductsService {
             finalPrice = productData.prod_price;
         }
 
-
         const newProduct = this.productRepository.create({
             createdBy: me,
             pc_category: findProductCate,
@@ -106,45 +105,50 @@ export class ProductsService {
 
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { isDeleted, fields, limit, page, filter } = query;
-        const objFilter = UtilConvert.convertJsonToObject(filter) || {};
         const ALIAS_NAME = 'products';
+        console.log(filter);
+        // console.log("Filter trước khi áp dụng:", filter);
 
-        console.log("objFilter::", objFilter);
-
-        // Lấy danh mục theo slug
+        // 1️⃣ Tìm danh mục theo slug
         const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
-        if (!categoryItem) return {} as any;
+        if (!categoryItem) return { items: [] };
 
-        // Lấy danh sách ID của danh mục cha + con
+        // 2️⃣ Lấy danh sách ID của danh mục cha + con
         const categoryIds = [categoryItem.id];
         if (categoryItem.children?.length > 0) {
-            categoryIds.push(...categoryItem.children.map(child => child.id));
+            categoryIds.push(...categoryItem.children.map((child) => child.id));
         }
 
-        // Thêm điều kiện lọc theo danh mục vào objFilter
-        objFilter['pc_category.id'] = In(categoryIds);
 
-        // Query sản phẩm theo danh mục
-        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
-            .select(fields)
-            .skip({ limit, page })
-            .take({ limit })
-            .leftJoinAndSelect(['pc_category'])
-            .where(objFilter, isDeleted); // Truyền filter đã chứa điều kiện `pc_category.id`
+        // 3️⃣ Lọc sản phẩm theo danh mục cha + con
+        let productItems = await this.productRepository.find({
+            where: {
+                pc_category: { id: In(categoryIds) },
+            },
+            skip: limit && page ? (page - 1) * limit : undefined,
+            take: limit || undefined,
+            relations: ['pc_category'], // Lấy thêm thông tin danh mục
+        });
+        // console.log("Sản phẩm trước khi áp dụng filter:", productItems);
 
-        const queryBuilder = result.build();
+        // 4️⃣ Nếu có filter, lọc lại sản phẩm theo filter
+        if (filter) {
+            const objFilter = UtilConvert.convertJsonToObject(filter) || {};
+            // console.log("Filter đã parse:", objFilter);
 
-        const [items, totalItems] = await Promise.all([
-            queryBuilder.getMany(),
-            queryBuilder.getCount(),
-        ]);
+            productItems = productItems.filter(product => {
+                return Object.entries(objFilter).every(([key, value]) => {
+                    return product[key] == value; // Chỉ giữ sản phẩm nào khớp với filter
+                });
+            });
+
+        }
 
         return {
-            items,
-            totalItems,
+            items: productItems,
+            totalItems: productItems.length
         };
     }
-
 
 
     async updateProduct({

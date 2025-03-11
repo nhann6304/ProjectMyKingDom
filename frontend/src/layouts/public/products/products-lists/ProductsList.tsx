@@ -56,6 +56,7 @@ const items: MenuProps["items"] = [
     },
 ];
 
+
 export default function ProductLayout({
     products,
     categories,
@@ -70,8 +71,8 @@ export default function ProductLayout({
     const searchParams = useSearchParams();
     const [slug, setSlug] = useState<string[]>([]);
     const [valueFilter, setValueFilter] = useState<any>();
+    //
     const queryParams: any = {};
-
     if (queryParams && !queryParams?.limit) queryParams.limit = 10;
     if (queryParams && !queryParams?.page) queryParams.page = 1;
     if (queryParams && !queryParams?.isDeleted) queryParams.isDeleted = false;
@@ -86,108 +87,115 @@ export default function ProductLayout({
             "prod_slug",
             "prod_price_official",
         ] as Array<keyof IProduct>;
-        //
-        useEffect(() => {
-            startTransition(async () => {
-                setSlug(pathname?.split("/").slice(2));
-            });
+    }
+    //
+    useEffect(() => {
+        startTransition(async () => {
+            // Cập nhật slug từ pathname
+            const newSlug = pathname?.split("/").slice(2);
+            setSlug(newSlug);
+
+            // Xử lý keySearch & searchParams
             const newResult = keySearch.flatMap((key) => {
-                const values = searchParams.get(key)?.split(",") || [];
-                return values;
+                return searchParams.get(key)?.split(",") || [];
             });
 
-            console.log("con cu", newResult);
-            console.log("con cu1", keySearch);
-        }, [pathname, searchParams, keySearch]);
+            // const formattedData = keySearch.map((key, index) => ({
+            //     f: key,
+            //     v: newResult[index]
+            // }));
 
-        //Gọi api khi slug thay đổi
-        useEffect(() => {
-            startTransition(async () => {
-                if (slug[0] === "all") {
-                    setListProducts(products?.metadata?.items || []);
-                } else if (slug.length >= 2) {
-                    const result = await FindProductBySlugCate(slug[1], queryParams);
-                    setListProducts(result?.metadata?.items || []);
-                } else {
-                    const result = await FindProductBySlugCate(slug[0], queryParams);
-                    setListProducts(result?.metadata?.items || []);
-                }
-            });
-        }, [slug]);
-        //
-        return (
-            <div className="product-container container-pub">
-                <div className="wrapper-container">
-                    <div className="box-control">
-                        {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
-                        <CollapseOption categories={categories?.metadata?.items || []} />
-                        <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
-                        <OptionItems title={"Giá (Đ)"} filterKey="prod_price" />
-                        <OptionItems title={"Giới tính"} filterKey="prod_gender" />
-                    </div>
+            const formattedData = {
+                f: keySearch[0],
+                v: newResult[0]
+            };
 
-                    <div className="box-product">
-                        <div className="product-container">
-                            <header>
-                                <div className="view-left">
-                                    <span className="text-view-setting">Kiểu xem</span>
-                                    <Tooltip arrow={false} title="Chế độ xem 2 lưới">
-                                        <Image
-                                            onClick={() => setSeeGird(false)}
-                                            src={categoryIcon}
-                                            alt="categoryIcon"
-                                        />
-                                    </Tooltip>
+            queryParams.filter = JSON.stringify(formattedData);
+            console.log("queryParams::", queryParams);
+            if (newSlug[0] === "all") {
+                const result = await FindAllProduct(queryParams);
+                setListProducts(result?.metadata?.items || []);
+            } else if (newSlug.length >= 2) {
+                const result = await FindProductBySlugCate(newSlug[1], queryParams);
+                setListProducts(result?.metadata?.items || []);
+            } else {
+                const result = await FindProductBySlugCate(newSlug[0], queryParams);
+                setListProducts(result?.metadata?.items || []);
+            }
+        });
+    }, [pathname, searchParams, keySearch]);
 
-                                    <Tooltip arrow={false} title="Chế độ xem 3 lưới">
-                                        <Image
-                                            onClick={() => setSeeGird(true)}
-                                            src={listIcon}
-                                            alt="listIcon"
-                                        />
-                                    </Tooltip>
-                                </div>
+    //
+    return (
+        <div className="product-container container-pub">
+            <div className="wrapper-container">
+                <div className="box-control">
+                    {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
+                    <CollapseOption categories={categories?.metadata?.items || []} />
+                    <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
+                    <OptionItems title={"Giá (Đ)"} filterKey="prod_price" />
+                    <OptionItems title={"Giới tính"} filterKey="prod_gender" />
+                </div>
 
-                                <div className="view-center">
-                                    <span className="">{listProducts.length} Sản phẩm</span>
-                                </div>
+                <div className="box-product">
+                    <div className="product-container">
+                        <header>
+                            <div className="view-left">
+                                <span className="text-view-setting">Kiểu xem</span>
+                                <Tooltip arrow={false} title="Chế độ xem 2 lưới">
+                                    <Image
+                                        onClick={() => setSeeGird(false)}
+                                        src={categoryIcon}
+                                        alt="categoryIcon"
+                                    />
+                                </Tooltip>
 
-                                <div className="view-right">
-                                    <Dropdown className="custom-dropdown" menu={{ items }}>
-                                        <a onClick={(e) => e.preventDefault()}>
-                                            <Space>
-                                                <span className="text-view-sort">Sắp xếp theo:</span>
-                                                <FaChevronDown />
-                                            </Space>
-                                        </a>
-                                    </Dropdown>
-                                </div>
-                            </header>
+                                <Tooltip arrow={false} title="Chế độ xem 3 lưới">
+                                    <Image
+                                        onClick={() => setSeeGird(true)}
+                                        src={listIcon}
+                                        alt="listIcon"
+                                    />
+                                </Tooltip>
+                            </div>
 
-                            <div className="product-body">
-                                <div
-                                    className={`${seeGird
-                                        ? "product-list-three-item"
-                                        : "product-list-two-item"
-                                        }`}
-                                >
-                                    {isLoading ? (
-                                        <Loading />
-                                    ) : (
-                                        <>
-                                            {listProducts?.map((prod) => (
-                                                <Fragment key={prod.id}>
-                                                    <CardProduct product={prod} />
-                                                </Fragment>
-                                            ))}
-                                        </>
-                                    )}
-                                </div>
+                            <div className="view-center">
+                                <span className="">{listProducts.length} Sản phẩm</span>
+                            </div>
+
+                            <div className="view-right">
+                                <Dropdown className="custom-dropdown" menu={{ items }}>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <Space>
+                                            <span className="text-view-sort">Sắp xếp theo:</span>
+                                            <FaChevronDown />
+                                        </Space>
+                                    </a>
+                                </Dropdown>
+                            </div>
+                        </header>
+
+                        <div className="product-body">
+                            <div
+                                className={`${seeGird ? "product-list-three-item" : "product-list-two-item"
+                                    }`}
+                            >
+                                {isLoading ? (
+                                    <Loading />
+                                ) : (
+                                    <>
+                                        {listProducts?.map((prod) => (
+                                            <Fragment key={prod.id}>
+                                                <CardProduct product={prod} />
+                                            </Fragment>
+                                        ))}
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }

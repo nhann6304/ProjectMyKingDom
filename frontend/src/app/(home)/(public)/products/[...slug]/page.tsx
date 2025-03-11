@@ -13,7 +13,6 @@ export default async function ProductPage({
 }: IPageProps) {
 
     const keySearch = Object.keys(searchParams);
-
     // Tạo object mới mà không chứa các key trong keySearch
     const prodSearch = Object.fromEntries(
         Object.entries(searchParams).filter(([key]) => !keySearch.includes(key))
