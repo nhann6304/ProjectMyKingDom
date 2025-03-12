@@ -9,10 +9,12 @@ import {
     CONST_GENDER_VALUES,
     CONST_PRICE_VALUES,
 } from "@/constants/values.constant";
+import { IProduct } from "@/interfaces/models/products.interface";
 
 interface IProps {
     title: string;
-    filterKey: string;
+    filterKey: keyof IProduct;
+    // filterKey: keyof Pick<IProduct, "prod_price_official" | "prod_gender" | "prod_agePlay">;
 }
 
 const OptionItemsContainer = styled.div`
@@ -48,7 +50,7 @@ export default function OptionItems({ title, filterKey }: IProps) {
     const getFilterValues = (type: string) => {
         const mapping: Record<string, Record<string | number, string | number>> = {
             prod_agePlay: CONST_AGE_GROUP,
-            prod_price: CONST_PRICE_VALUES,
+            prod_price_official: CONST_PRICE_VALUES,
             prod_gender: CONST_GENDER_VALUES,
         };
 

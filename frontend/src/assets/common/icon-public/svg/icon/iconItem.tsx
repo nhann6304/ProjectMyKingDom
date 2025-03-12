@@ -170,9 +170,9 @@ export const Checked = () => {
             <path
                 d="M16.5 1L6 13L1.5 8.5"
                 stroke="black"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
             ></path>
         </svg>
     );

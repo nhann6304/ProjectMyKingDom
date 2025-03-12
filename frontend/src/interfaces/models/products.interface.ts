@@ -1,5 +1,6 @@
 import { EAgeGroup } from "@/enums/EAge.enum";
 import { IProductCategory } from "./product-categories.interface";
+import { EGender } from "@/enums/EGender.enum";
 
 export interface IProduct {
     id?: any;
@@ -11,6 +12,7 @@ export interface IProduct {
     prod_slug: string;
     prod_price: number;
     prod_price_official?: number;
+    prod_gender: EGender[]
     prod_description: string;
     prod_quantity: number; // Số lượng tồn
     prod_nation: string; // Xuất xứ

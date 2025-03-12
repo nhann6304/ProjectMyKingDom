@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import "./style.scss";
 import hinh from "@/assets/common/icon-public/jpg/product.test.webp";
@@ -5,13 +6,24 @@ import {
     Checked,
     HearNotBg,
 } from "@/assets/common/icon-public/svg/icon/iconItem";
-import React from "react";
+import React, { useState } from "react";
+import ButtonCommon from "@/components/buttons/ButtonCommon";
+import ButtonForm from "@/components/buttons/ButtonForm";
+import InputQuantity from "@/components/inputs/input-quantity";
 
 interface ICommit {
     value: string;
     icon: React.ReactElement;
 }
 export default function ProductDetailsLayout() {
+    const [value, setValue] = useState<number>(1);
+    console.log("value::", value);
+
+
+    const handleSetValue = (e: number) => {
+        console.log("què", e);
+    }
+
     const arrCommit: ICommit[] = [
         {
             value: "Hàng chính hãng",
@@ -32,7 +44,9 @@ export default function ProductDetailsLayout() {
             <div className="box-detail">
                 <div className="box-detail-left">
                     <div className="image-big">
-                        <Image src={hinh} alt="" />
+                        {/* <Image src={hinh} alt="" /> */}
+                        <Image src={"http://localhost:9000/uploads/minhvycafe.jpg"} width={400} height={300} alt="" />
+
                     </div>
                 </div>
                 <div className="box-detail-right">
@@ -81,6 +95,19 @@ export default function ProductDetailsLayout() {
                                     <span className="item-content">{item.value}</span>
                                 </div>
                             ))}
+                        </div>
+
+                        <div className="box-prod-control">
+                            <h1>Số lượng</h1>
+
+                            <div className="btn-control">
+                                <div className="nhan">
+                                    <InputQuantity onChange={(value) => handleSetValue(value)} />
+                                </div>
+                                <div className="nhan1">
+                                    <ButtonForm title="Thêm vào giỏ hàng" />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

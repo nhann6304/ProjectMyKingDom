@@ -160,8 +160,7 @@ const CardContainer = styled.div`
         align-items: center;
         gap: 2rem;
         justify-content: space-between;
-        padding: 5px;
-        margin-top: 2px;
+        margin-top: 1rem;
         .btn-control {
           background-color: var(--color-background-global);
           padding: 1.4rem;

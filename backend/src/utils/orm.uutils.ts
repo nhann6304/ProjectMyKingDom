@@ -23,12 +23,12 @@ export class UtilORM<T> {
     }
 
     where(
-        filter: Partial<Record<keyof T, string | number | IRange>>,
+        filter: Partial<
+            Record<keyof T, string | number | IRange | IRange[] | string[]>
+        >,
         isDeleted: string,
     ): this {
-        const isDelete = UtilConvert.convertStringToBoolean(isDeleted); // Chuyển đổi giá trị isDeleted
-
-        // Bắt đầu truy vấn với điều kiện isDeleted
+        const isDelete = UtilConvert.convertStringToBoolean(isDeleted);
         this.queryBuilder.where(`${this.aliasName}.isDeleted = :isDelete`, {
             isDelete,
         });
@@ -37,14 +37,54 @@ export class UtilORM<T> {
             const value = filter[key];
 
             if (value !== undefined && value !== null) {
-                if (typeof value === 'object' && 'min' in value && 'max' in value) {
-                    const { min, max } = value as IRange;
+                if (
+                    Array.isArray(value) &&
+                    value.every((v) => typeof v === 'object' && 'min' in v)
+                ) {
+                    // ✅ Xử lý trường hợp value là mảng các khoảng [{ min, max }, { min, max }]
+                    const conditions = value
+                        .map((range, index) => {
+                            if (range.max === null) {
+                                return `${this.aliasName}.${key} >= :${key}_min${index}`;
+                            }
+                            return `${this.aliasName}.${key} BETWEEN :${key}_min${index} AND :${key}_max${index}`;
+                        })
+                        .join(' OR ');
+
+                    const params = value.reduce(
+                        (acc, range, index) => {
+                            acc[`${key}_min${index}`] = range.min;
+                            if (range.max !== null) {
+                                acc[`${key}_max${index}`] = range.max;
+                            }
+                            return acc;
+                        },
+                        {} as Record<string, number>,
+                    );
+
+                    this.queryBuilder.andWhere(`(${conditions})`, params);
+                } else if (typeof value === 'object' && 'min' in value) {
+                    // ✅ Xử lý trường hợp value là một khoảng duy nhất { min, max }
+                    if (value.max === null) {
+                        this.queryBuilder.andWhere(`${this.aliasName}.${key} >= :${key}_min`, {
+                            [`${key}_min`]: value.min,
+                        });
+                    } else {
+                        this.queryBuilder.andWhere(
+                            `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
+                            { [`${key}_start`]: value.min, [`${key}_end`]: value.max },
+                        );
+                    }
+                } else if (Array.isArray(value)) {
+                    // ✅ Xử lý nếu là mảng giá trị [value1, value2, ...]
                     this.queryBuilder.andWhere(
-                        `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
-                        { [`${key}_start`]: min, [`${key}_end`]: max },
+                        `${this.aliasName}.${key} IN (:...${key})`,
+                        {
+                            [key]: value,
+                        },
                     );
                 } else {
-                    // Trường hợp giá trị bình thường string | number
+                    // ✅ Xử lý nếu là string hoặc number
                     this.queryBuilder.andWhere(`${this.aliasName}.${key} = :${key}`, {
                         [key]: value,
                     });
@@ -54,6 +94,7 @@ export class UtilORM<T> {
 
         return this;
     }
+
 
     whereUser(userId: string): this {
         this.queryBuilder.where('cart.cart_users.id = :userId', { userId });

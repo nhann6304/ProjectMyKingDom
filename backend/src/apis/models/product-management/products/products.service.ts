@@ -74,7 +74,7 @@ export class ProductsService {
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter } = query;
-        const objFilter = UtilConvert.convertJsonToObject(filter);
+        const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const ALIAS_NAME = 'products';
         console.log("objFilter::", objFilter);
 
@@ -107,7 +107,6 @@ export class ProductsService {
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { isDeleted, fields, limit, page, filter } = query;
         const ALIAS_NAME = 'products';
-
         // 1️⃣ Tìm danh mục theo slug
         const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
         if (!categoryItem) return { items: [] };
@@ -130,11 +129,37 @@ export class ProductsService {
         // 4️⃣ Nếu có filter, lọc lại sản phẩm theo filter
         if (filter) {
             const objFilter = UtilConvert.convertJsonToObject(filter as any) || {};
+
             productItems = productItems.filter(product => {
                 return Object.entries(objFilter).every(([key, value]) => {
-                    return product[key] == value; // Chỉ giữ sản phẩm nào khớp với filter
+                    if (Array.isArray(product[key])) {
+                        return Array.isArray(value)
+                            ? value.some(v => product[key].includes(v)) // Nếu value là mảng, kiểm tra có phần tử nào khớp không
+                            : product[key].includes(value); // Nếu value là chuỗi, kiểm tra có chứa không
+                    }
+
+                    if (Array.isArray(value) && value.every(v => typeof v === "object" && v !== null && "min" in v)) {
+                        // ✅ Nếu value là một mảng các khoảng [{ min, max }, { min, max }]
+                        return value.some(range =>
+                            range.max === null
+                                ? product[key] >= range.min  // ✅ Nếu max là null => lấy tất cả >= min
+                                : product[key] >= range.min && product[key] <= range.max
+                        );
+                    }
+
+                    if (typeof value === "object" && value !== null && "min" in value) {
+                        // ✅ Nếu value là một khoảng { min, max }
+                        return value.max === null
+                            ? product[key] >= value.min // ✅ max = null => lấy tất cả lớn hơn min
+                            : product[key] >= value.min && product[key] <= value.max;
+                    }
+
+                    // ✅ Xử lý giá trị thông thường
+                    return Array.isArray(value) ? value.includes(product[key]) : product[key] == value;
                 });
             });
+
+
         }
 
         return {

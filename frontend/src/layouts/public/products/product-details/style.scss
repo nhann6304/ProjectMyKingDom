@@ -11,13 +11,17 @@
         gap: 1rem;
 
         &-left {
-            height: auto;
-            width: auto;
-            background-color: blue;
+            height: 100%;
+            width: 100%;
+            margin: 0 auto;
+            background-color: white;
             display: flex;
             justify-content: center;
 
             .image-big {
+                height: 55rem;
+                width: 100%;
+
                 img {
                     height: 100%;
                     width: 100%;
@@ -146,6 +150,32 @@
                             line-height: 20px;
                             color: #111;
                         }
+                    }
+                }
+
+                //
+
+                .box-prod-control {
+                    // width: 100%;
+
+                    h1 {
+                        font-size: 2rem;
+                        font-weight: 600;
+                    }
+
+                    .btn-control {
+                        margin-top: 1rem;
+                        height: 5rem;
+                        display: grid;
+                        grid-template-columns: 1.4fr 2fr;
+                        gap: 1rem;
+
+                        // này nó là trong container
+                        .custom-button {
+                            margin: 0;
+                        }
+
+
                     }
                 }
             }

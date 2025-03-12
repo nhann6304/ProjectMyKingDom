@@ -3,6 +3,7 @@ import { IsOptional, IsString, IsInt, IsArray } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { IQueries } from "src/interfaces/common/IBaseQueries.interface";
 import { FilterItem, FilterQuery } from "./AFilterAction.abstracts";
+import { IFilter } from "src/interfaces/common/IFilterAction.interface";
 
 export class AQueries<T = any> implements Partial<IQueries<T>> {
     @IsOptional()

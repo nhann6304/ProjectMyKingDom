@@ -95,23 +95,25 @@ export default function ProductLayout({
             const newSlug = pathname?.split("/").slice(2);
             setSlug(newSlug);
 
+            const formattedData: { f: string; v: string | { min: number; max: number } }[] = [];
             // Xử lý keySearch & searchParams
-            const newResult = keySearch.flatMap((key) => {
-                return searchParams.get(key)?.split(",") || [];
+            keySearch.forEach((key) => {
+                const values = searchParams.get(key)?.split(",") || []; // Lấy danh sách giá trị, nếu có
+
+                values.forEach((value) => {
+                    if (key === "prod_price_official" && value.includes("-")) {
+                        // Nếu key là prod_Price_office và value chứa dấu "-", tách thành min-max
+                        const [min, max] = value.split("-").map(Number);
+                        formattedData.push({ f: key, v: { min, max } });
+                    } else {
+                        // Nếu không, giữ nguyên
+                        formattedData.push({ f: key, v: value });
+                    }
+                });
             });
 
-            // const formattedData = keySearch.map((key, index) => ({
-            //     f: key,
-            //     v: newResult[index]
-            // }));
+            queryParams.filter = JSON.stringify({ filter: formattedData });
 
-            const formattedData = {
-                f: keySearch[0],
-                v: newResult[0]
-            };
-
-            queryParams.filter = JSON.stringify(formattedData);
-            console.log("queryParams::", queryParams);
             if (newSlug[0] === "all") {
                 const result = await FindAllProduct(queryParams);
                 setListProducts(result?.metadata?.items || []);
@@ -133,7 +135,7 @@ export default function ProductLayout({
                     {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
                     <CollapseOption categories={categories?.metadata?.items || []} />
                     <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
-                    <OptionItems title={"Giá (Đ)"} filterKey="prod_price" />
+                    <OptionItems title={"Giá (Đ)"} filterKey="prod_price_official" />
                     <OptionItems title={"Giới tính"} filterKey="prod_gender" />
                 </div>
 

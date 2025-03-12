@@ -16,7 +16,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   .custom-button {
     align-items: center;
-    width: auto;
+    width: 100%;
     height: 5rem;
     background: var(--color-background-global);
     color: var(--color-white);

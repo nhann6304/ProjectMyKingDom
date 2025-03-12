@@ -59,7 +59,6 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   async findProductBySlug(@Param('slug') slug: string, @Query() query: AQueries) {
     const items = await this.productsService.findProductBySlug(slug, query);
-
     return new OK({
       message: RES_MESS.FIND_BY_SLUG("Sản phẩm"),
       metadata: items
