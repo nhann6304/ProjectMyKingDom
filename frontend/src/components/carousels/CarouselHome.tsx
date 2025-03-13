@@ -130,18 +130,7 @@ export default function CarouselHome({
         <PrevArrow />
         <NextArrow />
       </CarouselContainer>
-      {/* {scroll && (
-        <div className="scroll-container">
-          <span></span>
-          <Image
-            src={minionIcon}
-            alt="Minion"
-            width={48}
-            height={48}
-            className="minion-image"
-          />
-        </div>
-      )} */}
+
     </>
   );
 }
