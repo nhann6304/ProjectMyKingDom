@@ -8,6 +8,7 @@ import {
     Column,
     Entity,
     JoinColumn,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -17,6 +18,7 @@ import { UserEntity } from '../../users/user.entity';
 import { CartEntity } from '../carts/cart.entity';
 import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { EGender } from 'src/enums/EGender.enum';
+import { ImageEntity } from 'src/apis/common/images/image.entity';
 
 @Entity('products')
 export class ProductsEntity extends ABaseModel implements IProduct {
@@ -65,6 +67,15 @@ export class ProductsEntity extends ABaseModel implements IProduct {
 
     @Column('decimal', { precision: 5, scale: 2, default: 0 })
     discount: number;
+
+    @ManyToMany(() => ImageEntity, (image) => image.products)
+    @JoinTable({
+        name: 'image_relations',
+        joinColumn: { name: 'product_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'image_id', referencedColumnName: 'id' },
+    })
+    prod_thumbnails?: ImageEntity[];
+
 
     @ManyToOne(() => ProductCategoryEntity, (category) => category.products, {
         nullable: false,

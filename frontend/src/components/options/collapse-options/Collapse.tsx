@@ -78,7 +78,6 @@ export default function CollapseOption({ categories }: IProps) {
 
   const handleCheckboxChange = (event: React.MouseEvent, category: string, slug: string) => {
     event.stopPropagation();
-    console.log(category);
 
     if (checkedValue?.category === category && checkedValue?.slug === slug) {
       setCheckedValue(null);

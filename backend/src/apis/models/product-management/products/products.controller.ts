@@ -36,6 +36,7 @@ export class ProductsController {
       req,
       productData,
     });
+    console.log(productData.image_ids);
     return new OK({
       message: RES_MESS.CREATE('Sản phẩm'),
       metadata: items,

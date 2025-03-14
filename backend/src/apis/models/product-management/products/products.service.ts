@@ -14,12 +14,15 @@ import { UtilCalculator } from 'src/utils/caculator.utils';
 import { CartsService } from '../carts/carts.service';
 import { IUser } from 'src/interfaces/common/IUser.interface';
 import { UserEntity } from '../../users/user.entity';
+import { ImageEntity } from 'src/apis/common/images/image.entity';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(ProductsEntity)
         private productRepository: Repository<ProductsEntity>,
+        @InjectRepository(ImageEntity)
+        private imagesRepository: Repository<ImageEntity>,
         private productCategoriesService: ProductCategoriesService,
         private cardsService: CartsService,
     ) { }
@@ -43,9 +46,14 @@ export class ProductsService {
     }) {
         const me = req['user'];
         let finalPrice = 0;
+
         const findProductCate = await this.productCategoriesService.findOneByID(
             productData.productCate_Id,
         );
+
+        const findImage = await this.imagesRepository.findBy({
+            id: In(productData.image_ids), //In là tra nhiều id
+        });
 
         if (!findProductCate) {
             throw new BadRequestException('Danh mục sản phẩm không tồn tại');
@@ -65,6 +73,7 @@ export class ProductsService {
             pc_category: findProductCate,
             ...productData,
             prod_price_official: finalPrice,
+            prod_thumbnails: findImage,
         });
 
         const result = await this.productRepository.save(newProduct);
@@ -76,8 +85,6 @@ export class ProductsService {
         const { isDeleted, fields, limit, page, filter } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const ALIAS_NAME = 'products';
-        console.log("objFilter::", objFilter);
-
         const result = new UtilORM<ProductsEntity>(
             this.productRepository,
             ALIAS_NAME,
@@ -85,7 +92,7 @@ export class ProductsService {
             .select(fields)
             .skip({ limit, page })
             .take({ limit })
-            .leftJoinAndSelect(['pc_category']);
+            .leftJoinAndSelect(['pc_category', 'prod_thumbnails']);
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
@@ -98,17 +105,28 @@ export class ProductsService {
             queryBuilder.getCount(),
         ]);
 
+        const transformedItems = items.map((item) => ({
+            ...item,
+            prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
+                id: thumbnail.id,
+                img_url: thumbnail.img_url,
+                img_alt: thumbnail.img_alt
+            })),
+        }));
+
         return {
-            items,
+            items: transformedItems,
             totalItems,
         };
+
     }
 
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { isDeleted, fields, limit, page, filter } = query;
         const ALIAS_NAME = 'products';
         // 1️⃣ Tìm danh mục theo slug
-        const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
+        const categoryItem =
+            await this.productCategoriesService.findCateBySlug(slug);
         if (!categoryItem) return { items: [] };
 
         // 2️⃣ Lấy danh sách ID của danh mục cha + con
@@ -123,31 +141,36 @@ export class ProductsService {
             },
             skip: limit && page ? (page - 1) * limit : undefined,
             take: limit || undefined,
-            // relations: ['pc_category'], // Lấy thêm thông tin danh mục
+            relations: ['prod_thumbnails'], // Lấy thêm thông tin danh mục
         });
 
         // 4️⃣ Nếu có filter, lọc lại sản phẩm theo filter
         if (filter) {
             const objFilter = UtilConvert.convertJsonToObject(filter as any) || {};
 
-            productItems = productItems.filter(product => {
+            productItems = productItems.filter((product) => {
                 return Object.entries(objFilter).every(([key, value]) => {
                     if (Array.isArray(product[key])) {
                         return Array.isArray(value)
-                            ? value.some(v => product[key].includes(v)) // Nếu value là mảng, kiểm tra có phần tử nào khớp không
+                            ? value.some((v) => product[key].includes(v)) // Nếu value là mảng, kiểm tra có phần tử nào khớp không
                             : product[key].includes(value); // Nếu value là chuỗi, kiểm tra có chứa không
                     }
 
-                    if (Array.isArray(value) && value.every(v => typeof v === "object" && v !== null && "min" in v)) {
+                    if (
+                        Array.isArray(value) &&
+                        value.every(
+                            (v) => typeof v === 'object' && v !== null && 'min' in v,
+                        )
+                    ) {
                         // ✅ Nếu value là một mảng các khoảng [{ min, max }, { min, max }]
-                        return value.some(range =>
+                        return value.some((range) =>
                             range.max === null
-                                ? product[key] >= range.min  // ✅ Nếu max là null => lấy tất cả >= min
-                                : product[key] >= range.min && product[key] <= range.max
+                                ? product[key] >= range.min // ✅ Nếu max là null => lấy tất cả >= min
+                                : product[key] >= range.min && product[key] <= range.max,
                         );
                     }
 
-                    if (typeof value === "object" && value !== null && "min" in value) {
+                    if (typeof value === 'object' && value !== null && 'min' in value) {
                         // ✅ Nếu value là một khoảng { min, max }
                         return value.max === null
                             ? product[key] >= value.min // ✅ max = null => lấy tất cả lớn hơn min
@@ -155,19 +178,27 @@ export class ProductsService {
                     }
 
                     // ✅ Xử lý giá trị thông thường
-                    return Array.isArray(value) ? value.includes(product[key]) : product[key] == value;
+                    return Array.isArray(value)
+                        ? value.includes(product[key])
+                        : product[key] == value;
                 });
             });
-
-
         }
 
+        const transformedItems = productItems.map((item) => ({
+            ...item,
+            prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
+                id: thumbnail.id,
+                img_url: thumbnail.img_url,
+                img_alt: thumbnail.img_alt
+            })),
+        }));
+
         return {
-            items: productItems,
-            totalItems: productItems.length
+            items: transformedItems,
+            totalItems: productItems.length,
         };
     }
-
 
     async updateProduct({
         id,

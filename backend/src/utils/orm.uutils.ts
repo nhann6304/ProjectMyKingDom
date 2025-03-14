@@ -95,7 +95,6 @@ export class UtilORM<T> {
         return this;
     }
 
-
     whereUser(userId: string): this {
         this.queryBuilder.where('cart.cart_users.id = :userId', { userId });
 

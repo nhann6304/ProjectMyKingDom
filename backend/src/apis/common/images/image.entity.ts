@@ -1,8 +1,9 @@
 import { ABaseAction } from "src/abstracts/common/ABaseAction.abstracts";
 import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
+import { ProductsEntity } from "src/apis/models/product-management/products/product.entity";
 import { UserEntity } from "src/apis/models/users/user.entity";
 import { IImage } from "src/interfaces/common/images.interface";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, ManyToMany } from "typeorm";
 
 @Entity("images")
 export class ImageEntity extends ABaseModel implements IImage {
@@ -29,6 +30,9 @@ export class ImageEntity extends ABaseModel implements IImage {
 
     @Column('int')
     img_heigh: number;
+
+    @ManyToMany(() => ProductsEntity, (product) => product.prod_thumbnails)
+    products: ProductsEntity[];
 }
 
 

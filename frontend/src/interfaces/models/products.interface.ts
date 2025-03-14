@@ -1,6 +1,7 @@
 import { EAgeGroup } from "@/enums/EAge.enum";
 import { IProductCategory } from "./product-categories.interface";
 import { EGender } from "@/enums/EGender.enum";
+import { IImage } from "./IImage.interface";
 
 export interface IProduct {
     id?: any;
@@ -8,6 +9,7 @@ export interface IProduct {
     prod_name: string;
     prod_thumb: string;
     prod_company: string; // Thương hiệu
+    prod_thumbnails?: IImage[]
     prod_sku: string; // Mã hàng hóa
     prod_slug: string;
     prod_price: number;

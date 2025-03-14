@@ -7,6 +7,7 @@ export interface IQueries<T = any> {
     page?: number;
     fields?: Array<T>
     isDeleted?: string | boolean;
+    filter?: any;
     // sortBy?: string;
     // sortChildrenBy?: string;
     // sortDir?: string | TDirectionSort;

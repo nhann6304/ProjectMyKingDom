@@ -11,14 +11,21 @@ import ListInfoProduct from "@/components/lists/List-Info-Prod";
 import { Settings } from "react-slick";
 import CarouselHome from "@/components/carousels/CarouselHome";
 import CardProduct from "@/components/cards/CardProduct";
+import { FindAllProduct } from "@/apis/product-management/products.apis";
+
+interface IProps {
+    product: Awaited<ReturnType<typeof FindAllProduct>>;
+
+}
 
 interface ICommit {
     value: string;
     icon: React.ReactElement;
 }
-export default function ProductDetailsLayout() {
+export default function ProductDetailsLayout({ product }: IProps) {
+    const productItem = product?.metadata?.items[0];
     const [value, setValue] = useState<number>(1);
-    const [selectedImage, setSelectedImage] = useState("http://localhost:9000/uploads/minhvycafe.jpg");
+    const [selectedImage, setSelectedImage] = useState(productItem?.prod_thumb);
 
     const handleSetValue = (e: number) => {
         console.log("què", e);
@@ -51,18 +58,18 @@ export default function ProductDetailsLayout() {
             <div className="box-detail">
                 <div className="box-detail-left">
                     <div className="image-big">
-                        <Image src={selectedImage} width={400} height={300} alt="" />
+                        <Image src={selectedImage || ""} width={400} height={300} alt="" />
                     </div>
 
                     <div className="image-small">
                         <CarouselHome scroll className="custom-carousel" settings={settingsProduct}>
-                            {imageList.map((img, index) => (
+                            {productItem?.prod_thumbnails?.map((img, index) => (
                                 <div
                                     key={index}
-                                    className={`card-item ${selectedImage === img ? "active" : "blurred"}`}
-                                    onClick={() => setSelectedImage(img)}
+                                    className={`card-item ${selectedImage === img.img_url ? "active" : "blurred"}`}
+                                    onClick={() => setSelectedImage(img.img_url)}
                                 >
-                                    <Image height={180} width={180} src={img} alt="product" />
+                                    <Image height={180} width={180} src={img.img_url} alt="product" />
                                 </div>
                             ))}
                         </CarouselHome>
@@ -72,7 +79,7 @@ export default function ProductDetailsLayout() {
                 <div className="box-detail-right">
                     <div className="detail-prod">
                         <div className="box-prod-title">
-                            <span className="name-prod">Đồ Chơi Lắp Ráp Siêu Xe Mô Tô Của Người Dơi LEGO TECHNIC 42155</span>
+                            <span className="name-prod">{productItem?.prod_name}</span>
                             <span className="icon-favourite">
                                 <HearNotBg />
                             </span>

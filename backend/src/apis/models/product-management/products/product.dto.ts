@@ -6,10 +6,11 @@ import { IProduct } from 'src/interfaces/models/product.interface';
 import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { CONST_ERROR } from 'src/constants';
 import { EGender } from 'src/enums/EGender.enum';
+import { ImageEntity } from 'src/apis/common/images/image.entity';
 
 export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({
-        example: 'Mô hình siêu anh hùng Spiderman 30cm SPIDERMAN E7333',
+        example: 'Mô hình siêu anh hùng Spiderman 30cm SPIDERMAN E73331',
     })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Tên sản phẩm') })
     prod_name: string;
@@ -17,6 +18,11 @@ export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({ type: String })
     @IsOptional()
     prod_thumb?: string;
+
+    @IsArray()
+    @ArrayNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Ảnh con') }) // Đảm bảo không rỗng
+    @ApiProperty({ type: 'array', items: { type: 'string' } }) // Nếu ID là string
+    image_ids?: string[]; // Nếu ID là số, đổi thành `number[]`
 
     @ApiProperty({ example: 'spiderman', required: true })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Thương hiệu') })
