@@ -1,52 +1,190 @@
+@use "@/app/globals.scss" as *;
+
 .product-container {
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--color-gray-200);
-        padding-bottom: 1rem;
-        margin-bottom: 2.6rem;
+    margin: 2rem auto;
+    width: 100%;
+    height: auto;
 
-        .view-left {
+    .wrapper-container {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 20% 80%;
+        height: auto;
+        gap: 2rem;
+        align-items: start;
+
+        .box-control {
+            height: auto;
+        }
+
+        .box-product {
+            height: auto;
+            padding: 0 1rem;
+        }
+
+        header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            border-bottom: 1px solid var(--color-gray-200);
+            padding-bottom: 1rem;
+            margin-bottom: 2.6rem;
 
-            span,
-            svg,
-            img {
+            .view-responsive {
+                display: none;
+            }
+
+            .view-left {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                span,
+                svg,
+                img {
+                    font-size: 1.4rem;
+                    cursor: pointer;
+                }
+            }
+
+            .view-center {
                 font-size: 1.4rem;
-                cursor: pointer;
+                font-weight: 600;
+            }
+
+            .view-right {
+                display: flex;
+
+                .text-view-sort {
+                    font-size: 1.4rem;
+                }
             }
         }
 
-        .view-center {
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .view-right {
-            display: flex;
-
-            .text-view-sort {
-                font-size: 1.4rem;
+        .product-body {
+            .product-list-three-item {
+                display: grid;
+                gap: 1.4rem;
+                grid-template-columns: 1fr 1fr 1fr;
             }
 
-            // .custom-dropdown {}
+            .product-list-two-item {
+                display: grid;
+                gap: 1rem;
+                grid-template-columns: 1fr 1fr;
+            }
         }
     }
 
-    .product-body {
-        .product-list-three-item {
-            display: grid;
-            gap: 1.4rem;
-            grid-template-columns: 1fr 1fr 1fr;
+    @include resLAP-1024() {
+        .wrapper-container {
+            display: block;
+            width: 100%;
+
+            .box-control {
+                display: none;
+            }
+
+            header {
+                .view-left {
+                    display: none;
+                }
+
+                .view-responsive {
+                    display: flex;
+                    align-items: center;
+                    gap: 1.2rem;
+
+                    span {
+                        font-size: 1.2rem;
+                    }
+
+                    svg {
+                        height: 1.8rem;
+                        width: 1.8rem;
+                    }
+                }
+            }
+        }
+    }
+
+    @include resTL-768() {
+        .wrapper-container {
+            .box-product {
+                .product-container {
+                    .product-body {
+
+                        .product-list-three-item,
+                        .product-list-two-item {
+                            grid-template-columns: 1fr 1fr;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include resMB-425() {
+        .wrapper-container {
+            .box-product {
+                .product-container {
+                    .product-body {
+
+                        .product-list-three-item,
+                        .product-list-two-item {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Custom antd
+.custom-drawer {
+    .ant-drawer-content-wrapper {
+        width: 40vw; // Mặc định cho màn hình lớn
+
+        @media (max-width: 1200px) {
+            width: 50vw; // Tablet lớn
         }
 
-        .product-list-two-item {
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: 1fr 1fr;
+        @media (max-width: 992px) {
+            width: 60vw; // Tablet nhỏ
+        }
+
+        @media (max-width: 768px) {
+            width: 80vw; // Mobile
+        }
+
+        @media (max-width: 480px) {
+            width: 90vw !important; // Mobile nhỏ
+        }
+    }
+
+    .ant-drawer-content {
+        overflow: unset;
+
+        .ant-drawer-header {
+            position: relative;
+
+            button {
+                position: absolute;
+                right: -10%;
+                top: 10%;
+                color: white;
+                font-size: 2rem;
+            }
+
+            .ant-drawer-title {
+                font-size: 1.8rem !important;
+                text-transform: uppercase;
+            }
+        }
+
+        .ant-drawer-footer {
+            padding: 0;
         }
     }
 }

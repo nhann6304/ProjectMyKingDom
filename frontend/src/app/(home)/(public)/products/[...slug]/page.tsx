@@ -5,7 +5,6 @@ import {
 import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 import { IProduct } from "@/interfaces/models/products.interface";
-import "./style.scss";
 import ProductLayout from "@/layouts/public/products/products-lists/ProductsList";
 export default async function ProductPage({
     searchParams,

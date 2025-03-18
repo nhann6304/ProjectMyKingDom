@@ -91,7 +91,7 @@ export default function ListFilterProd({ keySearch }: IProps) {
   //
   const keyMapping: Record<string, string> = {
     prod_agePlay: "Tuổi",
-    prod_price: "Giá (Đ)",
+    prod_price_official: "Giá (Đ)",
     prod_gender: "Giới Tính",
   };
 

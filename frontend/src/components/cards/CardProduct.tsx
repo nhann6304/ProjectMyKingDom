@@ -57,10 +57,21 @@ const CardContainer = styled.div`
       img {
         padding: 5px;
         object-position: center center;
-        transform: scale(1) !important;
+        transform: scale(1);
         max-width: 30rem;
         max-height: 30rem;
+        height: 30rem;
+        width: 100%;
         object-fit: cover;
+        border-radius: 1.2rem;
+        transition: transform 0.3s ease-in-out;
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      .box-icon-tym {
+        display: none;
       }
     }
 
@@ -74,7 +85,6 @@ const CardContainer = styled.div`
         -webkit-box-orient: vertical;
         background-color: rgba(252, 184, 51, 1);
         border-radius: 5px;
-        /* background-color: #eff5fd; */
         font-weight: 600;
         font-size: 1.3rem;
       }
@@ -173,12 +183,85 @@ const CardContainer = styled.div`
       }
     }
   }
+
+  @media (max-width: 1440px) {
+    .box-product {
+      .box-product-info {
+        padding: 1rem 5px;
+        .info-product-pay {
+          font-weight: 700;
+
+          .payable {
+            font-size: 1.6rem;
+          }
+
+          .pay-sale {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .box-product {
+      .box-product-item {
+        position: relative;
+        .box-icon-tym {
+          position: absolute;
+          bottom: 0;
+          right: -1%;
+          height: auto;
+          width: auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f2f2f2;
+          border-radius: 100%;
+          span {
+            padding: 1rem;
+          }
+        }
+
+        img {
+          transform: scale(1) !important;
+        }
+      }
+
+      .box-product-info {
+        padding: 1rem 5px;
+        .info-control {
+          span {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 425px) {
+    .box-product {
+      display: block;
+      padding: 1rem;
+      position: relative;
+      cursor: pointer;
+
+      .box-product-item {
+        img {
+          max-width: 100%;
+        }
+      }
+    }
+  }
 `;
 
 export default function CardProduct({ product }: IProps) {
   return (
     <CardContainer>
-      <Link href={`/products/details/${product?.prod_slug}`} className="box-product">
+      <Link
+        href={`/products/details/${product?.prod_slug}`}
+        className="box-product"
+      >
         <div className="box-product-discount">
           {Math.floor(product?.discount as number) !== 0 && (
             <span>-{convertDiscount(product?.discount as number)}%</span>
@@ -194,6 +277,11 @@ export default function CardProduct({ product }: IProps) {
             }
             alt="product"
           />
+          <div className="box-icon-tym">
+            <span>
+              <HearNotBg />
+            </span>
+          </div>
         </div>
 
         {nhan && (

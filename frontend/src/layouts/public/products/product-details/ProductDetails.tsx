@@ -2,7 +2,10 @@
 import Image from "next/image";
 import "./style.scss";
 import hinh from "@/assets/common/icon-public/jpg/product.test.webp";
-import { Checked, HearNotBg } from "@/assets/common/icon-public/svg/icon/iconItem";
+import {
+    Checked,
+    HearNotBg,
+} from "@/assets/common/icon-public/svg/icon/iconItem";
 import React, { useState } from "react";
 import ButtonCommon from "@/components/buttons/ButtonCommon";
 import ButtonForm from "@/components/buttons/ButtonForm";
@@ -15,7 +18,6 @@ import { FindAllProduct } from "@/apis/product-management/products.apis";
 
 interface IProps {
     product: Awaited<ReturnType<typeof FindAllProduct>>;
-
 }
 
 interface ICommit {
@@ -35,22 +37,23 @@ export default function ProductDetailsLayout({ product }: IProps) {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
+        slidesToShow: Math.min(productItem?.prod_thumbnails?.length ?? 4, 4),
         slidesToScroll: 1,
         arrows: false,
+        responsive: [
+            {
+                breakpoint: 425,
+                settings: {
+                    slidesToShow: 3
+                }
+            }
+        ]
     };
 
     const arrCommit: ICommit[] = [
         { value: "Hàng chính hãng", icon: <Checked /> },
         { value: "Miễn phí giao hàng toàn quốc đơn trên 500k", icon: <Checked /> },
         { value: "Giao hàng hỏa tốc 4 tiếng", icon: <Checked /> },
-    ];
-
-    const imageList = [
-        "http://localhost:9000/uploads/minhvydalat.jpg",
-        "http://localhost:9000/uploads/minhvycafe.jpg",
-        "http://localhost:9000/uploads/minhvycafe2.jpg",
-        "http://localhost:9000/uploads/kyky.jpg",
     ];
 
     return (
@@ -62,14 +65,24 @@ export default function ProductDetailsLayout({ product }: IProps) {
                     </div>
 
                     <div className="image-small">
-                        <CarouselHome scroll className="custom-carousel" settings={settingsProduct}>
+                        <CarouselHome
+                            scroll
+                            className="custom-carousel"
+                            settings={settingsProduct}
+                        >
                             {productItem?.prod_thumbnails?.map((img, index) => (
                                 <div
                                     key={index}
-                                    className={`card-item ${selectedImage === img.img_url ? "active" : "blurred"}`}
+                                    className={`card-item ${selectedImage === img.img_url ? "active" : "blurred"
+                                        }`}
                                     onClick={() => setSelectedImage(img.img_url)}
                                 >
-                                    <Image height={180} width={180} src={img.img_url} alt="product" />
+                                    <Image
+                                        height={180}
+                                        width={180}
+                                        src={img.img_url}
+                                        alt="product"
+                                    />
                                 </div>
                             ))}
                         </CarouselHome>
@@ -96,15 +109,34 @@ export default function ProductDetailsLayout({ product }: IProps) {
                         </div>
 
                         <div className="box-prod-price">
-                            <div className="price-normal">
-                                <span className="price-normal-title">Giá thành viên</span>
-                                <span className="price-normal-value">1.799.000 Đ</span>
+                            <div className="price-normal-container">
+                                <div className="price-normal-left">
+                                    <span className="price-normal-title">Giá thành viên</span>
+                                    <div className="group-price">
+                                        <span className="price-normal-value">1.799.000 Đ</span>
+                                        <s className="price-old">1.299.000 Đ</s>
+                                    </div>
+                                </div>
+
+                                <div className="price-normal-right">
+                                    <span className="price-sale">-20%</span>
+                                </div>
                             </div>
 
-                            <div className="price-official">
-                                <span className="price-normal-title">Giá bán</span>
-                                <span className="price-normal-value">1.799.000 Đ</span>
+                            <div className="price-normal-container">
+                                <div className="price-normal-left">
+                                    <span className="price-normal-title">Giá bán</span>
+                                    <div className="group-price">
+                                        <span className="price-normal-value">1.799.000 Đ</span>
+                                        <s className="price-old">1.299.000 Đ</s>
+                                    </div>
+                                </div>
+
+                                <div className="price-normal-right">
+                                    <span className="price-sale">-20%</span>
+                                </div>
                             </div>
+
                         </div>
 
                         <div className="box-prod-policy">
@@ -129,11 +161,12 @@ export default function ProductDetailsLayout({ product }: IProps) {
                         </div>
                     </div>
                 </div>
-
             </div>
             <div className="description-prod">
                 <h1 className="title">Mô tả sản phẩm</h1>
-                <span className="name-prod">Đồ Chơi Lắp Ráp Siêu Xe Mô Tô Của Người Dơi LEGO TECHNIC 42155</span>
+                <span className="name-prod">
+                    Đồ Chơi Lắp Ráp Siêu Xe Mô Tô Của Người Dơi LEGO TECHNIC 42155
+                </span>
             </div>
         </div>
     );

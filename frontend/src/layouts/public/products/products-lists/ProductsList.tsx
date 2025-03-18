@@ -12,7 +12,7 @@ import CardProduct from "@/components/cards/CardProduct";
 import CollapseOption from "@/components/options/collapse-options/Collapse";
 import { FaChevronDown } from "react-icons/fa";
 //
-import { Dropdown, MenuProps, Space, Tooltip } from "antd";
+import { Button, Drawer, Dropdown, MenuProps, Space, Tooltip } from "antd";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useState, useTransition } from "react";
@@ -23,6 +23,7 @@ import { findAllProductCate } from "@/apis/product-management/product-categories
 import ListFilterProd from "@/components/lists/ListFilterProd";
 import { convertOjbToString } from "@/utils";
 import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
+import { Cancel, SortIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
 interface IProps {
     products: Awaited<ReturnType<typeof FindAllProduct>>;
     categories: Awaited<ReturnType<typeof findAllProductCate>>;
@@ -56,7 +57,6 @@ const items: MenuProps["items"] = [
     },
 ];
 
-
 export default function ProductLayout({
     products,
     categories,
@@ -71,6 +71,7 @@ export default function ProductLayout({
     const searchParams = useSearchParams();
     const [slug, setSlug] = useState<string[]>([]);
     const [valueFilter, setValueFilter] = useState<any>();
+    const [open, setOpen] = useState(false);
     //
     const queryParams: any = {};
     if (queryParams && !queryParams?.limit) queryParams.limit = 10;
@@ -95,7 +96,10 @@ export default function ProductLayout({
             const newSlug = pathname?.split("/").slice(2);
             setSlug(newSlug);
 
-            const formattedData: { f: string; v: string | { min: number; max: number } }[] = [];
+            const formattedData: {
+                f: string;
+                v: string | { min: number; max: number };
+            }[] = [];
             // Xử lý keySearch & searchParams
             keySearch.forEach((key) => {
                 const values = searchParams.get(key)?.split(",") || []; // Lấy danh sách giá trị, nếu có
@@ -126,22 +130,57 @@ export default function ProductLayout({
             }
         });
     }, [pathname, searchParams, keySearch]);
-
     //
+    const showDrawer = () => {
+        setOpen(true);
+    };
+    //
+    const onClose = () => {
+        setOpen(false);
+    };
     return (
         <div className="product-container container-pub">
-            <div className="wrapper-container">
+            <div className="wrapper-container ">
                 <div className="box-control">
                     {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
                     <CollapseOption categories={categories?.metadata?.items || []} />
                     <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
                     <OptionItems title={"Giá (Đ)"} filterKey="prod_price_official" />
                     <OptionItems title={"Giới tính"} filterKey="prod_gender" />
+
+                    <Drawer
+                        rootClassName="custom-drawer"
+                        title="Bộ lọc"
+                        footer={
+                            <div className="text-center py-5 text-white bg-gray-800 text-2xl ">
+                                Kết quả (1)
+                            </div>
+                        }
+                        placement={"left"}
+                        onClose={onClose}
+                        open={open}
+                        styles={{
+                            header: {
+                                textAlign: "center",
+                            },
+                        }}
+                    >
+                        {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
+                        <CollapseOption categories={categories?.metadata?.items || []} />
+                        <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
+                        <OptionItems title={"Giá (Đ)"} filterKey="prod_price_official" />
+                        <OptionItems title={"Giới tính"} filterKey="prod_gender" />
+                    </Drawer>
                 </div>
 
-                <div className="box-product">
+                <div className="box-product ">
                     <div className="product-container">
                         <header>
+                            <div className="view-responsive" onClick={showDrawer}>
+                                <span>Bộ lọc</span>
+                                {open ? <Cancel /> : <SortIcon />}
+                            </div>
+
                             <div className="view-left">
                                 <span className="text-view-setting">Kiểu xem</span>
                                 <Tooltip arrow={false} title="Chế độ xem 2 lưới">
@@ -162,7 +201,7 @@ export default function ProductLayout({
                             </div>
 
                             <div className="view-center">
-                                <span className="">{listProducts.length} Sản phẩm</span>
+                                <span>{listProducts.length} Sản phẩm</span>
                             </div>
 
                             <div className="view-right">
@@ -179,7 +218,7 @@ export default function ProductLayout({
 
                         <div className="product-body">
                             <div
-                                className={`${seeGird ? "product-list-three-item" : "product-list-two-item"
+                                className={`product-list-responsive ${seeGird ? "product-list-three-item" : "product-list-two-item"
                                     }`}
                             >
                                 {isLoading ? (
