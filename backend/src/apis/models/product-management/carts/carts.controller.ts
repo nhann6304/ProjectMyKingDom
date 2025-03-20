@@ -20,9 +20,7 @@ export class CartsController {
     @Param("id") id: string,
     @Req() req: Request
   ) {
-
     await this.cartsService.addToCart({ id, req })
-
     return new OK({
       message: RES_MESS.UPDATE("Giỏ hàng")
     })
@@ -42,15 +40,14 @@ export class CartsController {
     })
   }
 
-  @Get("find-all-cart")
-  @ApiOperation({ summary: "Lấy giỏ hàng" })
+  @Get("find-all-cart/:userId")
+  @ApiOperation({ summary: "Lấy giỏ hàng theo user" })
   @UseGuards(AuthGuard)
   async findAllCart(
-    @Query() query: AQueries,
-    @Req() req: Request
+    @Param("userId") userId: string
   ) {
 
-    const items = await this.cartsService.findAllCart({ payload: query, req })
+    const items = await this.cartsService.findAllCart(userId)
 
     return new OK({
       message: RES_MESS.FIND_ALL("Giỏ hàng"),

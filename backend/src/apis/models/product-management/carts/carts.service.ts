@@ -22,8 +22,6 @@ export class CartsService {
     @InjectRepository(ProductsEntity)
     private productRepository: Repository<ProductsEntity>,
   ) { }
-
-
   async addToCart({ req, id }: { req: Request, id: string }) {
     const me = req['user'] as UserEntity;
     const findProduct = await this.productRepository.findOne({ where: { id } });
@@ -36,8 +34,9 @@ export class CartsService {
 
     const cart = await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
-      relations: ['cart_products', 'cart_products.product'],
+      relations: ['cart_products', 'cart_products.product_detail'],
     });
+
 
     if (!cart) {
       const newCart = this.cartRepository.create({ cart_products: [], cart_users: me });
@@ -70,7 +69,7 @@ export class CartsService {
 
     return await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
-      relations: ['cart_products', 'cart_products.product'],
+      relations: ['cart_products'],
     });
   }
 
@@ -83,7 +82,7 @@ export class CartsService {
 
     const findCartDetail = await this.cartDetailsRepository.findOne({
       where: { product_detail: { id: findProduct.id } },
-      relations: ['product'],
+      relations: ['product_detail'],
     });
 
     findCartDetail.quantity = payload.quantity;
@@ -94,39 +93,24 @@ export class CartsService {
     return true
   }
 
-  async findAllCart({ payload, req }: { payload: AQueries, req: Request }) {
-    const me = req['user'] as UserEntity
-    const { isDeleted, fields, limit, page, filter } = payload;
-
-    const cartUser = await this.cartRepository.findOne({
-      where: { cart_users: { id: me.id } },
-      relations: ['cart_products', 'cart_products.product'],
+  async findAllCart(userId: string) {
+    const cart = await this.cartRepository.findOne({
+      where: { cart_users: { id: userId } }, // Điều kiện tìm theo userId
+      relations: ["cart_products", "cart_products.product_detail"], // Lấy giỏ hàng kèm sản phẩm
     });
 
-    const objFilter = UtilConvert.convertJsonToObject(filter as any);
-    const ALIAS_NAME = "cart_detail"
+    if (!cart) {
+      throw new BadRequestException("Không tìm thấy giỏ hàng của người dùng");
+    }
 
-    const result = new UtilORM<CartDetailsEntity>(this.cartDetailsRepository, ALIAS_NAME)
-      .leftJoinAndSelect(["cart_detail", "product_detail"])
-      .select(fields, ["product"])
-      .skip({ limit, page })
-      .take({ limit })
-
-    const queryBuilder: SelectQueryBuilder<CartDetailsEntity> = result.build()
-
-    const [items, totalItems] = await Promise.all([
-      queryBuilder.getMany(),
-      queryBuilder.getCount(),
-    ]);
-
-    return items
-
+    return cart;
   }
+
 
   async deleteProductToCart({ id, req }: { id: string, req: Request }) {
     const me = req['user'] as UserEntity
 
-    const cartUser = await this.cartRepository.findOne({
+    await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
       relations: ['cart_products', 'cart_products.product'],
     });
