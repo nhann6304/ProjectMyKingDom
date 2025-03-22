@@ -3,6 +3,7 @@ import { EGender } from 'src/enums/EGender.enum';
 import { IImage } from '../common/images.interface';
 
 export interface IProduct {
+    id?: string;
     prod_name: string;
     prod_thumb: string;
     prod_thumbnails?: IImage[]

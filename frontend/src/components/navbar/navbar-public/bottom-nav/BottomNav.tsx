@@ -1,14 +1,21 @@
 "use client";
 import { Drawer, DrawerProps, Dropdown, MenuProps } from "antd";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.scss";
 //
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
+import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
 import anhquoc from "@/assets/common/icon-public/jpg/co-viet-nam.svg.png";
 import logo from "@/assets/common/icon-public/jpg/logo-254x76 (1).png";
-import { AccountIcon, CardIcon, TruckLive } from "@/assets/common/icon-public/svg/icon/iconItem";
+import {
+    AccountIcon,
+    CardIcon,
+    TruckLive,
+} from "@/assets/common/icon-public/svg/icon/iconItem";
+import ButtonCommon from "@/components/buttons/ButtonCommon";
+import CartProductCard from "@/components/cards/CartProductCard";
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
@@ -17,11 +24,14 @@ import Link from "next/link";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
-import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
-
+import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
+import { FindAllCarts } from "@/apis/product-management/carts.apis";
+import { IProduct } from "@/interfaces/models/products.interface";
+import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
+import { useCartStore } from "@/stores/carts/carts.store";
 
 interface IProps {
-    categories: Awaited<ReturnType<typeof findAllProductCate>>
+    categories: Awaited<ReturnType<typeof findAllProductCate>>;
 }
 
 interface IOption {
@@ -29,7 +39,7 @@ interface IOption {
     icon: React.ReactNode;
 }
 
-type ICustomProductCate = IProductCategory & { children: IProductCategory[] } // Adđ thêm type vào
+type ICustomProductCate = IProductCategory & { children: IProductCategory[] }; // Adđ thêm type vào
 
 const ListOption: IOption[] = [
     {
@@ -66,29 +76,28 @@ export default function BottomNav({ categories }: IProps) {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
     const { userCurrent } = useUserCurrent();
-
-
-    // const product = productStore as ICustomProductCate[]
-
-
-    const product = categories?.metadata?.items as ICustomProductCate[]
-
+    const { cartProduct, fetchCartProduct } = useCartStore();
+    const product = categories?.metadata?.items as ICustomProductCate[];
+    //
+    useEffect(() => {
+        fetchCartProduct();
+    }, [userCurrent, cartProduct]);
+    //
     const showDrawer = () => {
         setOpen(true);
     };
-
+    //
     const onClose = () => {
         setOpen(false);
     };
-
-
+    //
     const dropdownData = [
         {
             category: "Đồ chơi theo phim",
             products: ["Siêu anh hùng", "Siêu Robot", "Siêu thú"],
         },
     ];
-
+    //
     return (
         <div className="nav-container">
             <div className="section-top container-pub">
@@ -136,9 +145,51 @@ export default function BottomNav({ categories }: IProps) {
                             <h2>Giỏ hàng</h2>
                         </button>
 
-                        <div className="info-box">
-                            <p>Thông tin tài khoản</p>
-                        </div>
+                        {cartProduct ? (
+                            <div className="info-box">
+                                <div className="cart-list-box">
+                                    {cartProduct?.cart_products?.map((item) => (
+                                        <CartProductCard product={item.product_detail} />
+                                    ))}
+                                </div>
+
+                                <div className="list-box-footer">
+                                    <div className="clause-question">
+                                        <input className="input-checkbox" type="checkbox" />
+                                        <span>
+                                            Tôi đã đọc và đồng ý với{" "}
+                                            <Link href={"#"}> điều khoản</Link> và{" "}
+                                            <Link href={"#"}> điều kiện thanh toán</Link>
+                                        </span>
+                                    </div>
+
+                                    <div className="box-total-price">
+                                        <h1 className="title">Tổng cộng</h1>
+                                        <span className="value">1.687.000 Đ</span>
+                                    </div>
+
+                                    <div className="box-control">
+                                        <ButtonCommon
+                                            title="Xem giỏ hàng"
+                                            icon
+                                            iconPosition="left"
+                                            customIcon={<CardIcon />}
+                                            hoverBg={false}
+                                        />
+                                        <ButtonCommon title="Thanh toán ngay" background />
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="info-box">
+                                <h1>Giỏ hàng của bạn đang trống</h1>
+                                <ButtonCommon
+                                    title="Tiếp tục mua sắm"
+                                    hoverBg={true}
+                                    background
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="option-item">
@@ -158,7 +209,9 @@ export default function BottomNav({ categories }: IProps) {
                     </div>
 
                     <div className="option-child">
-                        <Link className="option-child-item" href={"/products/all"}>Sản phẩm</Link>
+                        <Link className="option-child-item" href={"/products/all"}>
+                            Sản phẩm
+                        </Link>
                         <FaChevronDown className="icon-default" size={13} />
                         <FaChevronUp className="icon-hover" size={13} />
                         <DropdownNav>
@@ -167,14 +220,21 @@ export default function BottomNav({ categories }: IProps) {
                                     <div className="dropdown-item" key={index}>
                                         {/* Render mỗi item-content cho từng category */}
                                         <div className="item-content" key={index}>
-                                            <Link href={`/products/${item?.pc_slug}`} className="content-title">
+                                            <Link
+                                                href={`/products/${item?.pc_slug}`}
+                                                className="content-title"
+                                            >
                                                 <span className="content-category">{item.pc_name}</span>
                                                 <IoMdArrowDropright size={24} />
                                             </Link>
 
                                             <div className="content-value">
                                                 {item?.children?.map((child, productIndex) => (
-                                                    <Link href={`/products/${item?.pc_slug}/${child?.pc_slug}`} className="value-product" key={productIndex}>
+                                                    <Link
+                                                        href={`/products/${item?.pc_slug}/${child?.pc_slug}`}
+                                                        className="value-product"
+                                                        key={productIndex}
+                                                    >
                                                         {child.pc_name}
                                                     </Link>
                                                 ))}

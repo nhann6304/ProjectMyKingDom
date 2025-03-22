@@ -1,7 +1,8 @@
 import { IUser } from '../common/IUser.interface';
-import { IProduct } from './product.interface';
+import { IProduct } from './products.interface';
 
 export interface ICart {
+    id?: string;
     cart_users: IUser;
     cart_products: ICartDetail[];
 }

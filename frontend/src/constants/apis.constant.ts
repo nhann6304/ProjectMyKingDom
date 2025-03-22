@@ -16,6 +16,7 @@ export const CONST_APIS = {
         COMMON: {
             AUTH: "auth",
             PRODUCTS: "products",
+            CARTS: "carts",
             PRODUCTS_CATEGORIES: "product-categories"
         }
     },

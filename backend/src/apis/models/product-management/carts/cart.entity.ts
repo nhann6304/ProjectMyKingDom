@@ -1,15 +1,13 @@
 import { Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserEntity } from "../../users/user.entity";
 import { CartDetailsEntity } from "../cart-details/cart-details.entity";
-import { ICart } from "src/interfaces/models/cart.interface";
+import { ICart, ICartDetail } from "src/interfaces/models/cart.interface";
+import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
 
 @Entity("carts")
-export class CartEntity implements ICart {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
-
+export class CartEntity extends ABaseModel implements ICart {
     @OneToMany(() => CartDetailsEntity, (cartProduct) => cartProduct.cart_detail)
-    cart_products: CartDetailsEntity[];
+    cart_products: ICartDetail[];
 
     @OneToOne(() => UserEntity, (user) => user.user_cart)
     @JoinColumn({ name: "user_id" })

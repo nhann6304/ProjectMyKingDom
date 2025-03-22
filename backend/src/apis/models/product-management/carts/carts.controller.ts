@@ -40,14 +40,13 @@ export class CartsController {
     })
   }
 
-  @Get("find-all-cart/:userId")
+  @Get("find-all")
   @ApiOperation({ summary: "Lấy giỏ hàng theo user" })
   @UseGuards(AuthGuard)
   async findAllCart(
-    @Param("userId") userId: string
+    @Req() req: Request
   ) {
-
-    const items = await this.cartsService.findAllCart(userId)
+    const items = await this.cartsService.findAllCart({ req })
 
     return new OK({
       message: RES_MESS.FIND_ALL("Giỏ hàng"),

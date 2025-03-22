@@ -2,6 +2,7 @@ import { IProductCategory } from "@/interfaces/models/product-categories.interfa
 import BottomNav from "./bottom-nav/BottomNav";
 import TopNavPublic from "./top-nav/TopNav";
 import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
 
 export default async function NavbarPublic() {
     const searchParams: any = {}
