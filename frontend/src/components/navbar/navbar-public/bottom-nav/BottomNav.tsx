@@ -1,7 +1,7 @@
 "use client";
 import { Drawer, DrawerProps, Dropdown, MenuProps } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import "./style.scss";
 //
 import { MdOutlineArrowDropDown } from "react-icons/md";
@@ -29,6 +29,7 @@ import { FindAllCarts } from "@/apis/product-management/carts.apis";
 import { IProduct } from "@/interfaces/models/products.interface";
 import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
 import { useCartStore } from "@/stores/carts/carts.store";
+import { convertPriceToString } from "@/utils";
 
 interface IProps {
     categories: Awaited<ReturnType<typeof findAllProductCate>>;
@@ -75,13 +76,20 @@ const itemsProduct: MenuProps["items"] = [
 export default function BottomNav({ categories }: IProps) {
     const [placement, setPlacement] = useState<DrawerProps["placement"]>("left");
     const [open, setOpen] = useState<boolean>(false);
+    // const [cartProduct, setCartProduct] = useState<ICart>();
     const { userCurrent } = useUserCurrent();
-    const { cartProduct, fetchCartProduct } = useCartStore();
+    const {
+        cartProduct,
+        fetchCartProduct,
+        updateCart: UpdateCartZustand,
+    } = useCartStore();
+    const [isPending, startTransition] = useTransition();
     const product = categories?.metadata?.items as ICustomProductCate[];
     //
     useEffect(() => {
         fetchCartProduct();
-    }, [userCurrent, cartProduct]);
+    }, [fetchCartProduct]);
+
     //
     const showDrawer = () => {
         setOpen(true);
@@ -98,6 +106,14 @@ export default function BottomNav({ categories }: IProps) {
         },
     ];
     //
+    const handleQuantityChange = (productId: string, newQuantity: number) => {
+        UpdateCartZustand({ product_id: productId, quantity: newQuantity });
+
+    };
+    //
+
+    console.log(cartProduct?.total_all_price);
+
     return (
         <div className="nav-container">
             <div className="section-top container-pub">
@@ -148,11 +164,20 @@ export default function BottomNav({ categories }: IProps) {
                         {cartProduct ? (
                             <div className="info-box">
                                 <div className="cart-list-box">
-                                    {cartProduct?.cart_products?.map((item) => (
-                                        <CartProductCard product={item.product_detail} />
+                                    {cartProduct?.cart_products?.map((item, index) => (
+                                        <CartProductCard
+                                            key={index}
+                                            quantity={item.quantity}
+                                            product={item.product_detail}
+                                            onQuantityChange={(newQuantity) =>
+                                                handleQuantityChange(
+                                                    item.product_detail.id,
+                                                    newQuantity
+                                                )
+                                            }
+                                        />
                                     ))}
                                 </div>
-
                                 <div className="list-box-footer">
                                     <div className="clause-question">
                                         <input className="input-checkbox" type="checkbox" />
@@ -165,7 +190,11 @@ export default function BottomNav({ categories }: IProps) {
 
                                     <div className="box-total-price">
                                         <h1 className="title">Tổng cộng</h1>
-                                        <span className="value">1.687.000 Đ</span>
+                                        <span className="value">
+                                            {convertPriceToString(
+                                                String(cartProduct.total_all_price)
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className="box-control">

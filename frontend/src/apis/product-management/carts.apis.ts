@@ -4,7 +4,8 @@ import { CONST_METHODS } from "@/constants/methods.constant";
 import { api } from "@/helpers";
 import {
     IBaseResponse,
-    IGetManyItem
+    IGetManyItem,
+    IUpdateValueCart
 } from "@/interfaces/common/IBaseResponse.interface";
 import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
 
@@ -23,6 +24,18 @@ export async function FindAllCarts(userId?: string) {
             },
         },
     });
+    return result;
+}
+
+export async function UpdateCart(payload: IUpdateValueCart) {
+    const result = await api<IBaseResponse<any>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.CARTS}/${CONST_API_COMMON.UPDATE}`,
+        options: {
+            method: CONST_METHODS.POST,
+            body: JSON.stringify(payload),
+        },
+    });
+
     return result;
 }
 

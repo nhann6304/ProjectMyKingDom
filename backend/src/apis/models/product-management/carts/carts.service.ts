@@ -7,6 +7,7 @@ import { UpdateCartDetailDto } from '../cart-details/cart-details.dto';
 import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { ProductsEntity } from '../products/product.entity';
 import { CartEntity } from './cart.entity';
+import { IUser } from 'src/interfaces/common/IUser.interface';
 
 @Injectable()
 export class CartsService {
@@ -28,73 +29,51 @@ export class CartsService {
 
     let quantity = 1;
 
-    const cart = await this.cartRepository.findOne({
+    let cart = await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
       relations: ['cart_products', 'cart_products.product_detail'],
     });
 
     if (!cart) {
-      const newCart = this.cartRepository.create({
+      cart = this.cartRepository.create({
         cart_products: [],
         cart_users: me,
+        total_all_price: 0, // Khởi tạo tổng giá trị giỏ hàng
       });
-      await this.cartRepository.save(newCart);
+      await this.cartRepository.save(cart);
+    }
 
+    const existingProduct = cart.cart_products.find(
+      (cp) => cp.product_detail.id === findProduct.id,
+    );
+
+    if (existingProduct) {
+      existingProduct.quantity += quantity;
+      existingProduct.total_price =
+        existingProduct.quantity * findProduct.prod_price_official;
+      await this.cartDetailsRepository.save(existingProduct);
+    } else {
       const newDetailProduct = this.cartDetailsRepository.create({
-        cart_detail: newCart,
+        cart_detail: cart,
         product_detail: findProduct,
         quantity,
-        total_price: findProduct.prod_price * quantity,
+        total_price: findProduct.prod_price_official * quantity,
       });
       await this.cartDetailsRepository.save(newDetailProduct);
-    } else {
-      const existingProduct = cart.cart_products.find(
-        (cp) => cp.product_detail.id === findProduct.id,
-      );
-      if (existingProduct) {
-        existingProduct.quantity += quantity;
-        existingProduct.total_price =
-          existingProduct.quantity * findProduct.prod_price;
-        await this.cartDetailsRepository.save(existingProduct);
-      } else {
-        const newDetailProduct = this.cartDetailsRepository.create({
-          cart_detail: cart,
-          product_detail: findProduct,
-          quantity,
-          total_price: findProduct.prod_price * quantity,
-        });
-        await this.cartDetailsRepository.save(newDetailProduct);
-        cart.cart_products.push(newDetailProduct);
-      }
+      cart.cart_products.push(newDetailProduct);
     }
+
+    //  Cập nhật total_all_price sau khi thêm sản phẩm
+    cart.total_all_price = cart.cart_products.reduce(
+      (total, product) => total + product.total_price,
+      0,
+    );
+    await this.cartRepository.save(cart);
 
     return await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
       relations: ['cart_products'],
     });
-  }
-
-  async updateToCart({ payload }: { payload: UpdateCartDetailDto }) {
-    const findProduct = await this.productRepository.findOne({
-      where: { id: payload.product_id },
-    });
-
-    if (!findProduct) {
-      throw new BadRequestException('Không tìm thấy sản phẩm');
-    }
-
-    const findCartDetail = await this.cartDetailsRepository.findOne({
-      where: { product_detail: { id: findProduct.id } },
-      relations: ['product_detail'],
-    });
-
-    findCartDetail.quantity = payload.quantity;
-    findCartDetail.total_price =
-      findCartDetail.quantity * findProduct.prod_price;
-
-    await this.cartDetailsRepository.save(findCartDetail);
-
-    return true;
   }
 
   async findAllCart({ req }: { req: Request }) {
@@ -109,9 +88,76 @@ export class CartsService {
     }
 
     return {
-      items
+      items,
     };
   }
+
+  async updateToCart({
+    payload,
+    req,
+  }: {
+    payload: UpdateCartDetailDto;
+    req: Request;
+  }) {
+    const me = req['user'] as IUser;
+
+    // Tìm sản phẩm
+    const findProduct = await this.productRepository.findOne({
+      where: { id: payload.product_id },
+    });
+    if (!findProduct) {
+      throw new BadRequestException('Không tìm thấy sản phẩm');
+    }
+
+    // Tìm giỏ hàng của người dùng (Không tìm thấy thì báo lỗi ngay)
+    const cart = await this.cartRepository.findOne({
+      where: { cart_users: { id: me.id } },
+      relations: ['cart_products', 'cart_products.product_detail'],
+    });
+    if (!cart) {
+      throw new BadRequestException('Không tìm thấy giỏ hàng');
+    }
+
+    // Tìm sản phẩm trong giỏ hàng
+    let findCartDetail = await this.cartDetailsRepository.findOne({
+      where: { product_detail: { id: findProduct.id } },
+      relations: ['product_detail'],
+    });
+
+    if (!findCartDetail) {
+      throw new BadRequestException('Sản phẩm chưa có trong giỏ hàng');
+    }
+
+    // Cập nhật số lượng và tổng giá
+    findCartDetail.quantity = payload.quantity;
+    findCartDetail.total_price = findCartDetail.quantity * findProduct.prod_price_official;
+
+    // Lưu cập nhật vào database
+    await this.cartDetailsRepository.save(findCartDetail);
+
+    //  Cập nhật giá sản phẩm mới
+    const updatedProduct = cart.cart_products.find(
+      (product) => product.product_detail.id === findProduct.id
+    );
+
+    if (updatedProduct) {
+      updatedProduct.total_price = findCartDetail.total_price;
+    }
+
+    // Tính lại tổng giá giỏ hàng từ danh sách đã cập nhật
+    cart.total_all_price = cart.cart_products.reduce(
+      (total, product) => total + Number(product.total_price || 0),
+      0
+    );
+
+    // Lưu lại giỏ hàng vào database
+    await this.cartRepository.save(cart);
+
+    return true;
+  }
+
+
+
 
   async deleteProductToCart({ id, req }: { id: string; req: Request }) {
     const me = req['user'] as UserEntity;

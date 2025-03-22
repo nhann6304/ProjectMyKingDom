@@ -4,6 +4,7 @@ import { IProduct } from './product.interface';
 export interface ICart {
     cart_users: IUser;
     cart_products: ICartDetail[];
+    total_all_price: number
 }
 
 

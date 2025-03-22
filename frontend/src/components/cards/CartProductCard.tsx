@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import styled from "styled-components";
-import hinhanh from "@/assets/common/icon-public/jpg/product.test.webp";
 import { TrashIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
 import InputQuantityCircle from "../inputs/input-quantity-circle";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IProduct } from "@/interfaces/models/products.interface";
 import { convertPriceToString } from "@/utils";
+import useDebounce from "@/hooks/useDebounce";
 
 const CardComponent = styled.div`
   width: 100%;
@@ -15,6 +15,7 @@ const CardComponent = styled.div`
   padding: 1rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid #8f8f8f8f;
+
   .cart-box {
     width: 100%;
     display: grid;
@@ -31,7 +32,7 @@ const CardComponent = styled.div`
 
   .container-info {
     display: flex;
-    flex-direction: column; /* Chia top và bottom thành 2 hàng */
+    flex-direction: column;
     justify-content: space-between;
     height: 90%;
     gap: 1rem;
@@ -39,13 +40,9 @@ const CardComponent = styled.div`
     &-top {
       display: grid;
       grid-template-columns: 85% 15%;
-      height: auto;
       width: 100%;
-      /* padding: 0.5rem 0.5rem 0 0.5rem; */
+
       .prod-name {
-        display: block;
-        max-width: 100%;
-        max-height: auto;
         font-size: 1.4rem;
         line-height: 2rem;
         color: #041675;
@@ -57,60 +54,77 @@ const CardComponent = styled.div`
       .prod-icon {
         margin: 0 auto;
         margin-top: 1rem;
+        cursor: pointer;
       }
     }
 
     &-bottom {
       display: grid;
-      height: auto;
+      grid-template-columns: 70% 30%;
       width: 100%;
-      grid-template-columns: 75% 25%;
 
-      .price-prod-total{
+      .price-prod-total {
         display: flex;
         align-items: center;
         font-size: 1.6rem;
         font-weight: 600;
         color: var(--color-background-global);
-    }
+      }
     }
   }
 `;
 
 interface IProps {
-  product: IProduct
+  product: IProduct;
+  quantity: number;
+  onQuantityChange?: (value: number) => void; // Callback khi quantity thay đổi
 }
 
-export default function CartProductCard({ product }: IProps) {
-  const [value, setValue] = useState<number>(1);
-  const handleSetValue = (e: number) => {
-    console.log("què", e);
-  };
+export default function CartProductCard({
+  product,
+  quantity,
+  onQuantityChange,
+}: IProps) {
+  const [value, setValue] = useState<number>(quantity);
+  const debouncedQuantity = useDebounce(value, 1000);
+  useEffect(() => {
+    if (onQuantityChange) {
+      onQuantityChange(debouncedQuantity);
+    }
+  }, [debouncedQuantity]);
+
   return (
     <CardComponent>
       <div className="cart-box">
         {/* Hình ảnh sản phẩm */}
-        <Image height={500} width={500} src={product?.prod_thumb} alt="hinhanh" />
+        <Image
+          height={500}
+          width={500}
+          src={product?.prod_thumb}
+          alt="hinhanh"
+        />
 
-        {/* Phần chứa thông tin sản phẩm */}
+        {/* Thông tin sản phẩm */}
         <div className="container-info">
           <div className="container-info-top">
-            <span className="prod-name">
-              {product?.prod_name}
-            </span>
-
+            <span className="prod-name">{product?.prod_name}</span>
             <span className="prod-icon">
               <TrashIcon />
             </span>
           </div>
+
           <div className="container-info-bottom">
             <div className="btn-control">
               <InputQuantityCircle
-                defaultValue={1}
-                onChange={(value) => handleSetValue(value)}
+                defaultValue={quantity}
+                onChange={(newValue) => setValue(newValue)}
               />
             </div>
-            <span className="price-prod-total">{convertPriceToString(String(product?.prod_price_official))}</span>
+            <span className="price-prod-total">
+              {convertPriceToString(
+                String((product.prod_price_official ?? 0) * value)
+              )}
+            </span>
           </div>
         </div>
       </div>

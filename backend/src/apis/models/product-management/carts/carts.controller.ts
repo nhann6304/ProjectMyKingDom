@@ -26,14 +26,15 @@ export class CartsController {
     })
   }
 
-  @Post("update-cart")
+  @Post("update")
   @ApiOperation({ summary: "Cập nhật giỏ hàng" })
   @UseGuards(AuthGuard)
   async updateToCart(
-    @Body() payload: UpdateCartDetailDto
+    @Body() payload: UpdateCartDetailDto,
+    @Req() req: Request
   ) {
 
-    await this.cartsService.updateToCart({ payload })
+    await this.cartsService.updateToCart({ payload, req })
 
     return new OK({
       message: RES_MESS.UPDATE("Sản phẩm trong giỏ hàng")

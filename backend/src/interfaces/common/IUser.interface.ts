@@ -3,6 +3,7 @@ import { ERole } from "src/enums/ERole.enum";
 import { EStatusUser } from "src/enums/EStatusUser.enum";
 
 export interface IUser {
+    id?: string;
     user_first_name: string;   // Tên người dùng
     user_last_name: string;    // Họ người dùng
     user_role: ERole;          // Vai trò người dùng
