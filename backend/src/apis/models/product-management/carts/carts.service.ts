@@ -8,6 +8,7 @@ import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { ProductsEntity } from '../products/product.entity';
 import { CartEntity } from './cart.entity';
 import { IUser } from 'src/interfaces/common/IUser.interface';
+import { AddCartDto } from './cart.dto';
 
 @Injectable()
 export class CartsService {
@@ -19,8 +20,9 @@ export class CartsService {
     @InjectRepository(ProductsEntity)
     private productRepository: Repository<ProductsEntity>,
   ) { }
-  async addToCart({ req, id }: { req: Request; id: string }) {
+  async addToCart({ req, addData }: { req: Request; addData: AddCartDto }) {
     const me = req['user'] as UserEntity;
+    const id = addData.idProduct;
     const findProduct = await this.productRepository.findOne({ where: { id } });
 
     if (!findProduct) {
@@ -130,14 +132,15 @@ export class CartsService {
 
     // Cập nhật số lượng và tổng giá
     findCartDetail.quantity = payload.quantity;
-    findCartDetail.total_price = findCartDetail.quantity * findProduct.prod_price_official;
+    findCartDetail.total_price =
+      findCartDetail.quantity * findProduct.prod_price_official;
 
     // Lưu cập nhật vào database
     await this.cartDetailsRepository.save(findCartDetail);
 
     //  Cập nhật giá sản phẩm mới
     const updatedProduct = cart.cart_products.find(
-      (product) => product.product_detail.id === findProduct.id
+      (product) => product.product_detail.id === findProduct.id,
     );
 
     if (updatedProduct) {
@@ -147,7 +150,7 @@ export class CartsService {
     // Tính lại tổng giá giỏ hàng từ danh sách đã cập nhật
     cart.total_all_price = cart.cart_products.reduce(
       (total, product) => total + Number(product.total_price || 0),
-      0
+      0,
     );
 
     // Lưu lại giỏ hàng vào database
@@ -155,9 +158,6 @@ export class CartsService {
 
     return true;
   }
-
-
-
 
   async deleteProductToCart({ id, req }: { id: string; req: Request }) {
     const me = req['user'] as UserEntity;

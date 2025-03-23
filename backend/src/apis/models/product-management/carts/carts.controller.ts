@@ -7,20 +7,22 @@ import { RES_MESS } from 'src/constants/constantMessRes.contant';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateCartDetailDto } from '../cart-details/cart-details.dto';
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
+import { AddCartDto } from './cart.dto';
 
 @Controller('carts')
 export class CartsController {
   constructor(private readonly cartsService: CartsService) { }
 
 
-  @Patch("add-to-cart/:id")
+  @Post("add-to-cart")
   @ApiOperation({ summary: "Thêm sản phẩm vào giỏ hàng" })
   @UseGuards(AuthGuard)
   async addToCart(
-    @Param("id") id: string,
+    // @Param("id") id: string,
+    @Body() addData: AddCartDto,
     @Req() req: Request
   ) {
-    await this.cartsService.addToCart({ id, req })
+    await this.cartsService.addToCart({ addData, req })
     return new OK({
       message: RES_MESS.UPDATE("Giỏ hàng")
     })

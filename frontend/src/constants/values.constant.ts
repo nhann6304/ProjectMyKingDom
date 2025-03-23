@@ -5,6 +5,7 @@ export const CONST_VALUES = {
     TOKEN: "token",
 };
 
+
 export const CONST_GENDER_VALUES: Record<EGender, string> = {
     [EGender.FEMALE]: "Nam",
     [EGender.MALE]: "Nữ",
@@ -27,9 +28,3 @@ export const CONST_PRICE_VALUES: Record<string, string> = {
     "2000000-4000000": "2.000.000 Đ - 4.000.000 Đ",
     "4000001-Infinity": "Trên 4.000.000 Đ",
 };
-
-
-
-
-
-

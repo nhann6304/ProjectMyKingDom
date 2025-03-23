@@ -88,7 +88,7 @@ export default function BottomNav({ categories }: IProps) {
     //
     useEffect(() => {
         fetchCartProduct();
-    }, [fetchCartProduct]);
+    }, [fetchCartProduct, userCurrent]);
 
     //
     const showDrawer = () => {
