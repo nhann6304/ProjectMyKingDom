@@ -19,17 +19,13 @@ import CartProductCard from "@/components/cards/CartProductCard";
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { useCartStore } from "@/stores/carts/carts.store";
 import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import { convertPriceToString } from "@/utils";
 import Link from "next/link";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
-import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
-import { FindAllCarts } from "@/apis/product-management/carts.apis";
-import { IProduct } from "@/interfaces/models/products.interface";
-import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
-import { useCartStore } from "@/stores/carts/carts.store";
-import { convertPriceToString } from "@/utils";
 
 interface IProps {
     categories: Awaited<ReturnType<typeof findAllProductCate>>;
@@ -156,10 +152,10 @@ export default function BottomNav({ categories }: IProps) {
                     )}
 
                     <div className="option-item">
-                        <button>
+                        <Link href={"/carts"}>
                             <CardIcon />
                             <h2>Giỏ hàng</h2>
-                        </button>
+                        </Link>
 
                         {cartProduct ? (
                             <div className="info-box">

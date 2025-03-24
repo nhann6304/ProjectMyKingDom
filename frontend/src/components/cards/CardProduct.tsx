@@ -38,7 +38,7 @@ const CardContainer = styled.div`
       height: auto;
       width: auto;
       background-color: var(--color-background-global);
-      z-index: 2;
+      z-index: 1;
       right: 5%;
       top: 2%;
 
