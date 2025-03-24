@@ -201,6 +201,7 @@ export default function BottomNav({ categories }: IProps) {
                                         <ButtonCommon
                                             title="Xem giỏ hàng"
                                             icon
+                                            link={"/carts"}
                                             iconPosition="left"
                                             customIcon={<CardIcon />}
                                             hoverBg={false}
