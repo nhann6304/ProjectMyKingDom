@@ -9,6 +9,7 @@ export interface ICart {
 
 
 export interface ICartDetail {
+    id?: string
     cart_detail: ICart;
     product_detail: IProduct;
     quantity: number;

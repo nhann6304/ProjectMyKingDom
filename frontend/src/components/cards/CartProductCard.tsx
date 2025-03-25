@@ -78,21 +78,28 @@ interface IProps {
   product: IProduct;
   quantity: number;
   onQuantityChange?: (value: number) => void; // Callback khi quantity thay đổi
+  onDeleteProductCart?: (IdProduct: string) => void
 }
 
 export default function CartProductCard({
   product,
   quantity,
   onQuantityChange,
+  onDeleteProductCart
 }: IProps) {
   const [value, setValue] = useState<number>(quantity);
   const debouncedQuantity = useDebounce(value, 1000);
+  //
   useEffect(() => {
     if (onQuantityChange) {
       onQuantityChange(debouncedQuantity);
     }
   }, [debouncedQuantity]);
-
+  //
+  const handleDeleteProduct = (id: string) => {
+    if (!onDeleteProductCart) return
+    onDeleteProductCart(id)
+  }
   return (
     <CardComponent>
       <div className="cart-box">
@@ -108,7 +115,7 @@ export default function CartProductCard({
         <div className="container-info">
           <div className="container-info-top">
             <span className="prod-name">{product?.prod_name}</span>
-            <span className="prod-icon">
+            <span className="prod-icon" onClick={() => handleDeleteProduct(product?.id)}>
               <TrashIcon />
             </span>
           </div>

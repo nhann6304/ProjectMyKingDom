@@ -77,9 +77,11 @@ export default function BottomNav({ categories }: IProps) {
     const {
         cartProduct,
         fetchCartProduct,
+        deleteCart: DeleteCartZustand,
         updateCart: UpdateCartZustand,
     } = useCartStore();
     const [isPending, startTransition] = useTransition();
+    const [clause, setClause] = useState<boolean>(false);
     const product = categories?.metadata?.items as ICustomProductCate[];
     //
     useEffect(() => {
@@ -104,12 +106,16 @@ export default function BottomNav({ categories }: IProps) {
     //
     const handleQuantityChange = (productId: string, newQuantity: number) => {
         UpdateCartZustand({ product_id: productId, quantity: newQuantity });
-
+    };
+    //Kiểm tra điều khoản
+    const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setClause(e.target.checked);
+        console.log("clause::", clause);
     };
     //
-
-    console.log(cartProduct?.total_all_price);
-
+    const handleDeleteProduct = (idProduct: string) => {
+        DeleteCartZustand(idProduct);
+    };
     return (
         <div className="nav-container">
             <div className="section-top container-pub">
@@ -157,7 +163,7 @@ export default function BottomNav({ categories }: IProps) {
                             <h2>Giỏ hàng</h2>
                         </Link>
 
-                        {cartProduct ? (
+                        {(cartProduct?.cart_products?.length ?? 0) > 0 ? (
                             <div className="info-box">
                                 <div className="cart-list-box">
                                     {cartProduct?.cart_products?.map((item, index) => (
@@ -171,12 +177,17 @@ export default function BottomNav({ categories }: IProps) {
                                                     newQuantity
                                                 )
                                             }
+                                            onDeleteProductCart={handleDeleteProduct}
                                         />
                                     ))}
                                 </div>
                                 <div className="list-box-footer">
                                     <div className="clause-question">
-                                        <input className="input-checkbox" type="checkbox" />
+                                        <input
+                                            onChange={handleCheckBoxChange}
+                                            className="input-checkbox"
+                                            type="checkbox"
+                                        />
                                         <span>
                                             Tôi đã đọc và đồng ý với{" "}
                                             <Link href={"#"}> điều khoản</Link> và{" "}
@@ -188,7 +199,7 @@ export default function BottomNav({ categories }: IProps) {
                                         <h1 className="title">Tổng cộng</h1>
                                         <span className="value">
                                             {convertPriceToString(
-                                                String(cartProduct.total_all_price)
+                                                String(cartProduct?.total_all_price)
                                             )}
                                         </span>
                                     </div>

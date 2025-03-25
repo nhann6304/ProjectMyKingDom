@@ -6,7 +6,39 @@ import { Breadcrumb, Checkbox } from "antd";
 import CardProductItem from "@/components/cards/CardProductItem";
 import ButtonCommon from "@/components/buttons/ButtonCommon";
 import Link from "next/link";
+import { useCartStore } from "@/stores/carts/carts.store";
+import { useEffect, useState } from "react";
+import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import { convertPriceToString } from "@/utils";
+import toast from "react-hot-toast";
 export default function CartLayout() {
+    const [clause, setClause] = useState<boolean>(false);
+    const { userCurrent } = useUserCurrent();
+    const {
+        cartProduct,
+        fetchCartProduct,
+        deleteCart: DeleteCartZustand,
+        updateCart: UpdateCartZustand,
+    } = useCartStore();
+    //
+    useEffect(() => {
+        fetchCartProduct();
+    }, [userCurrent, fetchCartProduct]);
+    //
+    const handleQuantityChange = (productId: string, newQuantity: number) => {
+        UpdateCartZustand({ product_id: productId, quantity: newQuantity });
+    };
+    //
+    const handleDeleteProduct = (idProduct: string) => {
+        DeleteCartZustand(idProduct);
+    };
+    //Kiểm tra điều khoản
+    const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setClause(e.target.checked);
+        console.log("clause::", clause);
+    };
+
+    console.log("cartProduct::", cartProduct);
     return (
         <div className="cart-container">
             <section className="section-container">
@@ -43,25 +75,18 @@ export default function CartLayout() {
                         </div>
 
                         <div className="cart-list-product">
-                            <div className="cart-list-product-item">
-                                <CardProductItem />
-                            </div>
-
-                            <div className="cart-list-product-item">
-                                <CardProductItem />
-                            </div>
-
-                            <div className="cart-list-product-item">
-                                <CardProductItem />
-                            </div>
-
-                            <div className="cart-list-product-item">
-                                <CardProductItem />
-                            </div>
-
-                            <div className="cart-list-product-item">
-                                <CardProductItem />
-                            </div>
+                            {cartProduct?.cart_products?.map((val) => (
+                                <div className="cart-list-product-item">
+                                    <CardProductItem
+                                        product={val?.product_detail}
+                                        quantity={val?.quantity}
+                                        onQuantityChange={(newQuantity) =>
+                                            handleQuantityChange(val.product_detail.id, newQuantity)
+                                        }
+                                        onDeleteProductCart={handleDeleteProduct}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -81,7 +106,9 @@ export default function CartLayout() {
 
                             <div className="box-price-prod">
                                 <span className="title">Tổng cộng</span>
-                                <span className="total-value">928.000 Đ</span>
+                                <span className="total-value">
+                                    {convertPriceToString(String(cartProduct?.total_all_price))}
+                                </span>
                             </div>
                         </div>
 
@@ -91,7 +118,11 @@ export default function CartLayout() {
                             </div>
 
                             <div className="check-box">
-                                <input type="checkbox" className="input-checkbox" />
+                                <input
+                                    onChange={handleCheckBoxChange}
+                                    type="checkbox"
+                                    className="input-checkbox"
+                                />
                                 <span>
                                     Tôi đã đọc và đồng ý với điều khoản và điều kiện thanh toán
                                 </span>
@@ -99,9 +130,13 @@ export default function CartLayout() {
 
                             <div className="instruct">
                                 <span className="instruct-text">
-                                    <Link className="instruct-link" href={"#"}>Đăng nhập</Link>
+                                    <Link className="instruct-link" href={"#"}>
+                                        Đăng nhập
+                                    </Link>
                                     Hoặc
-                                    <Link className="instruct-link" href={"#"}>Đăng ký</Link>
+                                    <Link className="instruct-link" href={"#"}>
+                                        Đăng ký
+                                    </Link>
                                     để mua hàng với nhiều ưu đãi hơn
                                 </span>
                             </div>

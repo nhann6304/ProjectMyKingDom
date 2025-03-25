@@ -24,7 +24,7 @@ export class CartsController {
   ) {
     await this.cartsService.addToCart({ addData, req })
     return new OK({
-      message: RES_MESS.UPDATE("Giỏ hàng")
+      message: RES_MESS.CREATE("Giỏ hàng")
     })
   }
 
@@ -57,7 +57,7 @@ export class CartsController {
     })
   }
 
-  @Delete("deleted-product/:id")
+  @Delete("delete/:id")
   @ApiOperation({ summary: "Xóa sản phẩm trong giỏ hàng" })
   @UseGuards(AuthGuard)
 
@@ -65,7 +65,6 @@ export class CartsController {
     @Param("id") id: string,
     @Req() req: Request
   ) {
-
     await this.cartsService.deleteProductToCart({ id, req });
 
 

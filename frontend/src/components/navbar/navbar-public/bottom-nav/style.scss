@@ -123,13 +123,15 @@
                             display: flex;
                             justify-content: flex-start;
                             align-items: flex-start;
-                            gap: 5px;
+                            gap: 1rem;
                             width: 100%;
+
                         }
 
                         input {
+                            cursor: pointer;
                             margin-top: 5px;
-                            transform: scale(0.8);
+                            transform: scale(1.4);
                         }
 
                         span {
@@ -395,10 +397,8 @@
                 justify-content: flex-end;
 
                 .option-item {
-                    button {
-                        h2 {
-                            display: none;
-                        }
+                    h2 {
+                        display: none;
                     }
                 }
             }
@@ -436,6 +436,14 @@
         .section-top {
             &-mobile {
                 gap: 0;
+            }
+
+            .box-option {
+                .option-item {
+                    .info-box {
+                        display: none;
+                    }
+                }
             }
         }
 

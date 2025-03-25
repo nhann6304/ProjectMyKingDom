@@ -161,13 +161,22 @@ export class CartsService {
 
   async deleteProductToCart({ id, req }: { id: string; req: Request }) {
     const me = req['user'] as UserEntity;
-
-    await this.cartRepository.findOne({
+    // lấy cái cart của thằng user đó ra
+    const findCart = await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
-      relations: ['cart_products', 'cart_products.product'],
+      relations: ['cart_products', 'cart_products.product_detail'], // Lấy giỏ hàng kèm sản phẩm
     });
+    if (!findCart) throw new BadRequestException("Bạn chưa có giỏ hàng")
 
-    await this.cartDetailsRepository.delete(id);
+    const findDetailCart = findCart.cart_products.find((val) => val.product_detail.id === id)
+
+    if (!findDetailCart) throw new BadRequestException("Sản phẩm không tồn tại")
+
+    findCart.total_all_price -= Number(findDetailCart.total_price || 0);
+
+    await this.cartDetailsRepository.delete(findDetailCart?.id);
+
+    await this.cartRepository.save(findCart);
 
     return true;
   }

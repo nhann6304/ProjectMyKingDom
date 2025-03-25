@@ -4,7 +4,18 @@ import Image from "next/image";
 import styled from "styled-components";
 import hinhanh from "@/assets/common/icon-public/jpg/product.test.webp";
 import InputQuantityCircle from "../inputs/input-quantity-circle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IProduct } from "@/interfaces/models/products.interface";
+import { convertPriceToString } from "@/utils";
+import useDebounce from "@/hooks/useDebounce";
+
+interface IProps {
+  product: IProduct;
+  quantity: number;
+  onQuantityChange?: (value: number) => void;
+  onDeleteProductCart?: (idProduct: string) => void
+
+}
 
 const CardContainer = styled.div`
   height: 100%;
@@ -74,8 +85,9 @@ const CardContainer = styled.div`
     }
 
     .prod-price {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: bold;
+      color: var(--color-background-global);
     }
   }
 
@@ -130,33 +142,54 @@ const CardContainer = styled.div`
   }
 `;
 
-export default function CardProductItem() {
-  const [value, setValue] = useState<number>(0);
+export default function CardProductItem({ product, quantity, onQuantityChange, onDeleteProductCart }: IProps) {
+  const [value, setValue] = useState<number>(quantity);
+  const debouncedQuantity = useDebounce(value, 1000);
+  //
+  useEffect(() => {
+    if (onQuantityChange) {
+      onQuantityChange(debouncedQuantity);
+    }
+  }, [debouncedQuantity]);
+  //
+  const handleDeleteProduct = (id: string) => {
+    if (!onDeleteProductCart) return
+    onDeleteProductCart(id)
+  }
+  //
 
   return (
     <CardContainer>
       <div className="card-container">
         <div className="card-left">
-          <Image src={hinhanh} alt="Hình ảnh sản phẩm" />
+          <Image
+            src={product?.prod_thumb}
+            height={100}
+            width={100}
+            alt="Hình ảnh sản phẩm"
+          />
         </div>
 
         <div className="card-right">
-          <span className="prod_name">
-            Đồ chơi phà chuyên phà chuyên dụng BATTAT
-          </span>
+          <span className="prod_name">{product?.prod_name}</span>
 
           <div className="prod-quantity-option">
             <span>Số lượng</span>
             <InputQuantityCircle
               inputWidth="10rem"
-              defaultValue={1}
+              defaultValue={quantity}
               onChange={(newValue) => setValue(newValue)}
             />
           </div>
 
           <div className="prod-footer">
-            <span className="footer-delete">Xóa</span>
-            <span className="prod-price">519.000 Đ</span>
+            <span className="footer-delete" onClick={() => handleDeleteProduct(product?.id)}>Xóa</span>
+
+            <span className="prod-price">
+              {convertPriceToString(
+                String((product.prod_price_official ?? 0) * value)
+              )}
+            </span>
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { api } from "@/helpers";
 import {
     IBaseResponse,
     IGetManyItem,
-    IUpdateValueCart
+    IUpdateValueCart,
 } from "@/interfaces/common/IBaseResponse.interface";
 import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
 
@@ -38,6 +38,19 @@ export async function UpdateCart(payload: IUpdateValueCart) {
 
     return result;
 }
+
+export async function DeletedProdCart(idProduct: string) {
+    const result = await api<IBaseResponse<any>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.CARTS}/${CONST_API_COMMON.DELETE}/${idProduct}`,
+        options: {
+            method: CONST_METHODS.DELETE,
+        },
+    });
+
+    return result;
+}
+
+// export async fun
 
 // export async function FindProductBySlugCate(slug: string, queries?: IQueries) {
 //     const result = await api<IBaseResponse<IGetManyItem<IProduct>>>({

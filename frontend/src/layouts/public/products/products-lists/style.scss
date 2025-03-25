@@ -74,6 +74,71 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+
+        .product-footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+
+            .ant-pagination {
+                display: flex;
+                align-items: center;
+
+                .ant-pagination-prev,
+                .ant-pagination-next {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border: 3px solid var(--color-background-global);
+                    height: 4.8rem;
+                    width: 4.8rem;
+                    border-radius: 50%;
+                    color: var(--color-background-global);
+                }
+
+                .ant-pagination-prev {
+                    transform: rotate(90deg);
+                }
+
+                .ant-pagination-next {
+                    transform: rotate(-90deg);
+                }
+
+                .ant-pagination-prev.ant-pagination-disabled,
+                .ant-pagination-next.ant-pagination-disabled {
+                    display: none !important;
+                }
+
+                .ant-pagination-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    height: 3.6rem;
+                    width: 3.6rem;
+                    border: none;
+                    background-color: #f2f2f2;
+                    font-size: 1.6rem;
+                    font-weight: 700;
+
+                    &-active {
+                        a {
+                            color: white;
+                        }
+
+                        background-color: var(--color-background-global);
+                    }
+
+                    &-disabled {
+                        display: none;
+                    }
+
+                    // .ant-pagination-disabled {
+                    //     display: none !important;
+                    // }
+                }
+            }
+        }
     }
 
     @include resLAP-1024() {

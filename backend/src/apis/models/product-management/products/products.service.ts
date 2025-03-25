@@ -85,32 +85,34 @@ export class ProductsService {
         const { isDeleted, fields, limit, page, filter } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const ALIAS_NAME = 'products';
-        const result = new UtilORM<ProductsEntity>(
-            this.productRepository,
-            ALIAS_NAME,
-        )
+
+        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .select(fields)
-            .skip({ limit, page })
-            .take({ limit })
             .leftJoinAndSelect(['pc_category', 'prod_thumbnails']);
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
         }
 
-        const queryBuilder: SelectQueryBuilder<ProductsEntity> = result.build();
+        // 1️⃣ Query đếm tổng số sản phẩm trước khi áp dụng skip/take
+        const queryBuilderCount: SelectQueryBuilder<ProductsEntity> = result.build();
+        const totalItems = await queryBuilderCount.getCount(); // ✅ Không bị ảnh hưởng bởi phân trang
 
-        const [items, totalItems] = await Promise.all([
-            queryBuilder.getMany(),
-            queryBuilder.getCount(),
-        ]);
+        // 2️⃣ Query lấy sản phẩm có phân trang
+        const queryBuilder: SelectQueryBuilder<ProductsEntity> = result
+            .skip({ limit, page }) // ✅ Áp dụng phân trang ở đây
+            .take({ limit })
+            .build();
 
+        const items = await queryBuilder.getMany();
+
+        // 3️⃣ Chuẩn hóa dữ liệu
         const transformedItems = items.map((item) => ({
             ...item,
             prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
                 id: thumbnail.id,
                 img_url: thumbnail.img_url,
-                img_alt: thumbnail.img_alt
+                img_alt: thumbnail.img_alt,
             })),
         }));
 
@@ -118,85 +120,83 @@ export class ProductsService {
             items: transformedItems,
             totalItems,
         };
-
     }
+
 
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { isDeleted, fields, limit, page, filter } = query;
         const ALIAS_NAME = 'products';
+
         // 1️⃣ Tìm danh mục theo slug
-        const categoryItem =
-            await this.productCategoriesService.findCateBySlug(slug);
-        if (!categoryItem) return { items: [] };
+        const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
+        if (!categoryItem) return { items: [], totalItems: 0 };
 
         // 2️⃣ Lấy danh sách ID của danh mục cha + con
         const categoryIds = [categoryItem.id];
         if (categoryItem.children?.length > 0) {
             categoryIds.push(...categoryItem.children.map((child) => child.id));
         }
-        // 3️⃣ Lọc sản phẩm theo danh mục cha + con
+
+        // 3️⃣ Đếm tổng số sản phẩm trước khi phân trang
+        const totalItems = await this.productRepository.count({
+            where: {
+                pc_category: { id: In(categoryIds) },
+            },
+        });
+
+        // 4️⃣ Lấy danh sách sản phẩm có phân trang
         let productItems = await this.productRepository.find({
             where: {
                 pc_category: { id: In(categoryIds) },
             },
             skip: limit && page ? (page - 1) * limit : undefined,
             take: limit || undefined,
-            relations: ['prod_thumbnails'], // Lấy thêm thông tin danh mục
+            relations: ['prod_thumbnails'],
         });
 
-        // 4️⃣ Nếu có filter, lọc lại sản phẩm theo filter
+        // 5️⃣ Nếu có filter, lọc lại sản phẩm theo filter
         if (filter) {
             const objFilter = UtilConvert.convertJsonToObject(filter as any) || {};
-
             productItems = productItems.filter((product) => {
                 return Object.entries(objFilter).every(([key, value]) => {
                     if (Array.isArray(product[key])) {
                         return Array.isArray(value)
-                            ? value.some((v) => product[key].includes(v)) // Nếu value là mảng, kiểm tra có phần tử nào khớp không
-                            : product[key].includes(value); // Nếu value là chuỗi, kiểm tra có chứa không
+                            ? value.some((v) => product[key].includes(v))
+                            : product[key].includes(value);
                     }
-
                     if (
                         Array.isArray(value) &&
-                        value.every(
-                            (v) => typeof v === 'object' && v !== null && 'min' in v,
-                        )
+                        value.every((v) => typeof v === 'object' && v !== null && 'min' in v)
                     ) {
-                        // ✅ Nếu value là một mảng các khoảng [{ min, max }, { min, max }]
                         return value.some((range) =>
                             range.max === null
-                                ? product[key] >= range.min // ✅ Nếu max là null => lấy tất cả >= min
+                                ? product[key] >= range.min
                                 : product[key] >= range.min && product[key] <= range.max,
                         );
                     }
-
                     if (typeof value === 'object' && value !== null && 'min' in value) {
-                        // ✅ Nếu value là một khoảng { min, max }
                         return value.max === null
-                            ? product[key] >= value.min // ✅ max = null => lấy tất cả lớn hơn min
+                            ? product[key] >= value.min
                             : product[key] >= value.min && product[key] <= value.max;
                     }
-
-                    // ✅ Xử lý giá trị thông thường
-                    return Array.isArray(value)
-                        ? value.includes(product[key])
-                        : product[key] == value;
+                    return Array.isArray(value) ? value.includes(product[key]) : product[key] == value;
                 });
             });
         }
 
+        // 6️⃣ Chuẩn hóa dữ liệu trước khi trả về
         const transformedItems = productItems.map((item) => ({
             ...item,
             prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
                 id: thumbnail.id,
                 img_url: thumbnail.img_url,
-                img_alt: thumbnail.img_alt
+                img_alt: thumbnail.img_alt,
             })),
         }));
 
         return {
             items: transformedItems,
-            totalItems: productItems.length,
+            totalItems, // ✅ Trả về tổng số sản phẩm thực tế (trước khi phân trang)
         };
     }
 

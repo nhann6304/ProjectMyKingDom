@@ -12,7 +12,16 @@ import CardProduct from "@/components/cards/CardProduct";
 import CollapseOption from "@/components/options/collapse-options/Collapse";
 import { FaChevronDown } from "react-icons/fa";
 //
-import { Button, Drawer, Dropdown, MenuProps, Space, Tooltip } from "antd";
+import {
+    Button,
+    Drawer,
+    Dropdown,
+    MenuProps,
+    Pagination,
+    PaginationProps,
+    Space,
+    Tooltip,
+} from "antd";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useState, useTransition } from "react";
@@ -23,7 +32,12 @@ import { findAllProductCate } from "@/apis/product-management/product-categories
 import ListFilterProd from "@/components/lists/ListFilterProd";
 import { convertOjbToString } from "@/utils";
 import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
-import { Cancel, SortIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
+import {
+    ArrowRight,
+    Cancel,
+    SortIcon,
+} from "@/assets/common/icon-public/svg/icon/iconItem";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 interface IProps {
     products: Awaited<ReturnType<typeof FindAllProduct>>;
     categories: Awaited<ReturnType<typeof findAllProductCate>>;
@@ -66,12 +80,18 @@ export default function ProductLayout({
     const [listProducts, setListProducts] = useState<IProduct[]>(
         products?.metadata?.items || []
     );
+    const [totalProduct, setTotalProduct] = useState<number>(
+        products?.metadata?.totalItems as number
+    );
     const [isLoading, startTransition] = useTransition();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [slug, setSlug] = useState<string[]>([]);
-    const [valueFilter, setValueFilter] = useState<any>();
     const [open, setOpen] = useState(false);
+    const [querySizePage, setQuerySizePage] = useState({
+        limit: 12,
+        page: 1,
+    });
     //
     const queryParams: any = {};
     if (queryParams && !queryParams?.limit) queryParams.limit = 10;
@@ -116,20 +136,25 @@ export default function ProductLayout({
                 });
             });
 
+            queryParams.limit = querySizePage.limit;
+            queryParams.page = querySizePage.page;
             queryParams.filter = JSON.stringify({ filter: formattedData });
 
             if (newSlug[0] === "all") {
                 const result = await FindAllProduct(queryParams);
                 setListProducts(result?.metadata?.items || []);
+                setTotalProduct(result?.metadata?.totalItems ?? 0);
             } else if (newSlug.length >= 2) {
                 const result = await FindProductBySlugCate(newSlug[1], queryParams);
+                setTotalProduct(result?.metadata?.totalItems ?? 0);
                 setListProducts(result?.metadata?.items || []);
             } else {
                 const result = await FindProductBySlugCate(newSlug[0], queryParams);
+                setTotalProduct(result?.metadata?.totalItems ?? 0);
                 setListProducts(result?.metadata?.items || []);
             }
         });
-    }, [pathname, searchParams, keySearch]);
+    }, [pathname, searchParams, keySearch, querySizePage]);
     //
     const showDrawer = () => {
         setOpen(true);
@@ -138,6 +163,14 @@ export default function ProductLayout({
     const onClose = () => {
         setOpen(false);
     };
+    // Phân trang
+    const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
+        current,
+        pageSize
+    ) => {
+        setQuerySizePage({ limit: pageSize, page: current });
+    };
+    //
     return (
         <div className="product-container container-pub">
             <div className="wrapper-container ">
@@ -234,6 +267,25 @@ export default function ProductLayout({
                                 )}
                             </div>
                         </div>
+                        {totalProduct >= 10 && (
+                            <div className="product-footer">
+                                <Pagination
+                                    showSizeChanger={false}
+                                    onShowSizeChange={onShowSizeChange}
+                                    current={querySizePage.page}
+                                    // total={500}
+                                    total={totalProduct}
+                                    onChange={(page) => {
+                                        setQuerySizePage((prev) => ({ ...prev, page }));
+                                        if (typeof window !== "undefined") {
+                                            window.scrollTo({ top: 0, behavior: "smooth" }); // ✅ Gọi đúng cách
+                                        }
+                                    }}
+                                    prevIcon={<ArrowRight />}
+                                    nextIcon={<ArrowRight />}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
