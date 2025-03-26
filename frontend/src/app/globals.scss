@@ -1,15 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@398&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@398&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 
 :root {
-
   // border-radius
   --border-radius: 5px;
 
-
-  --color-white: #F7F8FA;
+  --color-white: #f7f8fa;
   --color-background-global: #cf102d;
 
   // Pink
@@ -70,13 +68,12 @@ body {
   font-style: normal;
 }
 
-
 $MB: 425px;
 $TL: 768px;
 $LAP: 1024px;
 $BLAP: 1440px;
 
-@mixin resMB-425 () {
+@mixin resMB-425() {
   @media screen and (max-width: $MB) {
     @content;
   }
@@ -113,3 +110,5 @@ $BLAP: 1440px;
     width: 95vw !important;
   }
 }
+
+.public-layout {}

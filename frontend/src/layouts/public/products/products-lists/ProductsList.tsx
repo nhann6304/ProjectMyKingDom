@@ -114,7 +114,7 @@ export default function ProductLayout({
         startTransition(async () => {
             // Cập nhật slug từ pathname
             const newSlug = pathname?.split("/").slice(2);
-            setSlug(newSlug);
+            let nhan = pathname
 
             const formattedData: {
                 f: string;
@@ -248,7 +248,7 @@ export default function ProductLayout({
                                 </Dropdown>
                             </div>
                         </header>
-
+                        {/* Hiển thị sản phảm */}
                         <div className="product-body">
                             <div
                                 className={`product-list-responsive ${seeGird ? "product-list-three-item" : "product-list-two-item"
@@ -267,6 +267,7 @@ export default function ProductLayout({
                                 )}
                             </div>
                         </div>
+                        {/*  */}
                         {totalProduct >= 10 && (
                             <div className="product-footer">
                                 <Pagination

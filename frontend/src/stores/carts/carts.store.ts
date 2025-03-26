@@ -1,22 +1,33 @@
 import {
+    AddProductCart,
     DeletedProdCart,
     FindAllCarts,
     UpdateCart,
 } from "@/apis/product-management/carts.apis";
-import { IUpdateValueCart } from "@/interfaces/common/IBaseResponse.interface";
+import { ICartItemChange } from "@/interfaces/common/ICart.interface";
 import { ICart } from "@/interfaces/models/carts.interface";
 import { create } from "zustand";
 
 interface CartState {
     cartProduct: ICart | null;
-
     fetchCartProduct: () => Promise<void>;
-    updateCart: (payload: IUpdateValueCart) => Promise<void>;
+    updateCart: (payload: ICartItemChange) => Promise<void>;
+    addProductToCart: (payload: ICartItemChange) => Promise<any>;
     deleteCart: (idProduct: string) => Promise<void>
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
     cartProduct: null,
+
+    addProductToCart: async (payload) => {
+        try {
+            const response = await AddProductCart(payload);
+            await get().fetchCartProduct();
+            return response;
+        } catch (error) {
+            return error
+        }
+    },
 
     fetchCartProduct: async () => {
         try {

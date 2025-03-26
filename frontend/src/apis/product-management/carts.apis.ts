@@ -5,8 +5,8 @@ import { api } from "@/helpers";
 import {
     IBaseResponse,
     IGetManyItem,
-    IUpdateValueCart,
 } from "@/interfaces/common/IBaseResponse.interface";
+import { ICartItemChange } from "@/interfaces/common/ICart.interface";
 import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
 
 const TAG_NAME = {
@@ -27,7 +27,7 @@ export async function FindAllCarts(userId?: string) {
     return result;
 }
 
-export async function UpdateCart(payload: IUpdateValueCart) {
+export async function UpdateCart(payload: ICartItemChange) {
     const result = await api<IBaseResponse<any>>({
         url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.CARTS}/${CONST_API_COMMON.UPDATE}`,
         options: {
@@ -50,7 +50,16 @@ export async function DeletedProdCart(idProduct: string) {
     return result;
 }
 
-// export async fun
+export async function AddProductCart(payload: ICartItemChange) {
+    const result = await api<IBaseResponse<any>>({
+        url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.CARTS}/${CONST_API_COMMON.ADD}-to-cart`,
+        options: {
+            method: CONST_METHODS.POST,
+            body: JSON.stringify(payload)
+        },
+    });
+    return result;
+}
 
 // export async function FindProductBySlugCate(slug: string, queries?: IQueries) {
 //     const result = await api<IBaseResponse<IGetManyItem<IProduct>>>({

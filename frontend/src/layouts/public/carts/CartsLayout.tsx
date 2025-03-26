@@ -75,8 +75,10 @@ export default function CartLayout() {
                         </div>
 
                         <div className="cart-list-product">
-                            {cartProduct?.cart_products?.map((val) => (
-                                <div className="cart-list-product-item">
+                            {cartProduct?.cart_products?.map((val, index) => (
+                                <div className="cart-list-product-item"
+                                    key={index}
+                                >
                                     <CardProductItem
                                         product={val?.product_detail}
                                         quantity={val?.quantity}

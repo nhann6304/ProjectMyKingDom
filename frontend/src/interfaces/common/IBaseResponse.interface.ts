@@ -67,7 +67,3 @@ export interface IResetPassData {
     confirm_password: string
 }
 
-export interface IUpdateValueCart {
-    product_id: string;
-    quantity: number
-}

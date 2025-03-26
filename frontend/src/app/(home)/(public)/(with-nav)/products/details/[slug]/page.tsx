@@ -7,6 +7,12 @@ export default async function ProductDetails({
     params,
     searchParams,
 }: IPageProps) {
+
+    if (params.slug === "undefined") {
+        console.log("Qua 404 tramg không tồn tại");
+        return
+    }
+
     if (searchParams && !searchParams?.limit) searchParams.limit = 10;
     if (searchParams && !searchParams?.page) searchParams.page = 1;
     if (searchParams && !searchParams?.isDeleted) searchParams.isDeleted = false;
@@ -33,7 +39,6 @@ export default async function ProductDetails({
     searchParams.filter = JSON.stringify(filter);
 
     const product = await FindAllProduct(searchParams);
-
     return (
         <div>
             <ProductDetailsLayout product={product} />

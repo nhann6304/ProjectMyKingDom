@@ -27,5 +27,7 @@ export const CONST_API_COMMON = {
     FIND_ALL: "find-all",
     UPDATE: "update",
     DELETE: "delete",
+    CREATE: "create",
+    ADD: "add",
     FIND_PRODUCT_SLUG_CATE: "find-product-by-slug-cate"
 }

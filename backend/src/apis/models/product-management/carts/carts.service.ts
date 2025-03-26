@@ -22,14 +22,15 @@ export class CartsService {
   ) { }
   async addToCart({ req, addData }: { req: Request; addData: AddCartDto }) {
     const me = req['user'] as UserEntity;
-    const id = addData.idProduct;
+    const id = addData.product_id;
     const findProduct = await this.productRepository.findOne({ where: { id } });
 
     if (!findProduct) {
       throw new BadRequestException('Không tìm thấy sản phẩm');
     }
 
-    let quantity = 1;
+    let quantity = addData?.quantity ?? 1;
+    quantity = Math.min(quantity, findProduct.prod_quantity);
 
     let cart = await this.cartRepository.findOne({
       where: { cart_users: { id: me.id } },
@@ -67,7 +68,7 @@ export class CartsService {
 
     //  Cập nhật total_all_price sau khi thêm sản phẩm
     cart.total_all_price = cart.cart_products.reduce(
-      (total, product) => total + product.total_price,
+      (total, product) => total + Number(product.total_price),
       0,
     );
     await this.cartRepository.save(cart);

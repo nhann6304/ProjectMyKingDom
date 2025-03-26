@@ -1,11 +1,10 @@
 "use client";
 import { Button } from "antd";
-import Link from "next/link";
 import styled from "styled-components";
-
 
 interface IPropsButton {
   title: string;
+  loading?: boolean; // Mặc định là false
 }
 
 const ButtonContainer = styled.div`
@@ -27,6 +26,7 @@ const ButtonContainer = styled.div`
     font-size: 1.9rem;
     text-transform: capitalize;
     margin: 3rem 1.7rem 1.2rem 1.7rem;
+    transition: all 0.3s ease;
 
     &:hover {
       background: var(--color-background-global) !important;
@@ -35,7 +35,7 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export default function ButtonForm({ title }: IPropsButton) {
+export default function ButtonForm({ title, loading = false }: IPropsButton) {
   return (
     <ButtonContainer>
       <Button
@@ -43,6 +43,8 @@ export default function ButtonForm({ title }: IPropsButton) {
         htmlType="submit"
         type="default"
         size="large"
+        loading={loading}
+        disabled={loading} // Khi loading là true thì tự động disabled
       >
         {title}
       </Button>

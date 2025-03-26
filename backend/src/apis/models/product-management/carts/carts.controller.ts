@@ -24,7 +24,7 @@ export class CartsController {
   ) {
     await this.cartsService.addToCart({ addData, req })
     return new OK({
-      message: RES_MESS.CREATE("Giỏ hàng")
+      message: RES_MESS.ADD("Giỏ hàng")
     })
   }
 

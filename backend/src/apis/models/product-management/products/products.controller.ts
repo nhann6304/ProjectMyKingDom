@@ -45,7 +45,7 @@ export class ProductsController {
 
   @Get('find-all')
   @ApiOperation({ summary: 'Lấy toàn bộ sản phẩm' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async findAll(@Query() query: AQueries) {
     const items = await this.productsService.findAllProduct({ query });
 
@@ -57,7 +57,7 @@ export class ProductsController {
 
   @Get('find-product-by-slug-cate/:slug')
   @ApiOperation({ summary: 'Lấy sản phẩm bằng slug cate' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async findProductBySlug(@Param('slug') slug: string, @Query() query: AQueries) {
     const items = await this.productsService.findProductBySlug(slug, query);
     return new OK({

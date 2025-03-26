@@ -1,20 +1,21 @@
 "use client";
-import Image from "next/image";
-import "./style.scss";
-import hinh from "@/assets/common/icon-public/jpg/product.test.webp";
+import { FindAllProduct } from "@/apis/product-management/products.apis";
 import {
     Checked,
     HearNotBg,
 } from "@/assets/common/icon-public/svg/icon/iconItem";
-import React, { useState } from "react";
-import ButtonCommon from "@/components/buttons/ButtonCommon";
 import ButtonForm from "@/components/buttons/ButtonForm";
+import CarouselHome from "@/components/carousels/CarouselHome";
 import InputQuantity from "@/components/inputs/input-quantity";
 import ListInfoProduct from "@/components/lists/List-Info-Prod";
+import { ICartItemChange } from "@/interfaces/common/ICart.interface";
+import { useCartStore } from "@/stores/carts/carts.store";
+import { convertPriceToString } from "@/utils";
+import Image from "next/image";
+import React, { useState, useTransition } from "react";
 import { Settings } from "react-slick";
-import CarouselHome from "@/components/carousels/CarouselHome";
-import CardProduct from "@/components/cards/CardProduct";
-import { FindAllProduct } from "@/apis/product-management/products.apis";
+import "./style.scss";
+import toast from "react-hot-toast";
 
 interface IProps {
     product: Awaited<ReturnType<typeof FindAllProduct>>;
@@ -26,13 +27,14 @@ interface ICommit {
 }
 export default function ProductDetailsLayout({ product }: IProps) {
     const productItem = product?.metadata?.items[0];
-    const [value, setValue] = useState<number>(1);
+    const [quantity, setQuantity] = useState<number>(1);
     const [selectedImage, setSelectedImage] = useState(productItem?.prod_thumb);
-
+    const [isPending, startTransition] = useTransition();
+    const { addProductToCart } = useCartStore();
     const handleSetValue = (e: number) => {
-        console.log("què", e);
+        setQuantity(e)
     };
-
+    //
     const settingsProduct: Settings = {
         dots: false,
         infinite: true,
@@ -44,18 +46,30 @@ export default function ProductDetailsLayout({ product }: IProps) {
             {
                 breakpoint: 425,
                 settings: {
-                    slidesToShow: 3
-                }
-            }
-        ]
+                    slidesToShow: 3,
+                },
+            },
+        ],
     };
-
+    //
     const arrCommit: ICommit[] = [
         { value: "Hàng chính hãng", icon: <Checked /> },
         { value: "Miễn phí giao hàng toàn quốc đơn trên 500k", icon: <Checked /> },
         { value: "Giao hàng hỏa tốc 4 tiếng", icon: <Checked /> },
     ];
+    //
+    const handleAddProductToCart = () => {
+        const payload: ICartItemChange = {
+            product_id: productItem?.id,
+            quantity: quantity
+        }
 
+        startTransition(async () => {
+            const result = await addProductToCart(payload);
+            toast.success(result?.message)
+        })
+
+    }
     return (
         <div className="detail-container container-pub">
             <div className="box-detail">
@@ -101,10 +115,11 @@ export default function ProductDetailsLayout({ product }: IProps) {
                         <div className="box-prod-origin">
                             <div className="trademark">
                                 <span className="trademark-title">Thương hiệu</span>
-                                <h4 className="trademark-name">LEGO TECHNIC</h4>
+                                <h4 className="trademark-name">{productItem?.prod_company}</h4>
                             </div>
                             <div className="sku">
-                                <span className="sku-number">SKU 42155</span>
+                                {/* <span className="sku-number">SKU 42155</span> */}
+                                <span className="sku-number">SKU: {productItem?.prod_sku}</span>
                             </div>
                         </div>
 
@@ -113,13 +128,15 @@ export default function ProductDetailsLayout({ product }: IProps) {
                                 <div className="price-normal-left">
                                     <span className="price-normal-title">Giá thành viên</span>
                                     <div className="group-price">
-                                        <span className="price-normal-value">1.799.000 Đ</span>
-                                        <s className="price-old">1.299.000 Đ</s>
+                                        <span className="price-normal-value">
+                                            Đang cập nhật giá thành viên{" "}
+                                        </span>
+                                        {/* <s className="price-old">1.299.000 Đ</s> */}
                                     </div>
                                 </div>
 
                                 <div className="price-normal-right">
-                                    <span className="price-sale">-20%</span>
+                                    <span className="price-sale">-00%</span>
                                 </div>
                             </div>
 
@@ -127,8 +144,14 @@ export default function ProductDetailsLayout({ product }: IProps) {
                                 <div className="price-normal-left">
                                     <span className="price-normal-title">Giá bán</span>
                                     <div className="group-price">
-                                        <span className="price-normal-value">1.799.000 Đ</span>
-                                        <s className="price-old">1.299.000 Đ</s>
+                                        <span className="price-normal-value">
+                                            {convertPriceToString(
+                                                String(productItem?.prod_price_official)
+                                            )}
+                                        </span>
+                                        <s className="price-old">
+                                            {convertPriceToString(String(productItem?.prod_price))}
+                                        </s>
                                     </div>
                                 </div>
 
@@ -136,7 +159,6 @@ export default function ProductDetailsLayout({ product }: IProps) {
                                     <span className="price-sale">-20%</span>
                                 </div>
                             </div>
-
                         </div>
 
                         <div className="box-prod-policy">
@@ -152,7 +174,9 @@ export default function ProductDetailsLayout({ product }: IProps) {
                             <h1>Số lượng</h1>
                             <div className="btn-control">
                                 <InputQuantity onChange={(value) => handleSetValue(value)} />
-                                <ButtonForm title="Thêm vào giỏ hàng" />
+                                <span onClick={handleAddProductToCart}>
+                                    <ButtonForm loading={isPending} title="Thêm vào giỏ hàng" />
+                                </span>
                             </div>
                         </div>
 
