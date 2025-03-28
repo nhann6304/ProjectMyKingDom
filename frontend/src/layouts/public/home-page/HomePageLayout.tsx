@@ -8,15 +8,32 @@ import Image from "next/image";
 import { Settings } from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+//
+import img_all from "@/assets/common/icon-public/jpg/prod_all.webp";
+import img_new from "@/assets/common/icon-public/jpg/prod_new.webp";
+import img_present from "@/assets/common/icon-public/jpg/prod_present.webp";
+import img_sale from "@/assets/common/icon-public/jpg/prod_sale.webp";
+//
+import cate_name from "@/assets/common/icon-public/jpg/home-page/cateNam.webp";
 
+import Link from "next/link";
+import CardHotCate from "@/components/cards/CardHotCate";
 export default function HomePageLayout() {
     const settings: Settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    dots: false,
+                },
+            },
+        ],
     };
 
     const settingsProduct: Settings = {
@@ -26,71 +43,152 @@ export default function HomePageLayout() {
         slidesToShow: 4,
         slidesToScroll: 1,
         arrows: false,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                },
+            },
+
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                },
+            },
+            {
+                breakpoint: 425,
+                settings: {
+                    slidesToShow: 2,
+                },
+            },
+
+            {
+                breakpoint: 320,
+                settings: {
+                    slidesToShow: 1,
+                },
+            },
+        ],
     };
 
     return (
-        // <div className="home-container">
-        //     {/* carousel */}
-        //     <div className="box-carousel">
-        //         <CarouselHome scroll={false} settings={settings}>
-        //             <div>
-        //                 <Image src={hinh} alt="hinh" />
-        //             </div>
-        //             <div>
-        //                 <Image src={hinh} alt="hinh" />
-        //             </div>
-        //             <div>
-        //                 <Image src={hinh} alt="hinh" />
-        //             </div>
-        //             <div>
-        //                 <Image src={hinh} alt="hinh" />
-        //             </div>
-        //         </CarouselHome>
-        //     </div>
-        //     {/* Button option */}
-        //     <div className="box-btn-option ">
-        //         <ButtonCommon title="Tất cả" hoverBg={false} link="facebook.com" />
-        //         <ButtonCommon title="Hàng mới" />
-        //         <ButtonCommon title="Sự kiện" />
-        //         <ButtonCommon title="Giảm giá" />
-        //     </div>
-        //     {/* Product box */}
-        //     <div className="box-product-item">
-        //         <h1 className="product-item-title">
-        //             Ưu Đãi Độc Quyền Online Từ 08-14/2
-        //         </h1>
-        //         <div className="product-btn-more">
-        //             <ButtonCommon title="Xem thêm" icon hoverBg={false} />
-        //         </div>
-        //         {/* Carousel Product */}
-
-        //         <CarouselHome
-        //             scroll
-        //             className="custom-carousel"
-        //             settings={settingsProduct}
-        //         >
-        //             <div className="card-item">
-        //                 <CardProduct />
-        //             </div>
-
-        //             <div className="card-item">
-        //                 <CardProduct />
-        //             </div>
-
-        //             <div className="card-item">
-        //                 <CardProduct />
-        //             </div>
-
-        //             <div className="card-item">
-        //                 <CardProduct />
-        //             </div>
-        //         </CarouselHome>
-        //     </div>
-        // </div>
-
         <div className="home-container">
-            <div className="section-container">
-                12323
+            <div className="section-container container-pub">
+                <div className="box-carousel">
+                    <CarouselHome scroll={false} settings={settings}>
+                        <div>
+                            <Image src={hinh} alt="hinh" />
+                        </div>
+                        <div>
+                            <Image src={hinh} alt="hinh" />
+                        </div>
+                        <div>
+                            <Image src={hinh} alt="hinh" />
+                        </div>
+                        <div>
+                            <Image src={hinh} alt="hinh" />
+                        </div>
+                    </CarouselHome>
+                </div>
+                {/* --------------- */}
+                <div className="box-btn-option">
+                    <Link href={"#"} className="btn-option">
+                        <Image src={img_all} alt="hinh" />
+                    </Link>
+
+                    <Link href={"#"} className="btn-option">
+                        <Image src={img_new} alt="hinh" />
+                    </Link>
+
+                    <Link href={"#"} className="btn-option">
+                        <Image src={img_present} alt="hinh" />
+                    </Link>
+
+                    <Link href={"#"} className="btn-option">
+                        <Image src={img_sale} alt="hinh" />
+                    </Link>
+                </div>
+                {/* --------------- */}
+                <div className="box-product-item">
+                    <h1 className="product-item-title">Ưu Đãi Độc Quyền Website</h1>
+                    <div className="product-btn-more">
+                        <ButtonCommon background title="Xem thêm" icon hoverBg={false} />
+                    </div>
+                    {/* Carousel Product */}
+
+                    <CarouselHome
+                        scroll
+                        className="custom-carousel"
+                        settings={settingsProduct}
+                    >
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+                    </CarouselHome>
+                </div>
+                {/* --------------- */}
+                <div className="box-category-hot">
+                    <h1 className="cate-item-title">Danh mục HOT</h1>
+
+                    <div className="list-cate">
+                        <CardHotCate img={cate_name} link="#" title="Đồ chơi bé trai" />
+                        <CardHotCate img={cate_name} link="#" title="Đồ chơi bé gái" />
+                        <CardHotCate img={cate_name} link="#" title="Hot Wheels" />
+                        <CardHotCate img={cate_name} link="#" title="Balo, Túi & Vali" />
+                    </div>
+                </div>
+
+                {/* --------------- */}
+                <div className="box-product-item ">
+                    <h1 className="product-item-title">Hàng mới về - bé thích mê</h1>
+                    <div className="product-btn-more">
+                        <ButtonCommon background title="Xem thêm" icon hoverBg={false} />
+                    </div>
+                    {/* Carousel Product */}
+
+                    <CarouselHome
+                        scroll
+                        className="custom-carousel"
+                        settings={settingsProduct}
+                    >
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+
+                        <div className="card-item">
+                            <CardProduct />
+                        </div>
+                    </CarouselHome>
+                </div>
+                {/* -------Update sau-------- */}
+                {/* <div className="box-age-play">
+                    <h1 className="age-play-title">Độ tuổi</h1>
+                </div> */}
+                {/* --------------- */}
+
+
             </div>
         </div>
     );

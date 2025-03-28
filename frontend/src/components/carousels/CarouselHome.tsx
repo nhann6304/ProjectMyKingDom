@@ -17,6 +17,12 @@ const CarouselContainer = styled.div`
   position: relative;
   .slick-slider {
     padding: 0 4rem;
+     @media screen and (max-width: 768px) {
+         padding: 0 ;
+    }
+      @media screen and (max-width: 425px) {
+         padding: 0  2rem;
+    }
   }
 
   .slick-list {
@@ -73,14 +79,64 @@ const CarouselContainer = styled.div`
     color: var(--color-background-global);
     padding: 5px;
     transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    @media screen and (max-width: 1024px) {
+      width: 40px;
+      height: 40px;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 35px;
+      height: 35px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 
   .custom-prev-arrow {
     left: 100%;
+    transform: translateX(-50%);
+    @media screen and (max-width: 1440px) {
+      left: 99%;
+    }
+    @media screen and (max-width: 1024px) {
+      left: 98%;
+    }
+    @media screen and (max-width: 768px) {
+      left: 97%;
+    }
   }
 
   .custom-next-arrow {
     right: 100%;
+    transform: translateX(50%);
+     @media screen and (max-width: 1440px) {
+      right: 99%;
+    }
+    @media screen and (max-width: 1024px) {
+      right: 98%;
+    }
+    @media screen and (max-width: 768px) {
+      right: 97%;
+    }
   }
 
   .slick-slide {
@@ -130,7 +186,6 @@ export default function CarouselHome({
         <PrevArrow />
         <NextArrow />
       </CarouselContainer>
-
     </>
   );
 }

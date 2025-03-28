@@ -26,6 +26,7 @@ const CardContainer = styled.div`
   border: 1.5px solid var(--color-gray-200);
   border-radius: 2rem;
   overflow: hidden;
+  background-color: white;
   .box-product {
     display: block;
     padding: 1rem;
@@ -55,7 +56,7 @@ const CardContainer = styled.div`
       display: flex;
       justify-content: center;
       img {
-        padding: 5px;
+        padding: 1.2rem;
         object-position: center center;
         transform: scale(1);
         max-width: 30rem;
@@ -63,7 +64,7 @@ const CardContainer = styled.div`
         height: 30rem;
         width: 100%;
         object-fit: cover;
-        border-radius: 1.2rem;
+        border-radius: 1.4rem;
         transition: transform 0.3s ease-in-out;
         &:hover {
           transform: scale(1.1);
@@ -122,6 +123,7 @@ const CardContainer = styled.div`
           text-align: right;
         }
       }
+
       .info-product-name {
         display: block;
         width: 100%;
@@ -225,6 +227,7 @@ const CardContainer = styled.div`
 
         img {
           transform: scale(1) !important;
+          max-height: 20rem;
         }
       }
 
@@ -239,7 +242,20 @@ const CardContainer = styled.div`
     }
   }
 
-  @media (max-width: 425px) {
+  @media (max-width: 768px) {
+    .box-product {
+      .box-product-info {
+        .info-control {
+          .btn-control {
+            padding: 1rem;
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
     .box-product {
       display: block;
       padding: 1rem;
@@ -249,6 +265,34 @@ const CardContainer = styled.div`
       .box-product-item {
         img {
           max-width: 100%;
+          max-height: 20rem;
+        }
+      }
+
+      .box-product-info {
+        .info-product-top{
+            .info-sku{
+              display: none;
+            }
+
+            .info-category{
+              font-size: 1.2rem;
+            }
+        }
+        .info-control {
+          .btn-control {
+            font-size: 1.1rem;
+          }
+        }
+
+        .info-product-name{
+          font-size: 1.2rem;
+        }
+
+        .info-product-pay{
+          margin: 0;
+          flex-direction: column;
+          align-items: flex-start;
         }
       }
     }

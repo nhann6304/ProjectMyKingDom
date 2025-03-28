@@ -1,92 +1,142 @@
 @use "@/app/globals.scss" as *;
 
-// .home-container {
-//     width: 100%;
-//     height: calc(100vh - 20rem);
-//     padding: 0 10rem;
-//     margin-top: 1rem;
-
-//     .box-btn-option {
-//         display: flex;
-//         margin: 4rem auto 0 auto;
-//         justify-content: center;
-//         align-items: center;
-//     }
-
-//     .box-product-item {
-//         .product-item-title {
-//             text-align: center;
-//             font-size: 4.8rem;
-//             font-weight: 700;
-//             color: #041675;
-//             text-transform: capitalize;
-//         }
-
-//         // .product-btn-more {
-//         //     display: none;
-//         // }
-
-//         .custom-carousel {
-//             .slick-slide {
-//                 padding: 0 4px;
-
-//                 div {
-//                     width: 100%;
-//                 }
-//             }
-
-//             .card-item {
-//                 border-radius: 2rem;
-
-//                 &:hover {
-//                     box-shadow: 2px 2px 16px #cf102d33;
-//                 }
-//             }
-//         }
-//     }
-
-//     @include resLAP-1024() {
-//         .box-product-item {
-//             .product-item-title {
-//                 text-align: center;
-//                 font-size: 4.8rem;
-//                 font-weight: 700;
-//                 color: #041675;
-//                 text-transform: capitalize;
-//             }
-
-//             .custom-carousel {
-//                 width: calc(100% - 2rem);
-//                 margin: 0 auto;
-
-//                 .slick-slide {
-//                     padding: 0 4px;
-
-//                     div {
-//                         width: 100%;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-@use "@/app/globals.scss" as *;
-
 .home-container {
-    max-height: 100vh;
-    max-width: 100vw;
-    height: 100%; // --
-    width: 100%; // --
-    position: relative;
+    height: auto;
+    width: auto;
     background: url("../../../assets/common/icon-public/jpg/Background_mykingdom.webp") center / cover no-repeat;
 
     .section-container {
-        min-height: 100vh;
+        padding-top: 2rem;
         /* Giữ chiều cao đầy đủ */
-        // width: 100%;
+        margin: 0 auto;
 
+        .box-btn-option {
+            padding: 4rem 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
 
+            .btn-option {
+                height: 100%;
+                width: 100%;
+                transition: transform 0.3s ease-in-out;
 
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
+
+        .box-product-item {
+            .product-item-title {
+                padding: 4rem 0 2rem 0;
+                text-align: center;
+                font-size: 4.6rem;
+                font-weight: 700;
+                color: #041675;
+                text-transform: capitalize;
+            }
+
+            .custom-carousel {
+                .slick-slider {
+                    .slick-list {
+                        .slick-track {
+                            display: flex;
+                            gap: 1rem;
+
+                            .slick-slide {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .box-category-hot {
+            .cate-item-title {
+                text-align: center;
+                font-size: 4.6rem;
+                font-weight: 700;
+                color: #041675;
+                text-transform: capitalize;
+                padding: 4rem 0 2rem 0;
+            }
+
+            .list-cate {
+                height: 100%;
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 3rem;
+            }
+        }
+
+        .box-age-play {
+            .age-play-title {
+                text-align: center;
+                font-size: 4.6rem;
+                font-weight: 700;
+                color: #041675;
+                text-transform: capitalize;
+                padding: 4rem 0 2rem 0;
+            }
+        }
+    }
+
+    @include resBLAP-1440() {
+        .section-container {
+            .box-btn-option {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+
+            .box-product-item {
+                .product-item-title {
+                    font-size: 4rem;
+                }
+            }
+
+            .box-category-hot {
+                .cate-item-title {
+                    font-size: 4rem;
+                }
+            }
+        }
+    }
+
+    @include resTL-768() {
+        .section-container {
+            .box-product-item {
+                .product-item-title {
+                    font-size: 2.4rem;
+                }
+            }
+
+            .box-category-hot {
+                .cate-item-title {
+                    font-size: 2.4rem;
+                }
+
+                .list-cate {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+        }
+
+        .custom-prev-arrow,
+        .custom-next-arrow {
+            top: 45% !important;
+        }
+    }
+
+    @include resMB-425() {
+        .section-container {
+            .box-product-item {
+                .product-item-title {
+                    font-size: 2.4rem;
+                }
+            }
+        }
     }
 }
