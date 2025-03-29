@@ -33,7 +33,6 @@ const SearchContainer = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  width: auto;
   width: 100%;
   padding: 0 1.6rem;
   border-radius: 4rem;
@@ -55,14 +54,29 @@ const SearchContainer = styled.div<{
     }
   }
 
-  img {
+  img, svg {
     width: ${(props) => props.$imgSize};
     height: ${(props) => props.$imgSize};
   }
 
-  svg {
-    width: ${(props) => props.$imgSize};
-    height: ${(props) => props.$imgSize};
+  /* Responsive */
+  @media (max-width: 1024px) {
+    input {
+      height: calc(${(props) => props.$inputHeight} - 0.4rem);
+    }
+  }
+
+  @media (max-width: 768px) {
+    input {
+      height: calc(${(props) => props.$inputHeight} - 0.8rem);
+    }
+  }
+
+  @media (max-width: 425px) {
+    input {
+      height: calc(${(props) => props.$inputHeight} - 1rem);
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -75,7 +89,6 @@ export default function InputSearch({ size = "medium" }: InputSearchProps) {
       $inputWidth={inputWidth}
       $imgSize={imgSize}
     >
-      {/* <Image src={search} alt="search" /> */}
       <ItemIcon />
       <input type="text" placeholder="Search...." />
     </SearchContainer>

@@ -1,4 +1,6 @@
-import NavbarPublic from "@/components/navbar/navbar-public/NavbarPublic";
+import NavClient from "@/components/navbar/navbar-public/NavClient";
+import "./style.scss"
+import NavbarPublic from "@/components/navbar/navbar-public/NavbarApi";
 
 export default function WithLayout({
     children,
@@ -7,8 +9,11 @@ export default function WithLayout({
 }>) {
     return (
         <div className="public-layout">
-            <NavbarPublic />
-            {children}
+            <nav>
+                <NavClient />
+            </nav>
+            <main>{children}</main>
+            <footer>footer</footer>
         </div>
     );
 }

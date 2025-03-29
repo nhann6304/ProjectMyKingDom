@@ -1,10 +1,10 @@
+import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
 import { IProductCategory } from "@/interfaces/models/product-categories.interface";
 import BottomNav from "./bottom-nav/BottomNav";
 import TopNavPublic from "./top-nav/TopNav";
-import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
-import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
+import NavbarApi from "./NavbarApi";
 
-export default async function NavbarPublic() {
+export default async function NavClient() {
     const searchParams: any = {}
 
     if (searchParams && !searchParams?.limit) searchParams.limit = 10;
@@ -17,14 +17,11 @@ export default async function NavbarPublic() {
     }
 
     const resultCate = await findAllProductCate(searchParams);
+
     return (
-        <div>
-            {/* TOP NAV */}
-            <TopNavPublic />
-            {/* CENTER NAV */}
-            <BottomNav categories={resultCate} />
-            {/* BOTTOM NAV */}
-            {/* Bottom Nav Public */}
-        </div>
-    )
+        <>
+            <NavbarApi categories={resultCate} />
+        </>
+
+    );
 }
