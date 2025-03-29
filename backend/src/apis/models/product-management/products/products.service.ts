@@ -82,7 +82,8 @@ export class ProductsService {
     }
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
-        const { isDeleted, fields, limit, page, filter } = query;
+        const { isDeleted, fields, limit, page, filter, sort } = query;
+        console.log(sort);
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const ALIAS_NAME = 'products';
 
@@ -102,6 +103,7 @@ export class ProductsService {
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result
             .skip({ limit, page }) // ✅ Áp dụng phân trang ở đây
             .take({ limit })
+            .sort(sort)
             .build();
 
         const items = await queryBuilder.getMany();

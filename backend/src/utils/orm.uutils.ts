@@ -4,6 +4,8 @@ import { start } from 'repl';
 import { IRange } from 'src/interfaces/common/IFilterAction.interface';
 import { UtilConvert } from './convert.ultils';
 import { UtilCalculator } from './caculator.utils';
+import { SortOptions } from 'src/enums/ESort.enum';
+import { ProductsEntity } from 'src/apis/models/product-management/products/product.entity';
 
 export class UtilORM<T> {
     private queryBuilder: SelectQueryBuilder<T>;
@@ -121,6 +123,16 @@ export class UtilORM<T> {
         this.queryBuilder.select(arrFields);
 
         return this;
+    }
+
+    sort(sortOptions?: SortOptions): this {
+        if (!sortOptions) return this;
+
+        // const sortMap: Record<SortOptions, { field: keyof T; order: "ASC" | "DESC" }> = {
+        //     [SortOptions.NAME_ASC]: {field:""}
+        // }
+
+        return this
     }
 
     skip({ page, limit }: { page: number; limit: number }): this {

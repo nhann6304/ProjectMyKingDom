@@ -1,7 +1,7 @@
 @use "@/app/globals.scss" as *;
 
 .nav-container {
-    height: 15rem;
+    height: auto;
     width: 100%;
     background-color: var(--color-background-global);
     margin: 0 auto;

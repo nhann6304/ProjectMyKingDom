@@ -42,7 +42,7 @@ export default function NavbarApi({ categories }: IProps) {
 
     return (
         <div
-            className={`fixed top-0 left-0 w-full bg-white shadow-md z-50 transition-transform duration-500 ${isVisible ? "translate-y-0" : "-translate-y-full"
+            className={`fixed top-0 left-0 w-full  bg-white shadow-md z-50 transition-transform duration-500 ${isVisible ? "translate-y-0" : "-translate-y-full"
                 }`}
         >
             {/* TopNav hiện trước */}
@@ -52,7 +52,7 @@ export default function NavbarApi({ categories }: IProps) {
 
             {/* BottomNav xuất hiện sau TopNav 200ms */}
             <div
-                className={`transition-transform duration-500 ${showBottomNav ? "translate-y-0" : "-translate-y-5"
+                className={`transition-transform duration-500 ${showBottomNav ? "translate-y-0" : "-translate-y-0"
                     }`}
             >
                 <BottomNav categories={categories} />

@@ -94,7 +94,7 @@ export default function HomePageLayout() {
                 </div>
                 {/* --------------- */}
                 <div className="box-btn-option">
-                    <Link href={"#"} className="btn-option">
+                    <Link href={"/products/all"} className="btn-option">
                         <Image src={img_all} alt="hinh" />
                     </Link>
 
