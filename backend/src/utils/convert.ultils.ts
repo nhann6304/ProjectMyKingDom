@@ -1,4 +1,5 @@
 import { FilterQuery } from 'src/abstracts/common/AFilterAction.abstracts';
+import { SortOptions } from 'src/enums/ESort.enum';
 import { IQueries } from 'src/interfaces/common/IBaseQueries.interface';
 import { IFilter } from 'src/interfaces/common/IFilterAction.interface';
 
@@ -50,6 +51,30 @@ export class UtilConvert {
                         }
                     }
                 });
+            }
+        } catch (error) {
+            console.error('Lỗi khi parse JSON:', error);
+        }
+
+        return obj;
+    }
+    //
+    static convertSortToObject<T extends Record<string, any>>(
+        val: string | { sort: { field: keyof T; order: SortOptions } },
+    ): { field?: keyof T; order?: SortOptions } {
+        let obj: { field?: keyof T; order?: SortOptions } = {};
+
+        if (!val) return obj;
+        try {
+            if (typeof val === 'string') {
+                val = JSON.parse(val);
+            }
+
+            if (typeof val === 'object' && 'sort' in val) {
+                obj = {
+                    field: val.sort.field as keyof T,
+                    order: val.sort.order as SortOptions,
+                };
             }
         } catch (error) {
             console.error('Lỗi khi parse JSON:', error);

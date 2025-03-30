@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsInt, IsArray, IsEnum } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsOptional, IsString, IsInt, IsArray, IsEnum, ValidateNested } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { IQueries } from 'src/interfaces/common/IBaseQueries.interface';
 import { FilterItem, FilterQuery } from './AFilterAction.abstracts';
 import { IFilter } from 'src/interfaces/common/IFilterAction.interface';
 import { SortOptions } from 'src/enums/ESort.enum';
+import { SortQuery } from './ASortAction.abstracts';
 
 export class AQueries<T = any> implements Partial<IQueries<T>> {
     @IsOptional()
@@ -48,14 +49,17 @@ export class AQueries<T = any> implements Partial<IQueries<T>> {
 
     @IsOptional()
     @ApiProperty({
-        enum: SortOptions,
-        title: 'Sắp xếp',
+        type: [SortQuery],
+        description: "Danh sách các trường cần sắp xếp",
         required: false,
-        example: SortOptions.DEFAULT,
-        description: 'Các tùy chọn sắp xếp có sẵn',
+        example: [
+            { field: "blog_name", order: "ASC" },
+            { field: "created_at", order: "DESC" }
+        ]
     })
-    @IsEnum(SortOptions, { message: 'Giá trị sort không hợp lệ' })
-    sort?: SortOptions;
+    // @ValidateNested({ each: true })
+    // @Type(() => SortQuery)
+    sort?: SortQuery;
 
     @IsOptional()
     @ApiProperty({

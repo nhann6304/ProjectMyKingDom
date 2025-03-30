@@ -83,10 +83,10 @@ export class ProductsService {
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter, sort } = query;
-        console.log(sort);
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
+        const objSort = UtilConvert.convertSortToObject(sort as any)
         const ALIAS_NAME = 'products';
-
+        console.log(objSort);
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .select(fields)
             .leftJoinAndSelect(['pc_category', 'prod_thumbnails']);
@@ -103,7 +103,7 @@ export class ProductsService {
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result
             .skip({ limit, page }) // ✅ Áp dụng phân trang ở đây
             .take({ limit })
-            .sort(sort)
+            .sort(objSort as any)
             .build();
 
         const items = await queryBuilder.getMany();

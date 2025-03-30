@@ -68,9 +68,12 @@ export class UtilORM<T> {
                 } else if (typeof value === 'object' && 'min' in value) {
                     // ✅ Xử lý trường hợp value là một khoảng duy nhất { min, max }
                     if (value.max === null) {
-                        this.queryBuilder.andWhere(`${this.aliasName}.${key} >= :${key}_min`, {
-                            [`${key}_min`]: value.min,
-                        });
+                        this.queryBuilder.andWhere(
+                            `${this.aliasName}.${key} >= :${key}_min`,
+                            {
+                                [`${key}_min`]: value.min,
+                            },
+                        );
                     } else {
                         this.queryBuilder.andWhere(
                             `${this.aliasName}.${key} BETWEEN :${key}_start AND :${key}_end`,
@@ -125,15 +128,35 @@ export class UtilORM<T> {
         return this;
     }
 
-    sort(sortOptions?: SortOptions): this {
-        if (!sortOptions) return this;
+    sort(sortOptions?: { field?: keyof T; order?: SortOptions }): this {
+        // Nếu không có sortOptions hoặc sortOptions là object rỗng thì return luôn
+        if (!sortOptions || !sortOptions.field || !sortOptions.order || sortOptions.order === SortOptions.DEFAULT) {
+            return this;
+        }
 
-        // const sortMap: Record<SortOptions, { field: keyof T; order: "ASC" | "DESC" }> = {
-        //     [SortOptions.NAME_ASC]: {field:""}
-        // }
+        // Ánh xạ SortOptions sang "ASC" | "DESC"
+        const orderMap: Partial<Record<SortOptions, 'ASC' | 'DESC'>> = {
+            [SortOptions.NAME_ASC]: 'ASC',
+            [SortOptions.NAME_DESC]: 'DESC',
+            [SortOptions.PRICE_ASC]: 'ASC',
+            [SortOptions.PRICE_DESC]: 'DESC',
+            [SortOptions.NEWEST]: 'DESC',
+            [SortOptions.BEST_SELLING]: 'DESC',
+            [SortOptions.PROMOTION]: 'DESC',
+        };
 
-        return this
+        // Kiểm tra nếu order hợp lệ thì lấy, nếu không thì mặc định "ASC"
+        const order = orderMap[sortOptions.order] || 'ASC';
+
+        // Sắp xếp theo field truyền vào
+        this.queryBuilder.orderBy(
+            `${this.aliasName}.${String(sortOptions.field)}`,
+            order,
+        );
+
+        return this;
     }
+
 
     skip({ page, limit }: { page: number; limit: number }): this {
         this.queryBuilder.skip(UtilCalculator.calculatorSkipPage({ limit, page }));
