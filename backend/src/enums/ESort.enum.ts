@@ -8,3 +8,4 @@ export enum SortOptions {
     PRICE_ASC = 'price_asc',
     PRICE_DESC = 'price_desc',
 }
+// discount

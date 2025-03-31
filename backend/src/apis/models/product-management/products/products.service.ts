@@ -84,10 +84,13 @@ export class ProductsService {
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter, sort } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
-        const objSort = UtilConvert.convertSortToObject(sort as any)
+        const objSort = UtilConvert.convertSortToObject(sort as any);
         const ALIAS_NAME = 'products';
         console.log(objSort);
-        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
+        const result = new UtilORM<ProductsEntity>(
+            this.productRepository,
+            ALIAS_NAME,
+        )
             .select(fields)
             .leftJoinAndSelect(['pc_category', 'prod_thumbnails']);
 
@@ -96,7 +99,8 @@ export class ProductsService {
         }
 
         // 1️⃣ Query đếm tổng số sản phẩm trước khi áp dụng skip/take
-        const queryBuilderCount: SelectQueryBuilder<ProductsEntity> = result.build();
+        const queryBuilderCount: SelectQueryBuilder<ProductsEntity> =
+            result.build();
         const totalItems = await queryBuilderCount.getCount(); // ✅ Không bị ảnh hưởng bởi phân trang
 
         // 2️⃣ Query lấy sản phẩm có phân trang
@@ -124,13 +128,13 @@ export class ProductsService {
         };
     }
 
-
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
-        const { isDeleted, fields, limit, page, filter } = query;
+        const { limit, page, filter, sort } = query;
         const ALIAS_NAME = 'products';
 
         // 1️⃣ Tìm danh mục theo slug
-        const categoryItem = await this.productCategoriesService.findCateBySlug(slug);
+        const categoryItem =
+            await this.productCategoriesService.findCateBySlug(slug);
         if (!categoryItem) return { items: [], totalItems: 0 };
 
         // 2️⃣ Lấy danh sách ID của danh mục cha + con
@@ -168,7 +172,9 @@ export class ProductsService {
                     }
                     if (
                         Array.isArray(value) &&
-                        value.every((v) => typeof v === 'object' && v !== null && 'min' in v)
+                        value.every(
+                            (v) => typeof v === 'object' && v !== null && 'min' in v,
+                        )
                     ) {
                         return value.some((range) =>
                             range.max === null
@@ -181,12 +187,43 @@ export class ProductsService {
                             ? product[key] >= value.min
                             : product[key] >= value.min && product[key] <= value.max;
                     }
-                    return Array.isArray(value) ? value.includes(product[key]) : product[key] == value;
+                    return Array.isArray(value)
+                        ? value.includes(product[key])
+                        : product[key] == value;
                 });
             });
         }
 
-        // 6️⃣ Chuẩn hóa dữ liệu trước khi trả về
+        // 6️⃣ Nếu có sort, thực hiện sắp xếp
+        if (sort) {
+            const objSort = UtilConvert.convertSortToObject(sort as any);
+
+            // Chuyển order về chữ hoa để đồng nhất
+            const sortOrder = objSort.order?.toUpperCase() === 'DESC' || objSort.order?.toUpperCase().includes('DESC') ? 'DESC' : 'ASC';
+            const sortField = objSort.field as keyof ProductsEntity;
+
+            productItems.sort((a, b) => {
+                let valueA = a[sortField];
+                let valueB = b[sortField];
+
+                // Chuyển đổi về số nếu có thể
+                if (!isNaN(Number(valueA)) && !isNaN(Number(valueB))) {
+                    valueA = Number(valueA);
+                    valueB = Number(valueB);
+                }
+
+                if (typeof valueA === 'string' && typeof valueB === 'string') {
+                    return sortOrder === 'ASC' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+                }
+                if (typeof valueA === 'number' && typeof valueB === 'number') {
+                    return sortOrder === 'ASC' ? valueA - valueB : valueB - valueA;
+                }
+                return 0;
+            });
+        }
+
+
+        // 7️⃣ Chuẩn hóa dữ liệu trước khi trả về
         const transformedItems = productItems.map((item) => ({
             ...item,
             prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
@@ -196,9 +233,13 @@ export class ProductsService {
             })),
         }));
 
+        console.log(transformedItems.map((val) => {
+            return val.discount
+        }));
+
         return {
             items: transformedItems,
-            totalItems, // ✅ Trả về tổng số sản phẩm thực tế (trước khi phân trang)
+            totalItems,
         };
     }
 
