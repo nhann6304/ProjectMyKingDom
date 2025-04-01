@@ -86,7 +86,7 @@ export class ProductsService {
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
         const objSort = UtilConvert.convertSortToObject(sort as any);
         const ALIAS_NAME = 'products';
-        console.log(objSort);
+        console.log("sort:::", sort);
         const result = new UtilORM<ProductsEntity>(
             this.productRepository,
             ALIAS_NAME,

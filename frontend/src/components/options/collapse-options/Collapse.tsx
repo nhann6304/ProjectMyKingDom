@@ -45,6 +45,7 @@ const CollapseContainer = styled.div`
         }
 
         .ant-collapse-content {
+          background: transparent;
           padding: 5px 0;
           &-box {
             padding: 0;
@@ -68,7 +69,7 @@ export default function CollapseOption({ categories }: IProps) {
   const [checkedValue, setCheckedValue] = useState<{ category: string; slug: string } | null>(null);
 
   useEffect(() => {
-    const pathParts = pathname.split("/").slice(2); // Bỏ "/products"
+    const pathParts = pathname.split("/").slice(2);
     if (pathParts.length === 2) {
       setCheckedValue({ category: pathParts[0], slug: pathParts[1] });
     } else {

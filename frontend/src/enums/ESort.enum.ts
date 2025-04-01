@@ -1,4 +1,4 @@
-export enum SortOptions {
+export enum ESortOptions {
     DEFAULT = 'default',
     PROMOTION = 'promotion',
     NEWEST = 'newest',

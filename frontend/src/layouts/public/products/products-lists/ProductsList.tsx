@@ -38,38 +38,14 @@ import {
     SortIcon,
 } from "@/assets/common/icon-public/svg/icon/iconItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import DropDownSort from "@/components/dropdown/DropDownSort";
+import { SORT_FIELD_MAP } from "@/constants/values.constant";
+import { ESortOptions } from "@/enums/ESort.enum";
 interface IProps {
     products: Awaited<ReturnType<typeof FindAllProduct>>;
     categories: Awaited<ReturnType<typeof findAllProductCate>>;
     keySearch: string[];
 }
-
-const items: MenuProps["items"] = [
-    {
-        key: "1",
-        label: "My Account",
-        disabled: true,
-    },
-    {
-        type: "divider",
-    },
-    {
-        key: "2",
-        label: "Profile",
-        extra: "⌘P",
-    },
-    {
-        key: "3",
-        label: "Billing",
-        extra: "⌘B",
-    },
-    {
-        key: "4",
-        label: "Settings",
-        icon: <FaChevronDown />,
-        extra: "⌘S",
-    },
-];
 
 export default function ProductLayout({
     products,
@@ -112,34 +88,47 @@ export default function ProductLayout({
     //
     useEffect(() => {
         startTransition(async () => {
-            // Cập nhật slug từ pathname
             const newSlug = pathname?.split("/").slice(2);
-            let nhan = pathname
-
             const formattedData: {
                 f: string;
                 v: string | { min: number; max: number };
             }[] = [];
+
+            let sortValue: string | null = searchParams.get("sort"); // Giá trị order (ví dụ: "PRICE_ASC")
+            let sortField: string | undefined =
+                SORT_FIELD_MAP[sortValue as ESortOptions]; // Field tương ứng
+
+            // Nếu không có sortField, gán giá trị mặc định
+            const sort: { field: string; order: string } | null =
+                sortField && sortValue ? { field: sortField, order: sortValue } : null;
+
             // Xử lý keySearch & searchParams
             keySearch.forEach((key) => {
-                const values = searchParams.get(key)?.split(",") || []; // Lấy danh sách giá trị, nếu có
+                const values = searchParams.get(key)?.split(",") || [];
 
-                values.forEach((value) => {
-                    if (key === "prod_price_official" && value.includes("-")) {
-                        // Nếu key là prod_Price_office và value chứa dấu "-", tách thành min-max
-                        const [min, max] = value.split("-").map(Number);
-                        formattedData.push({ f: key, v: { min, max } });
-                    } else {
-                        // Nếu không, giữ nguyên
-                        formattedData.push({ f: key, v: value });
-                    }
-                });
+                if (key !== "sort") {
+                    values.forEach((value) => {
+                        if (key === "prod_price_official" && value.includes("-")) {
+                            const [min, max] = value.split("-").map(Number);
+                            formattedData.push({ f: key, v: { min, max } });
+                        } else {
+                            formattedData.push({ f: key, v: value });
+                        }
+                    });
+                }
             });
 
+            // Gán vào queryParams
             queryParams.limit = querySizePage.limit;
             queryParams.page = querySizePage.page;
             queryParams.filter = JSON.stringify({ filter: formattedData });
 
+            // Nếu có sort, gán vào queryParams, nếu không bỏ qua
+            if (sort) {
+                queryParams.sort = JSON.stringify({ sort });
+            }
+            console.log("queryParams:::::", queryParams);
+            // Gọi API
             if (newSlug[0] === "all") {
                 const result = await FindAllProduct(queryParams);
                 setListProducts(result?.metadata?.items || []);
@@ -155,6 +144,7 @@ export default function ProductLayout({
             }
         });
     }, [pathname, searchParams, keySearch, querySizePage]);
+
     //
     const showDrawer = () => {
         setOpen(true);
@@ -170,12 +160,14 @@ export default function ProductLayout({
     ) => {
         setQuerySizePage({ limit: pageSize, page: current });
     };
-    //
+    //Sắp xếp
+    const handleClickSort: MenuProps["onClick"] = (e) => { };
+
     return (
         <div className="product-container container-pub">
             <div className="wrapper-container ">
                 <div className="box-control">
-                    {keySearch.length !== 0 && <ListFilterProd keySearch={keySearch} />}
+                    {keySearch.length !== 0 && !keySearch.includes("sort") && <ListFilterProd keySearch={keySearch} />}
                     <CollapseOption categories={categories?.metadata?.items || []} />
                     <OptionItems title={"Danh mục"} filterKey="prod_agePlay" />
                     <OptionItems title={"Giá (Đ)"} filterKey="prod_price_official" />
@@ -238,14 +230,8 @@ export default function ProductLayout({
                             </div>
 
                             <div className="view-right">
-                                <Dropdown className="custom-dropdown" menu={{ items }}>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                        <Space>
-                                            <span className="text-view-sort">Sắp xếp theo:</span>
-                                            <FaChevronDown />
-                                        </Space>
-                                    </a>
-                                </Dropdown>
+                                {/* Bộ lọc */}
+                                <DropDownSort />
                             </div>
                         </header>
                         {/* Hiển thị sản phảm */}

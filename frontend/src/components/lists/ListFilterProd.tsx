@@ -98,6 +98,7 @@ export default function ListFilterProd({ keySearch }: IProps) {
   //
   useEffect(() => {
     const newResult = keySearch.flatMap((key) => {
+      if (!keyMapping[key]) return [];
       const values = searchParams.get(key)?.split(",") || [];
       return values.map((val) => ({
         key: keyMapping[key] || key,

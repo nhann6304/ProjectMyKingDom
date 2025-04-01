@@ -295,9 +295,9 @@ export default function BottomNav({ categories }: IProps) {
                         <span>Khuyến mãi</span>
                     </div>
 
-                    <div className="option-child">
+                    {/* <div className="option-child">
                         <span>Chương trình thành viên</span>
-                    </div>
+                    </div> */}
 
                     <div className="option-child">
                         <span>Cẩn nang</span>
