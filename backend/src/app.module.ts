@@ -11,6 +11,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { CartsModule } from './apis/models/product-management/carts/carts.module';
 import { ProductCategoriesModule } from './apis/models/product-management/product-categories/product-categories.module';
 import { CartDetailsModule } from './apis/models/product-management/cart-details/cart-details.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
+import { CONST_CONF_VAL } from './constants/value.contants';
 
 @Module({
   imports: [
@@ -21,26 +24,41 @@ import { CartDetailsModule } from './apis/models/product-management/cart-details
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        configService.get<TypeOrmModuleOptions>("mysql"),
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),  // Đảm bảo đường dẫn đến thư mục uploads
-      serveRoot: '/uploads',  // Đường dẫn truy cập từ phía client
+        configService.get<TypeOrmModuleOptions>('mysql'),
     }),
 
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), // Đảm bảo đường dẫn đến thư mục uploads
+      serveRoot: '/uploads', // Đường dẫn truy cập từ phía client
+    }),
+
+    //Redis => 6379 chạy bằng docker
+    // CacheModule.registerAsync({
+    //   isGlobal: true, // Apply for microservice
+    //   imports: [ConfigModule],
+    //   useFactory: async (configService: ConfigService) => {
+    //     const store = await redisStore({
+    //       socket: configService.get(CONST_CONF_VAL.CACHE_CONF),
+    //     });
+    //     return {
+    //       store: store,
+    //       ttl: 30 * 24 * 60 * 60, // 30 ngày
+    //     };
+    //   },
+    //   inject: [ConfigService],
+    // }),
 
     //Auth
     UsersModule,
     AuthModule,
 
-    //Product    
+    //Product
     ProductCategoriesModule,
     ProductsModule,
     CartsModule,
     //
     ImagesModule,
-    CartDetailsModule
-
+    CartDetailsModule,
   ],
   controllers: [],
   providers: [],

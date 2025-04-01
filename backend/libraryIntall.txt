@@ -25,6 +25,10 @@ npm i --save-dev @types/multer
 npm i --save @nestjs/serve-static
 npm i sharp
 
+- Cache redis 
+ npm install cache-manager
+ npm install @nestjs/cache-manager 
+
 
 
 nest g resource products  --no-spec
