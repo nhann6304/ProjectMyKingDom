@@ -2,7 +2,11 @@ import { FilterQuery } from 'src/abstracts/common/AFilterAction.abstracts';
 import { SortOptions } from 'src/enums/ESort.enum';
 import { IQueries } from 'src/interfaces/common/IBaseQueries.interface';
 import { IFilter } from 'src/interfaces/common/IFilterAction.interface';
-
+import { TTime } from 'src/types/time.type';
+interface IConvertTime {
+    typeTime: TTime;
+    value: number;
+}
 export class UtilConvert {
     static convertStringToBoolean(val: string): boolean {
         const result = val === 'true';
@@ -81,5 +85,27 @@ export class UtilConvert {
         }
 
         return obj;
+    }
+
+
+    static convertTimeToMilisecond({ typeTime, value }: IConvertTime): number {
+        switch (typeTime) {
+            case 'MILLISECONDS':
+                return value;
+            case 'SECOND':
+                return value * 1000;
+            case 'MINUTE':
+                return value * 60 * 1000;
+            case 'HOUR':
+                return value * 60 * 60 * 1000;
+            case 'DAY':
+                return value * 24 * 60 * 60 * 1000;
+            case 'MONTH':
+                return value * 30 * 24 * 60 * 60 * 1000;
+            case 'YEAR':
+                return value * 365 * 24 * 60 * 60 * 1000;
+            default:
+                throw new Error('Invalid time type');
+        }
     }
 }

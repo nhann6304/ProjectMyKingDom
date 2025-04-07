@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
@@ -11,12 +11,16 @@ import { ProductCategoryEntity } from './product-category.entity';
 import { UtilConvert } from 'src/utils/convert.ultils';
 import { UtilCalculator } from 'src/utils/caculator.utils';
 import { UtilORM } from 'src/utils/orm.uutils';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { RedisStore } from 'cache-manager-redis-yet';
 
 @Injectable()
 export class ProductCategoriesService {
     constructor(
         @InjectRepository(ProductCategoryEntity)
         private productCategoriesRepository: Repository<ProductCategoryEntity>,
+        @Inject(CACHE_MANAGER) private readonly redisStore: RedisStore,
+
     ) { }
 
     async findOneByID(id: string) {
@@ -69,8 +73,21 @@ export class ProductCategoriesService {
     }
 
     async findAll(query: AQueries, req: Request) {
-        const { fields, limit, page, filter, isDeleted } = query;
+        const { fields, limit, page, filter, isDeleted, sort } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
+
+        const cacheKey = `categories:${page || 1}:${limit || 10}:${JSON.stringify({
+            fields,      // Thêm fields vào cacheKey
+            filter: objFilter,
+            isDeleted,   // Thêm isDeleted vào cacheKey
+        })}`;
+
+        const cachedData = await this.redisStore.get(cacheKey);
+
+        if (cachedData) {
+            console.log('Cache hit cate - Trả về dữ liệu từ Redis:');
+            return cachedData; // Trả về dữ liệu từ cache nếu có
+        }
 
         let arrFields: Array<string> = [
             'parent.id',
@@ -154,15 +171,23 @@ export class ProductCategoriesService {
                 }));
         };
 
-        const items = filterItemsWithChildren(filteredResult);
-
-        return {
-            items,
-            totalItems: items.length,
+        const response = {
+            items: filterItemsWithChildren(filteredResult),
+            totalItems: filteredResult.length
         };
+
+        await this.redisStore.set(
+            cacheKey,
+            response,
+            UtilConvert.convertTimeToMilisecond({
+                typeTime: 'HOUR',
+                value: 1,  // Lưu cache trong 1 ngày
+            }),
+        );
+        console.log('Cache hit cate - tạo dữ liệu lưu vào Redis:');
+
+        return response;
     }
-
-
 
     async update({
         req,

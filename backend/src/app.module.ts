@@ -32,21 +32,21 @@ import { CONST_CONF_VAL } from './constants/value.contants';
       serveRoot: '/uploads', // Đường dẫn truy cập từ phía client
     }),
 
-    //Redis => 6379 chạy bằng docker
-    // CacheModule.registerAsync({
-    //   isGlobal: true, // Apply for microservice
-    //   imports: [ConfigModule],
-    //   useFactory: async (configService: ConfigService) => {
-    //     const store = await redisStore({
-    //       socket: configService.get(CONST_CONF_VAL.CACHE_CONF),
-    //     });
-    //     return {
-    //       store: store,
-    //       ttl: 30 * 24 * 60 * 60, // 30 ngày
-    //     };
-    //   },
-    //   inject: [ConfigService],
-    // }),
+    //Redis
+    CacheModule.registerAsync({
+      isGlobal: true, // Apply for microservice
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const store = await redisStore({
+          socket: configService.get(CONST_CONF_VAL.CACHE_CONF),
+        });
+        return {
+          store: store,
+          ttl: 30 * 24 * 60 * 60,
+        };
+      },
+      inject: [ConfigService],
+    }),
 
     //Auth
     UsersModule,

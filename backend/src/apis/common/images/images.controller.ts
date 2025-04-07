@@ -39,6 +39,7 @@ export class ImagesController {
       },
     }),
   )
+
   @UseGuards(AuthGuard)
   async uploadImage(
     @UploadedFiles() files: Array<Express.Multer.File>,

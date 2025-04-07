@@ -1,12 +1,21 @@
 import {
-    BadGatewayException,
     BadRequestException,
     Inject,
-    Injectable,
+    Injectable
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request, Response } from 'express';
 import { UserEntity } from 'src/apis/models/users/user.entity';
+import { UsersService } from 'src/apis/models/users/users.service';
+import { templateEmailRegister } from 'src/constants/templates/registerEmail.contants';
+import { templateSenOtp } from 'src/constants/templates/sendOtp.contants';
+import { PasswordHelper } from 'src/helper/hashPassWord.helper';
+import { SendEmailHelper } from 'src/helper/sendEmail.helper';
+import { IUser } from 'src/interfaces/common/IUser.interface';
+import { calcNumberOtp } from 'src/utils/otp.utils';
 import { Repository } from 'typeorm';
+import { OtpService } from '../otp/otp.service';
+import { TokenService } from '../token/token.service';
 import {
     LoginDto,
     OtpCodeDto,
@@ -14,20 +23,6 @@ import {
     resetPasswordDto,
     resetPasswordSendMailDto,
 } from './auth.dto';
-import { UsersService } from 'src/apis/models/users/users.service';
-import { emailConfig } from 'src/config/email.config';
-import * as nodemailer from 'nodemailer';
-import { templateEmailRegister } from 'src/constants/templates/registerEmail.contants';
-import { SendEmailHelper } from 'src/helper/sendEmail.helper';
-import { PasswordHelper } from 'src/helper/hashPassWord.helper';
-import { TokenService } from '../token/token.service';
-import { Request, Response } from 'express';
-import { IUser } from 'src/interfaces/common/IUser.interface';
-import { CONST_VAL } from 'src/constants/value.contants';
-import { CookieHelper } from 'src/helper/cookie.helper';
-import { calcNumberOtp } from 'src/utils/otp.utils';
-import { OtpService } from '../otp/otp.service';
-import { templateSenOtp } from 'src/constants/templates/sendOtp.contants';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RedisStore } from 'cache-manager-redis-yet';
 
@@ -39,7 +34,7 @@ export class AuthService {
         private userService: UsersService,
         private tokenService: TokenService,
         private otpService: OtpService,
-        // @Inject(CACHE_MANAGER) private readonly redisStore: RedisStore,
+        @Inject(CACHE_MANAGER) private readonly redisStore: RedisStore,
     ) { }
     async register(dataUser: RegisterDto) {
         const isEmail = await this.userService.findIsEmailExits(
