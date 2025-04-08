@@ -71,3 +71,17 @@ export class resetPasswordDto implements Pick<IUser, "user_password"> {
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Xác nhận mật khẩu mới") })
     confirm_password: string
 }
+// Phần Guest
+
+export class createGuestDto implements Partial<IUser> {
+
+    user_first_name?: string;
+
+    user_last_name?: string;
+
+    @ApiProperty({ default: "huynhthanhnhan632004@gmail.com" })
+    @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY("Email") })
+    user_guest_id?: string;
+}
+
+

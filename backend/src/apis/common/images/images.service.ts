@@ -14,28 +14,23 @@ export class ImagesService {
     private readonly imagesRepositories: Repository<ImageEntity>,
   ) { }
 
-
-
-
   async findById({ id }: { id: string }) {
     const data = await this.imagesRepositories.findOne({
       where: { id },
       // relations: {
       //   pc_category: true
       // }
-    })
-    return data
+    });
+    return data;
   }
-
 
   async create({
     req,
-    payload
+    payload,
   }: {
-    req: Request,
+    req: Request;
     payload: Express.Multer.File[];
   }) {
-
     const me = req['user'];
     const uploadPromise = payload.map(async (file) => {
       const imageMetadata = await sharp(file.buffer).metadata();
@@ -49,7 +44,7 @@ export class ImagesService {
         'uploads',
       );
 
-      const HOST_SERVER = "http://localhost:9000/uploads";
+      const HOST_SERVER = 'http://localhost:9000/uploads';
 
       const filePath = path.join(uploadsPath, file.originalname);
 
@@ -61,84 +56,78 @@ export class ImagesService {
 
       // Lưu database
       const createData = await this.imagesRepositories.create({
-        img_key: "",
+        img_key: '',
         img_path: filePath,
-        img_format: file.mimetype.split("/")[0],
+        img_format: file.mimetype.split('/')[0],
         img_size: file.size,
         img_heigh: height,
         img_width: width,
         img_url: `${HOST_SERVER}/${file.originalname}`,
-        img_alt: file.originalname.split(".")[0],
-        createdBy: me
-      })
+        img_alt: file.originalname.split('.')[0],
+        createdBy: me,
+      });
 
       return this.imagesRepositories.save(createData);
     });
 
     const imageUpload = await Promise.all(uploadPromise);
-    return imageUpload
+    return imageUpload;
   }
 
-
-  async sortDeleted({ id, req }: { req: Request, id: string }) {
-    const me = req['user']
+  async sortDeleted({ id, req }: { req: Request; id: string }) {
+    const me = req['user'];
 
     const findImage = await this.findById({ id });
 
     if (!findImage) {
-      throw new BadRequestException("Hình ảnh không tồn tại");
+      throw new BadRequestException('Hình ảnh không tồn tại');
     }
 
     if (findImage.isDeleted) {
-      throw new BadRequestException("Hình ảnh đã được xóa");
-
+      throw new BadRequestException('Hình ảnh đã được xóa');
     }
 
     await this.imagesRepositories.update(id, {
       isDeleted: true,
       deletedBy: me,
-      deletedAt: new Date()
-    })
+      deletedAt: new Date(),
+    });
 
-    return true
+    return true;
   }
 
   async restoreDelete({ id }: { id: string }) {
-
     const findImage = await this.findById({ id });
 
     if (!findImage) {
-      throw new BadRequestException("Hình ảnh không tồn tại");
+      throw new BadRequestException('Hình ảnh không tồn tại');
     }
 
     if (!findImage.isDeleted) {
-      throw new BadRequestException("Hình ảnh đã được khôi phục");
+      throw new BadRequestException('Hình ảnh đã được khôi phục');
     }
 
     await this.imagesRepositories.update(id, {
       isDeleted: false,
-      deletedAt: null
-    })
+      deletedAt: null,
+    });
 
-    return true
+    return true;
   }
 
   async deleteProduct(id: string): Promise<boolean> {
-
-    const findImage = await this.imagesRepositories.findOne({ where: { id }, });
-
+    const findImage = await this.imagesRepositories.findOne({ where: { id } });
 
     if (!findImage) {
-      throw new BadRequestException("Hình ảnh không tồn tại");
+      throw new BadRequestException('Hình ảnh không tồn tại');
     }
 
     if (findImage.isDeleted === false) {
-      throw new BadRequestException("Hình ảnh không nằm trong thùng rác");
+      throw new BadRequestException('Hình ảnh không nằm trong thùng rác');
     }
 
     await this.imagesRepositories.delete(id);
 
-    return true
+    return true;
   }
-
 }

@@ -1,9 +1,10 @@
 import { ABaseAction } from "src/abstracts/common/ABaseAction.abstracts";
 import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
+import { CompanyEntity } from "src/apis/models/companys/company.entity";
 import { ProductsEntity } from "src/apis/models/product-management/products/product.entity";
 import { UserEntity } from "src/apis/models/users/user.entity";
 import { IImage } from "src/interfaces/common/images.interface";
-import { Column, Entity, ManyToMany } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 
 @Entity("images")
 export class ImageEntity extends ABaseModel implements IImage {
@@ -33,6 +34,9 @@ export class ImageEntity extends ABaseModel implements IImage {
 
     @ManyToMany(() => ProductsEntity, (product) => product.prod_thumbnails)
     products: ProductsEntity[];
+
+    @OneToMany(() => CompanyEntity, (company) => company.company_thumb)
+    companies: CompanyEntity[];
 }
 
 

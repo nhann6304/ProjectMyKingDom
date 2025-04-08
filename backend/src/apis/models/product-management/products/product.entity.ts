@@ -19,6 +19,7 @@ import { CartEntity } from '../carts/cart.entity';
 import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { EGender } from 'src/enums/EGender.enum';
 import { ImageEntity } from 'src/apis/common/images/image.entity';
+import { CompanyEntity } from '../../companys/company.entity';
 
 @Entity('products')
 export class ProductsEntity extends ABaseModel implements IProduct {
@@ -28,8 +29,9 @@ export class ProductsEntity extends ABaseModel implements IProduct {
     @Column('varchar', { length: 255, nullable: true })
     prod_thumb: string;
 
-    @Column('varchar', { length: 50 }) // Công ty vd TOY MONSTER
-    prod_company: string;
+    @ManyToOne(() => CompanyEntity, { nullable: false, eager: true })
+    @JoinColumn({ name: 'prod_company' })
+    prod_company: CompanyEntity;
 
     @Column('varchar', { length: 50, unique: true })
     prod_sku: string; // Mã hàng hóa SKU T01160

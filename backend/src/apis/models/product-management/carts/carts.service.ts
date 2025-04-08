@@ -54,7 +54,7 @@ export class CartsService {
       existingProduct.quantity += quantity;
       existingProduct.total_price =
         existingProduct.quantity * findProduct.prod_price_official;
-      await this.cartDetailsRepository.save(existingProduct);
+      await this.cartDetailsRepository.save(existingProduct as any);
     } else {
       const newDetailProduct = this.cartDetailsRepository.create({
         cart_detail: cart,

@@ -43,4 +43,11 @@ export class UserEntity extends ABaseModel implements IUser {
 
     @Column({ nullable: true })
     user_avatar?: string;
+
+    @Column({ type: "boolean", default: false })
+    user_isGuest?: boolean;
+
+    @Column({ type: 'uuid', nullable: true })
+    user_guest_id: string;    // Guest ID lấy từ `id` nếu là guest user
+
 }

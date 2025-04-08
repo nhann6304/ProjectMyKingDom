@@ -1,12 +1,6 @@
 npm i @nestjs/config
 npm i helmet 
 
-
-
-
-
-
-
 npm i compression
 npm i --save-dev @types/compression
 
@@ -29,16 +23,13 @@ npm i sharp
  npm install cache-manager
  npm install @nestjs/cache-manager 
 
+-- Socket io
+npm install @nestjs/websockets 
+nom install @nestjs/platform-socket.io
 
 
 nest g resource products  --no-spec
 nest g guard otp
-
-
-
-
-
-
 
 
  const obj = {
@@ -57,14 +48,6 @@ const filterJSON = JSON.stringify(filterArray);
 console.log(filterJSON);
 
 
-
-
-
-
-
-
-
-
  {
     "f": "prod_price",
     "v": {
@@ -72,3 +55,30 @@ console.log(filterJSON);
       "max": 30
     }
   },
+
+
+
+
+
+
+// mẫu tạo product
+  {
+  "prod_name": "Mô hình con gà an đờ ri bớt",
+  "prod_thumb": "http://localhost:9000/uploads/ANGRY-company.png",
+  "image_ids": [
+    "a2954521-857c-4036-853e-20d689dea028"
+  ],
+  "company_id": "247a57e7-eda1-4f4a-8088-bc78b99a1bdf",
+  "prod_sku": "7777",
+  "prod_price": 290,
+  "prod_description": "Mô tả cho con gà an đờ ri bớt",
+  "prod_nation": "Trung Quốc",
+  "prod_agePlay": "UnderOneYear",
+  "prod_gender": [
+    "male",
+    "female"
+  ],
+  "discount": 1,
+  "productCate_Id": "b69e5a29-1f86-4d18-8792-81e221df225c",
+  "prod_quantity": 12
+}

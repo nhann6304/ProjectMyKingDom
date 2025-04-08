@@ -1,13 +1,14 @@
 import { EAgeGroup } from 'src/enums/EAge.enum';
 import { EGender } from 'src/enums/EGender.enum';
 import { IImage } from '../common/images.interface';
+import { ICompany } from './company.interface';
 
 export interface IProduct {
     id?: string;
     prod_name: string;
     prod_thumb: string;
     prod_thumbnails?: IImage[]
-    prod_company: string; // Thương hiệu
+    prod_company: string | ICompany; // Thương hiệu
     prod_sku: string; // Mã hàng hóa
     prod_slug: string;
     prod_price: number;

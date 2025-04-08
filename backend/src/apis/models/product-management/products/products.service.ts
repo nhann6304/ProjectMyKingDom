@@ -18,6 +18,7 @@ import { ImageEntity } from 'src/apis/common/images/image.entity';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RedisStore } from 'cache-manager-redis-yet';
 import { TTime } from 'src/types/time.type';
+import { CompanyEntity } from '../../companys/company.entity';
 
 @Injectable()
 export class ProductsService {
@@ -26,6 +27,8 @@ export class ProductsService {
         private productRepository: Repository<ProductsEntity>,
         @InjectRepository(ImageEntity)
         private imagesRepository: Repository<ImageEntity>,
+        @InjectRepository(CompanyEntity)
+        private companyRepository: Repository<CompanyEntity>,
         private productCategoriesService: ProductCategoriesService,
         private cardsService: CartsService,
         @Inject(CACHE_MANAGER) private readonly redisStore: RedisStore,
@@ -50,17 +53,25 @@ export class ProductsService {
     }) {
         const me = req['user'];
         let finalPrice = 0;
-
+        console.log(productData.company_id);
         const findProductCate = await this.productCategoriesService.findOneByID(
             productData.productCate_Id,
         );
 
-        const findImage = await this.imagesRepository.findBy({
-            id: In(productData.image_ids), //In là tra nhiều id
+        const findImages = await this.imagesRepository.findBy({
+            id: In(productData.image_ids),
+        });
+
+        const findCompany = await this.companyRepository.findOne({
+            where: { id: productData.company_id },
         });
 
         if (!findProductCate) {
             throw new BadRequestException('Danh mục sản phẩm không tồn tại');
+        }
+
+        if (!findCompany) {
+            throw new BadRequestException('Công ty không tồn tại');
         }
 
         if (productData.discount != null && productData.discount >= 0) {
@@ -75,15 +86,17 @@ export class ProductsService {
         const newProduct = this.productRepository.create({
             createdBy: me,
             pc_category: findProductCate,
-            ...productData,
+            prod_company: findCompany, // ✅ Set khóa ngoại đúng kiểu entity
             prod_price_official: finalPrice,
-            prod_thumbnails: findImage,
+            prod_thumbnails: findImages,
+            ...productData,
         });
 
         const result = await this.productRepository.save(newProduct);
 
         return result;
     }
+
 
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter, sort } = query;

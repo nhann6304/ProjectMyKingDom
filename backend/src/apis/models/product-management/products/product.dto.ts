@@ -1,12 +1,9 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { EAgeGroup } from 'src/enums/EAge.enum';
-import { ProductsEntity } from './product.entity';
-import { ProductCategoryEntity } from '../product-categories/product-category.entity';
-import { IProduct } from 'src/interfaces/models/product.interface';
-import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { CONST_ERROR } from 'src/constants';
+import { EAgeGroup } from 'src/enums/EAge.enum';
 import { EGender } from 'src/enums/EGender.enum';
-import { ImageEntity } from 'src/apis/common/images/image.entity';
+import { ProductsEntity } from './product.entity';
 
 export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({
@@ -24,9 +21,9 @@ export class CreateProductDto extends PartialType(ProductsEntity) {
     @ApiProperty({ type: 'array', items: { type: 'string' } }) // Nếu ID là string
     image_ids?: string[]; // Nếu ID là số, đổi thành `number[]`
 
-    @ApiProperty({ example: 'spiderman', required: true })
+    @ApiProperty({ example: '54ccfb6d-a2f5-404f-a59b-d8a780143a8d' })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Thương hiệu') })
-    prod_company: string;
+    company_id: string; // <-- sửa từ prod_company thành company_id
 
     @ApiProperty({ example: 'sku e7333', required: true })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Mã hàng hóa') })

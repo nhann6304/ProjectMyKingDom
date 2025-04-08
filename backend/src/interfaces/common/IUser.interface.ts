@@ -14,6 +14,8 @@ export interface IUser {
     user_avatar?: string;      // Ảnh đại diện của người dùng
     user_status: EStatusUser;  // Trạng thái người dùng
     user_address?: IAddress[]; // Địa chỉ của người dùng
+    user_isGuest?: boolean;
+    user_guest_id?: string;
 }
 
 

@@ -17,14 +17,17 @@ import { CartDetailsModule } from '../cart-details/cart-details.module';
 import { CartDetailsEntity } from '../cart-details/cart-details.entity';
 import { ImageEntity } from 'src/apis/common/images/image.entity';
 import { ImagesModule } from 'src/apis/common/images/images.module';
+import { CompanyEntity } from '../../companys/company.entity';
+import { CompanyModule } from '../../companys/companys.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ProductsEntity, ProductCategoryEntity, CartEntity, CartDetailsEntity, ImageEntity]),
+    TypeOrmModule.forFeature([ProductsEntity, ProductCategoryEntity, CartEntity, CartDetailsEntity, ImageEntity, CompanyEntity]),
     UsersModule,
     ImagesModule,
     TokenModule,
     CartsModule,
+    CompanyModule,
     CartDetailsModule,
     ProductCategoriesModule
   ],

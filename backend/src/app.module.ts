@@ -14,6 +14,7 @@ import { CartDetailsModule } from './apis/models/product-management/cart-details
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { CONST_CONF_VAL } from './constants/value.contants';
+import { CompanyModule } from './apis/models/companys/companys.module';
 
 @Module({
   imports: [
@@ -52,10 +53,11 @@ import { CONST_CONF_VAL } from './constants/value.contants';
     UsersModule,
     AuthModule,
 
-    //Product
+    //Module
     ProductCategoriesModule,
     ProductsModule,
     CartsModule,
+    CompanyModule,
     //
     ImagesModule,
     CartDetailsModule,
