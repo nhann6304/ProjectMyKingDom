@@ -86,7 +86,7 @@ export class ProductsService {
         const newProduct = this.productRepository.create({
             createdBy: me,
             pc_category: findProductCate,
-            prod_company: findCompany, // ✅ Set khóa ngoại đúng kiểu entity
+            prod_company: findCompany,
             prod_price_official: finalPrice,
             prod_thumbnails: findImages,
             ...productData,
@@ -135,7 +135,7 @@ export class ProductsService {
 
         // 5️⃣ Query lấy sản phẩm có phân trang
         const queryBuilder: SelectQueryBuilder<ProductsEntity> = result
-            .skip({ limit, page }) // Áp dụng phân trang
+            .skip({ limit, page })
             .take({ limit })
             .sort(objSort as any)
             .build();
