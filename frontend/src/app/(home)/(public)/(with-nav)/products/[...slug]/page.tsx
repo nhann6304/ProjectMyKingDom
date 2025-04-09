@@ -3,8 +3,8 @@ import {
     FindAllProduct
 } from "@/apis/product-management/products.apis";
 import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import ProductLayout from "@/layouts/public/products/products-lists/ProductsList";
 export default async function ProductPage({
     searchParams,

@@ -1,6 +1,6 @@
 import { FindAllProduct } from "@/apis/product-management/products.apis";
 import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import ProductDetailsLayout from "@/layouts/public/products/product-details/ProductDetails";
 
 export default async function ProductDetails({

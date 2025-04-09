@@ -5,7 +5,7 @@ import styled from "styled-components";
 import hinhanh from "@/assets/common/icon-public/jpg/product.test.webp";
 import InputQuantityCircle from "../inputs/input-quantity-circle";
 import { useEffect, useState } from "react";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import { convertPriceToString } from "@/utils";
 import useDebounce from "@/hooks/useDebounce";
 

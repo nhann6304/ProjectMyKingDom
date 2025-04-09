@@ -1,7 +1,3 @@
-import { IImage } from "../common/images.interface";
+import { KdInterfaceModule } from 'library-mykingdom';
 
-export interface ICompany {
-    company_name: string,
-    company_thumb: IImage,
-
-}
+export interface ICompany extends KdInterfaceModule.ICompany { }

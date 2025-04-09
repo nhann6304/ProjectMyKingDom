@@ -18,7 +18,7 @@ import ButtonCommon from "@/components/buttons/ButtonCommon";
 import CartProductCard from "@/components/cards/CartProductCard";
 import DropdownNav from "@/components/dropdown/DropdownNav";
 import InputSearch from "@/components/inputs/input-search";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
 import { useCartStore } from "@/stores/carts/carts.store";
 import { useUserCurrent } from "@/stores/userCurrent/userCurrent";
 import { convertPriceToString } from "@/utils";

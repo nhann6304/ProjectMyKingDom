@@ -1,8 +1,7 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CartDetailsEntity } from "./cart-details.entity";
-import { ProductsEntity } from "../products/product.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsOptional } from "class-validator";
+import { CartDetailsEntity } from "./cart-details.entity";
+
 
 export class UpdateCartDetailDto implements Partial<CartDetailsEntity> {
 

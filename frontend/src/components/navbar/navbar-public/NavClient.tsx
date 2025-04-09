@@ -1,5 +1,5 @@
 import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
 import BottomNav from "./bottom-nav/BottomNav";
 import TopNavPublic from "./top-nav/TopNav";
 import NavbarApi from "./NavbarApi";

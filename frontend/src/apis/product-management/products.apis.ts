@@ -8,7 +8,7 @@ import {
     IGetManyItem,
     IQueries,
 } from "@/interfaces/common/IBaseResponse.interface";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import { convertOjbToString } from "@/utils";
 
 const TAG_NAME = {

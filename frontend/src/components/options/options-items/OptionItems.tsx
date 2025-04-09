@@ -9,7 +9,7 @@ import {
     CONST_GENDER_VALUES,
     CONST_PRICE_VALUES,
 } from "@/constants/values.constant";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 
 interface IProps {
     title: string;

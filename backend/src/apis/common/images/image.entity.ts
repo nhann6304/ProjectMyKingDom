@@ -3,7 +3,7 @@ import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
 import { CompanyEntity } from "src/apis/models/companys/company.entity";
 import { ProductsEntity } from "src/apis/models/product-management/products/product.entity";
 import { UserEntity } from "src/apis/models/users/user.entity";
-import { IImage } from "src/interfaces/common/images.interface";
+import { IImage } from "src/interfaces/common/IImages.interface";
 import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 
 @Entity("images")

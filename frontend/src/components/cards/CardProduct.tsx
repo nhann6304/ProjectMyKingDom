@@ -11,7 +11,7 @@ import Image from "next/image";
 import ButtonCommon from "../buttons/ButtonCommon";
 import ButtonForm from "../buttons/ButtonForm";
 import { HearNotBg } from "@/assets/common/icon-public/svg/icon/iconItem";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import { convertDiscount, convertPriceToString } from "@/utils";
 import { FaPercent } from "react-icons/fa";
 import Link from "next/link";
@@ -336,11 +336,11 @@ export default function CardProduct({ product }: IProps) {
 
         <div className="box-product-info">
           <div className="info-product-top">
-            <span className="info-category">{product?.prod_company}</span>
+            {/* <span className="info-category">{product?.prod_company}</span> */}
             <span className="info-sku">SKU:{product?.prod_sku}</span>
           </div>
 
-          <span className="info-product-name">[{product?.prod_name}]</span>
+          <span className="info-product-name">{product?.prod_name}</span>
 
           <div className="info-product-pay">
             <span className="payable">

@@ -1,8 +1,8 @@
-import { BadGatewayException, BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { UserEntity } from './user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { resetPasswordDto } from 'src/apis/common/auth/auth.dto';
+import { Injectable, BadRequestException } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
+import { UserEntity } from "./user.entity"
+
 
 @Injectable()
 export class UsersService {

@@ -8,7 +8,7 @@ import {
     IBaseResponse,
     IGetManyItem,
 } from "@/interfaces/common/IBaseResponse.interface";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
 import { convertOjbToString } from "@/utils";
 
 const TAG_NAME = {

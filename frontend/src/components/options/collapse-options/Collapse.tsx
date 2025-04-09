@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { usePathname } from "next/navigation";
 import { useCollapseStore } from "@/stores/collapse/collapse.store";
-import { IProductCategory } from "@/interfaces/models/product-categories.interface";
+import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
 
 interface ICategory extends IProductCategory {
   children?: IProductCategory[]

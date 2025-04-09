@@ -25,7 +25,7 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useState, useTransition } from "react";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import Loading from "@/components/loading/Loading";
 import OptionItems from "@/components/options/options-items/OptionItems";
 import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
@@ -265,7 +265,7 @@ export default function ProductLayout({
                                     onChange={(page) => {
                                         setQuerySizePage((prev) => ({ ...prev, page }));
                                         if (typeof window !== "undefined") {
-                                            window.scrollTo({ top: 0, behavior: "smooth" }); // ✅ Gọi đúng cách
+                                            window.scrollTo({ top: 0, behavior: "smooth" });
                                         }
                                     }}
                                     prevIcon={<ArrowRight />}

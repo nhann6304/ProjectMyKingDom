@@ -1,0 +1,6 @@
+export * from "./IBaseAction.interface"
+export * from "./IBaseModel.interface"
+export * from "./IBaseQueries.interface"
+export * from "./IFilterAction.interface"
+export * from "./IUser.interface"
+export * from "./IImages.interface"

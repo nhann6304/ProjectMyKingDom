@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { TrashIcon } from "@/assets/common/icon-public/svg/icon/iconItem";
 import InputQuantityCircle from "../inputs/input-quantity-circle";
 import { useState, useEffect, useRef } from "react";
-import { IProduct } from "@/interfaces/models/products.interface";
+import { IProduct } from "@/interfaces/models/IProducts.interface";
 import { convertPriceToString } from "@/utils";
 import useDebounce from "@/hooks/useDebounce";
 

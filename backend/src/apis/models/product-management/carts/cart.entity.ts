@@ -1,8 +1,9 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
+import { ICart, ICartDetail } from "src/interfaces/models";
+import { Entity, OneToMany, OneToOne, JoinColumn, Column } from "typeorm";
 import { UserEntity } from "../../users/user.entity";
 import { CartDetailsEntity } from "../cart-details/cart-details.entity";
-import { ICart, ICartDetail } from "src/interfaces/models/cart.interface";
-import { ABaseModel } from "src/abstracts/common/ABaseModel.abstracts";
+
 
 @Entity("carts")
 export class CartEntity extends ABaseModel implements ICart {

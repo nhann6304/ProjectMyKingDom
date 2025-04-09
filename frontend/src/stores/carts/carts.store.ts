@@ -5,7 +5,7 @@ import {
     UpdateCart,
 } from "@/apis/product-management/carts.apis";
 import { ICartItemChange } from "@/interfaces/common/ICart.interface";
-import { ICart } from "@/interfaces/models/carts.interface";
+import { ICart } from "@/interfaces/models/ICarts.interface";
 import { create } from "zustand";
 
 interface CartState {

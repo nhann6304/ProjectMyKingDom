@@ -7,7 +7,7 @@ import {
     IGetManyItem,
 } from "@/interfaces/common/IBaseResponse.interface";
 import { ICartItemChange } from "@/interfaces/common/ICart.interface";
-import { ICart, ICartDetail } from "@/interfaces/models/carts.interface";
+import { ICart, ICartDetail } from "@/interfaces/models/ICarts.interface";
 
 const TAG_NAME = {
     CART: "CART",
