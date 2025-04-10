@@ -16,7 +16,6 @@ export class ProductCategoryEntity extends ABaseModel implements IProductCategor
     @Column('varchar', { length: 255, unique: true })
     pc_slug: string;
 
-
     @ManyToOne(() => ProductCategoryEntity, (category) => category.children, { nullable: true, onDelete: "CASCADE" })
     @JoinColumn({ name: "parentId" })
     parent: ProductCategoryEntity;

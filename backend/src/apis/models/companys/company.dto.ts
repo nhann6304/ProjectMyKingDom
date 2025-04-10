@@ -15,5 +15,5 @@ export class CreateCompanyDto {
         description: 'ID của hình ảnh thumbnail đã được upload',
     })
     @IsNotEmpty({ message: CONST_ERROR.FIELD_NOT_EMPTY('Ảnh thumbnail') })
-    company_thumb_id: string; // hoặc number tùy kiểu ID
+    company_thumb_id: string;
 }
