@@ -336,7 +336,7 @@ export default function CardProduct({ product }: IProps) {
 
         <div className="box-product-info">
           <div className="info-product-top">
-            {/* <span className="info-category">{product?.prod_company}</span> */}
+            <span className="info-category">{product?.prod_company?.company_name}</span>
             <span className="info-sku">SKU:{product?.prod_sku}</span>
           </div>
 

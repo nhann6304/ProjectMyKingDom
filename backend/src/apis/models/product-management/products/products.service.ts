@@ -123,7 +123,7 @@ export class ProductsService {
         // 3️⃣ Nếu không có trong cache, tiếp tục lấy dữ liệu từ cơ sở dữ liệu
         const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
             .select(fields)
-            .leftJoinAndSelect(['pc_category', 'prod_thumbnails']);
+            .leftJoinAndSelect(['pc_category', 'prod_thumbnails', "prod_company"]);
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
@@ -160,7 +160,7 @@ export class ProductsService {
             response,
             UtilConvert.convertTimeToMilisecond({
                 typeTime: 'HOUR',
-                value: 1,  // Lưu cache trong 1 ngày
+                value: 1,  // Lưu cache trong 1 giờ
             }),
         );
 

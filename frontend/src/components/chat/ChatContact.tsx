@@ -154,7 +154,7 @@ const ChatClientContainer = styled.div`
 
 export default function ChatContact() {
   const [value, setValue] = useState("");
-  const [openChat, setOpenChat] = useState<boolean>(false);
+  const [openChat, setOpenChat] = useState<boolean>(true);
 
   return (
     <ChatClientContainer className={`${openChat ? "w-[20rem]" : "w-[30rem]"}`}>

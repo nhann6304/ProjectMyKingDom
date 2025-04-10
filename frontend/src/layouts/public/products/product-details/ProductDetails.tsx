@@ -60,9 +60,11 @@ export default function ProductDetailsLayout({ product }: IProps) {
     //
     const handleAddProductToCart = () => {
         const payload: ICartItemChange = {
-            product_id: productItem?.id,
+            product_id: productItem?.id!,
             quantity: quantity
         }
+
+        console.log(payload);
 
         startTransition(async () => {
             const result = await addProductToCart(payload);
@@ -115,7 +117,7 @@ export default function ProductDetailsLayout({ product }: IProps) {
                         <div className="box-prod-origin">
                             <div className="trademark">
                                 <span className="trademark-title">Thương hiệu</span>
-                                <h4 className="trademark-name">{productItem?.prod_company}</h4>
+                                <h4 className="trademark-name">{productItem?.prod_company?.company_name}</h4>
                             </div>
                             <div className="sku">
                                 {/* <span className="sku-number">SKU 42155</span> */}
