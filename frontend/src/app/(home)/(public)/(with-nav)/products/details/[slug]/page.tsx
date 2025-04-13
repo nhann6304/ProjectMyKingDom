@@ -1,4 +1,4 @@
-import { FindAllProduct } from "@/apis/product-management/products.apis";
+import { FindAllProduct } from "@/apis/modules/product-management/products.apis";
 import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
 import { IProduct } from "@/interfaces/models/IProducts.interface";
 import ProductDetailsLayout from "@/layouts/public/products/product-details/ProductDetails";
@@ -9,7 +9,7 @@ export default async function ProductDetails({
 }: IPageProps) {
 
     if (params.slug === "undefined") {
-        console.log("Qua 404 tramg không tồn tại");
+        console.log("Qua 404 trang không tồn tại");
         return
     }
 

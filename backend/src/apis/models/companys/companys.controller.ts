@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Get,
+    Param,
     Post,
     Query,
     Req,
@@ -16,10 +17,9 @@ import { OK } from 'src/core/response.core';
 import { RES_MESS } from 'src/constants/constantMessRes.contant';
 import { AQueries } from 'src/abstracts/common/ABaseQueries.abstracts';
 
-@Controller('company')
+@Controller('companies')
 export class CompanyController {
     constructor(private readonly companyService: CompanyService) { }
-
     @Post('create')
     @ApiOperation({ summary: 'Thêm công ty' })
     @ApiBody({
@@ -43,6 +43,17 @@ export class CompanyController {
     @UseGuards(AuthGuard)
     async getAllCompany(@Query() query: AQueries) {
         const items = await this.companyService.getAllCompany(query);
+        return new OK({
+            message: RES_MESS.FIND_ALL('Công ty'),
+            metadata: items,
+        });
+    }
+
+    @Get('find-name-tag/:tag')
+    @ApiOperation({ summary: 'Lấy công ty theo tag' })
+    @UseGuards(AuthGuard)
+    async getTagNameCompany(@Param('tag') tag: string) {
+        const items = await this.companyService.getTagNameCompany(tag);
         return new OK({
             message: RES_MESS.FIND_ALL('Công ty'),
             metadata: items,

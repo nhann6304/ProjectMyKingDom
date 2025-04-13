@@ -5,6 +5,9 @@ import { useState } from "react";
 
 interface IProps {
   title: string;
+  disabled?: boolean;
+  isActive?: boolean;
+  onClick?: (tag: string) => void;
 }
 
 // Styled button
@@ -13,7 +16,7 @@ const ButtonContainer = styled.button<{ $active: boolean }>`
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-  width: auto; // 👈 tự động theo content
+  width: auto;
   font-weight: 700;
   text-transform: capitalize;
   ${(props) =>
@@ -27,15 +30,26 @@ const ButtonContainer = styled.button<{ $active: boolean }>`
           background-color: #f2f2f2;
           color: var(--color-background-global);
           border: 2px solid #f2f2f2;
-
         `}
 `;
 
-export default function ButtonName({ title }: IProps) {
-  const [active, setActive] = useState(false);
+export default function ButtonName({
+  title,
+  isActive = false,
+  disabled = false,
+  onClick,
+}: IProps) {
+
+  const handleClick = () => {
+    onClick?.(title);
+  };
 
   return (
-    <ButtonContainer $active={active} onClick={() => setActive(!active)}>
+    <ButtonContainer
+      disabled={disabled}
+      $active={isActive}
+      onClick={() => handleClick()} // 👈 Không cần event nữa
+    >
       {title}
     </ButtonContainer>
   );

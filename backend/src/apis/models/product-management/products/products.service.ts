@@ -19,6 +19,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RedisStore } from 'cache-manager-redis-yet';
 import { TTime } from 'src/types/time.type';
 import { CompanyEntity } from '../../companys/company.entity';
+import { CompanyService } from '../../companys/companys.service';
+import { ICompany } from 'src/interfaces/models';
 
 @Injectable()
 export class ProductsService {
@@ -30,10 +32,10 @@ export class ProductsService {
         @InjectRepository(CompanyEntity)
         private companyRepository: Repository<CompanyEntity>,
         private productCategoriesService: ProductCategoriesService,
+        private companyService: CompanyService,
         private cardsService: CartsService,
         @Inject(CACHE_MANAGER) private readonly redisStore: RedisStore,
     ) { }
-
     async findById({ id }: { id: string }) {
         const data = await this.productRepository.findOne({
             where: { id },
@@ -97,7 +99,6 @@ export class ProductsService {
         return result;
     }
 
-
     async findAllProduct({ query }: { query: AQueries<ProductsEntity> }) {
         const { isDeleted, fields, limit, page, filter, sort } = query;
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
@@ -106,10 +107,10 @@ export class ProductsService {
 
         // 1️⃣ Tạo cacheKey dựa trên tất cả các tham số quan trọng
         const cacheKey = `products:${page || 1}:${limit || 10}:${JSON.stringify({
-            fields,      // Thêm fields vào cacheKey
+            fields, // Thêm fields vào cacheKey
             filter: objFilter,
             sort: objSort,
-            isDeleted,   // Thêm isDeleted vào cacheKey
+            isDeleted, // Thêm isDeleted vào cacheKey
         })}`;
 
         // 2️⃣ Kiểm tra xem dữ liệu đã có trong cache chưa
@@ -121,16 +122,20 @@ export class ProductsService {
         }
 
         // 3️⃣ Nếu không có trong cache, tiếp tục lấy dữ liệu từ cơ sở dữ liệu
-        const result = new UtilORM<ProductsEntity>(this.productRepository, ALIAS_NAME)
+        const result = new UtilORM<ProductsEntity>(
+            this.productRepository,
+            ALIAS_NAME,
+        )
             .select(fields)
-            .leftJoinAndSelect(['pc_category', 'prod_thumbnails', "prod_company"]);
+            .leftJoinAndSelect(['pc_category', 'prod_thumbnails', 'prod_company']);
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
         }
 
         // 4️⃣ Query đếm tổng số sản phẩm trước khi áp dụng skip/take
-        const queryBuilderCount: SelectQueryBuilder<ProductsEntity> = result.build();
+        const queryBuilderCount: SelectQueryBuilder<ProductsEntity> =
+            result.build();
         const totalItems = await queryBuilderCount.getCount(); // Tổng số sản phẩm
 
         // 5️⃣ Query lấy sản phẩm có phân trang
@@ -160,14 +165,12 @@ export class ProductsService {
             response,
             UtilConvert.convertTimeToMilisecond({
                 typeTime: 'HOUR',
-                value: 1,  // Lưu cache trong 1 giờ
+                value: 1, // Lưu cache trong 1 giờ
             }),
         );
 
         return response;
     }
-
-
 
     async findProductBySlug(slug: string, query: AQueries<ProductsEntity>) {
         const { limit, page, filter, sort } = query;
@@ -176,45 +179,65 @@ export class ProductsService {
         // 1️⃣ Tìm danh mục theo slug
         const categoryItem =
             await this.productCategoriesService.findCateBySlug(slug);
-        if (!categoryItem) return { items: [], totalItems: 0 };
 
-        // 2️⃣ Lấy danh sách ID của danh mục cha + con
-        const categoryIds = [categoryItem.id];
-        if (categoryItem.children?.length > 0) {
-            categoryIds.push(...categoryItem.children.map((child) => child.id));
+        // 2️⃣ Nếu không tìm thấy category, thử tìm company
+        let isCompany = false;
+        let companyItem = null;
+
+        if (!categoryItem) {
+            companyItem = await this.companyService.findCompanyBySlug(slug);
+            if (!companyItem) return { items: [], totalItems: 0 }; // Không tìm thấy gì cả
+            isCompany = true;
+
         }
 
-        // 3️⃣ Tạo cacheKey dựa trên các tham số quan trọng của query
-        const cacheKey = `products:${slug}:${page || 1}:${limit || 10}:${JSON.stringify({
-            filter,    // Bao gồm filter vào cacheKey
-            sort,      // Bao gồm sort vào cacheKey
-        })}`;
+        // 3️⃣ Tạo whereClause tùy theo category hoặc company
+        let whereClause: any = {};
 
-        // 4️⃣ Kiểm tra xem dữ liệu đã có trong cache chưa
+        if (isCompany) {
+            whereClause = {
+                prod_company: { id: companyItem.id },
+            };
+        } else {
+            const categoryIds = [categoryItem.id];
+            if (categoryItem.children?.length > 0) {
+                categoryIds.push(...categoryItem.children.map((child) => child.id));
+            }
+            whereClause = {
+                pc_category: { id: In(categoryIds) },
+            };
+        }
+
+        // 4️⃣ Tạo cacheKey
+        const cacheKey = `products:${slug}:${page || 1}:${limit || 10}:${JSON.stringify(
+            {
+                filter,
+                sort,
+                type: isCompany ? 'company' : 'category',
+            },
+        )}`;
+
+        // 5️⃣ Kiểm tra cache
         const cachedData = await this.redisStore.get(cacheKey);
         if (cachedData) {
             console.log('Cache hit - Trả về dữ liệu từ Redis:');
-            return cachedData; // Trả về dữ liệu từ cache nếu có
+            return cachedData;
         }
 
-        // 5️⃣ Đếm tổng số sản phẩm trước khi phân trang
+        // 6️⃣ Đếm tổng số sản phẩm
         const totalItems = await this.productRepository.count({
-            where: {
-                pc_category: { id: In(categoryIds) },
-            },
+            where: whereClause,
         });
 
-        // 6️⃣ Lấy danh sách sản phẩm có phân trang
+        // 7️⃣ Lấy danh sách sản phẩm
         let productItems = await this.productRepository.find({
-            where: {
-                pc_category: { id: In(categoryIds) },
-            },
+            where: whereClause,
             skip: limit && page ? (page - 1) * limit : undefined,
             take: limit || undefined,
             relations: ['prod_thumbnails'],
         });
 
-        // 7️⃣ Nếu có filter, lọc lại sản phẩm theo filter
+        // 8️⃣ Lọc sản phẩm nếu có filter
         if (filter) {
             const objFilter = UtilConvert.convertJsonToObject(filter as any) || {};
             productItems = productItems.filter((product) => {
@@ -248,11 +271,10 @@ export class ProductsService {
             });
         }
 
-        // 8️⃣ Nếu có sort, thực hiện sắp xếp
+        // 9️⃣ Sắp xếp nếu có sort
         if (sort) {
             const objSort = UtilConvert.convertSortToObject(sort as any);
 
-            // Chuyển order về chữ hoa để đồng nhất
             const sortOrder =
                 objSort.order?.toUpperCase() === 'DESC' ||
                     objSort.order?.toUpperCase().includes('DESC')
@@ -264,7 +286,6 @@ export class ProductsService {
                 let valueA = a[sortField];
                 let valueB = b[sortField];
 
-                // Chuyển đổi về số nếu có thể
                 if (!isNaN(Number(valueA)) && !isNaN(Number(valueB))) {
                     valueA = Number(valueA);
                     valueB = Number(valueB);
@@ -282,7 +303,7 @@ export class ProductsService {
             });
         }
 
-        // 9️⃣ Chuẩn hóa dữ liệu trước khi trả về
+        // 🔟 Chuẩn hóa dữ liệu trả về
         const transformedItems = productItems.map((item) => ({
             ...item,
             prod_thumbnails: item.prod_thumbnails.map((thumbnail) => ({
@@ -292,22 +313,21 @@ export class ProductsService {
             })),
         }));
 
-        // 10️⃣ Lưu dữ liệu vào cache với thời gian sống
         const response = { items: transformedItems, totalItems };
 
+        // 🔁 Lưu cache
         await this.redisStore.set(
             cacheKey,
             response,
             UtilConvert.convertTimeToMilisecond({
                 typeTime: 'HOUR',
-                value: 1,  // Lưu cache trong 1 ngày
+                value: 1,
             }),
         );
         console.log('Cache miss - Dữ liệu đã được lưu vào Redis với cacheKey:');
 
         return response;
     }
-
 
     async updateProduct({
         id,

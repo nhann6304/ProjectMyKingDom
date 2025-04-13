@@ -15,6 +15,7 @@ import { IProduct } from "@/interfaces/models/IProducts.interface";
 import { convertDiscount, convertPriceToString } from "@/utils";
 import { FaPercent } from "react-icons/fa";
 import Link from "next/link";
+import avatarNhan from "@/assets/models/avatar/nhan.png"
 const nhan = false;
 
 interface IProps {
@@ -317,7 +318,7 @@ export default function CardProduct({ product }: IProps) {
             width={500}
             src={
               product?.prod_thumb ||
-              "http://localhost:9000/uploads/minhvydalat.jpg"
+              avatarNhan
             }
             alt="product"
           />

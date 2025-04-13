@@ -7,7 +7,7 @@ import {
     IGetManyItem,
 } from "@/interfaces/common/IBaseResponse.interface";
 import { ICartItemChange } from "@/interfaces/common/ICart.interface";
-import { ICart, ICartDetail } from "@/interfaces/models/ICarts.interface";
+import { ICart } from "@/interfaces/models/ICarts.interface";
 
 const TAG_NAME = {
     CART: "CART",
@@ -55,7 +55,7 @@ export async function AddProductCart(payload: ICartItemChange) {
         url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.CARTS}/${CONST_API_COMMON.ADD}-to-cart`,
         options: {
             method: CONST_METHODS.POST,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         },
     });
     return result;

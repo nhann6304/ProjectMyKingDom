@@ -115,7 +115,7 @@ export default function CartProductCard({
         <div className="container-info">
           <div className="container-info-top">
             <span className="prod-name">{product?.prod_name}</span>
-            <span className="prod-icon" onClick={() => handleDeleteProduct(product?.id)}>
+            <span className="prod-icon" onClick={() => handleDeleteProduct(String(product?.id))}>
               <TrashIcon />
             </span>
           </div>

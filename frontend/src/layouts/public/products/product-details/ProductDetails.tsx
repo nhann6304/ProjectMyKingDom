@@ -1,5 +1,5 @@
 "use client";
-import { FindAllProduct } from "@/apis/product-management/products.apis";
+import { FindAllProduct } from "@/apis/modules/product-management/products.apis";
 import {
     Checked,
     HearNotBg,

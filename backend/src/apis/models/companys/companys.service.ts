@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyEntity } from './company.entity';
-import { In, Repository, SelectQueryBuilder } from 'typeorm';
+import { In, Like, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateCompanyDto } from './company.dto';
 import { IUser } from 'src/interfaces/common/IUser.interface';
 import { ImageEntity } from 'src/apis/common/images/image.entity';
@@ -46,9 +46,7 @@ export class CompanyService {
         );
 
         if (invalidCompanies.length > 0) {
-            const invalidList = invalidCompanies.map(
-                (c) => `${c.company_name}`,
-            );
+            const invalidList = invalidCompanies.map((c) => `${c.company_name}`);
             throw new BadRequestException(
                 `Hình ảnh của công ty ${invalidList} không tồn tại`,
             );
@@ -75,31 +73,91 @@ export class CompanyService {
     async getAllCompany(query: AQueries<CompanyEntity>) {
         const { limit, page, filter, sort, fields, isDeleted } = query;
         const ALIAS_NAME = 'companies';
+
         const objSort = UtilConvert.convertSortToObject(sort as any);
         const objFilter = UtilConvert.convertJsonToObject(filter as any);
 
         const result = new UtilORM<CompanyEntity>(
             this.companyRepository,
             ALIAS_NAME,
-        ).select(fields);
+        )
+            .select(fields)
+            .leftJoinAndSelect(['company_thumb']);
 
         if (objFilter !== undefined) {
             result.where(objFilter, isDeleted);
         }
 
         const queryBuilderCount: SelectQueryBuilder<CompanyEntity> = result.build();
-
         const totalItems = await queryBuilderCount.getCount();
 
         const queryBuilder: SelectQueryBuilder<CompanyEntity> = result
-            .skip({ limit, page })
-            .take({ limit })
             .sort(objSort as any)
             .build();
 
         const items = await queryBuilder.getMany();
-        const response = { items, totalItems };
 
-        return response;
+        // Group by first character of name
+        const groupedItems = items.reduce(
+            (acc, company) => {
+                const nameCompany = company.company_name || '';
+                const firstChar = nameCompany.charAt(0).toUpperCase();
+                if (!acc[firstChar]) {
+                    acc[firstChar] = [];
+                }
+                acc[firstChar].push(company);
+                return acc;
+            },
+            {} as Record<string, CompanyEntity[]>,
+        );
+
+        // Sort the grouped result by letter A-Z
+        const sortedGroupedItems = Object.keys(groupedItems)
+            .sort()
+            .reduce(
+                (sortedAcc, key) => {
+                    sortedAcc[key] = groupedItems[key];
+                    return sortedAcc;
+                },
+                {} as Record<string, CompanyEntity[]>,
+            );
+
+        return {
+            totalItems,
+            items: sortedGroupedItems,
+        };
+    }
+
+    async getTagNameCompany(tag: string) {
+        //Tim theo chữ cái
+        const companies = await this.companyRepository.find({
+            where: {
+                company_name: Like(`${tag}%`),
+            },
+            order: {
+                company_name: 'ASC',
+            },
+        });
+        // Nhóm lại
+        const groupedItems = companies.reduce((acc, company) => {
+            const name = company.company_name || '';
+            const firstChar = name.charAt(0).toUpperCase();
+            if (!acc[firstChar]) {
+                acc[firstChar] = [];
+            }
+            acc[firstChar].push(company);
+            return acc;
+        },
+            {} as Record<string, typeof companies>,
+        );
+        return groupedItems;
+    }
+
+    async findCompanyBySlug(slug: string) {
+        const items = await this.companyRepository.findOne({
+            where: { company_slug: slug },
+
+        })
+        return items;
     }
 }

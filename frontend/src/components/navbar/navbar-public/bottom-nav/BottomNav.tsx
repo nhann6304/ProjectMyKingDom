@@ -6,7 +6,7 @@ import "./style.scss";
 //
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
-import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import { findAllProductCate } from "@/apis/modules/product-management/product-categories.apis";
 import anhquoc from "@/assets/common/icon-public/jpg/co-viet-nam.svg.png";
 import logo from "@/assets/common/icon-public/jpg/logo-254x76 (1).png";
 import {
@@ -173,7 +173,7 @@ export default function BottomNav({ categories }: IProps) {
                                             product={item.product_detail}
                                             onQuantityChange={(newQuantity) =>
                                                 handleQuantityChange(
-                                                    item.product_detail.id,
+                                                    String(item.product_detail.id),
                                                     newQuantity
                                                 )
                                             }
@@ -284,7 +284,9 @@ export default function BottomNav({ categories }: IProps) {
                     </div>
 
                     <div className="option-child">
-                        <span>Thương hiệu</span>
+                        <Link className="option-child-item" href={"/trademark"}>
+                            Thương hiệu
+                        </Link>
                     </div>
 
                     <div className="option-child">

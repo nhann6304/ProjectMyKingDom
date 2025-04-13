@@ -1,7 +1,7 @@
-import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import { findAllProductCate } from "@/apis/modules/product-management/product-categories.apis";
 import {
     FindAllProduct
-} from "@/apis/product-management/products.apis";
+} from "@/apis/modules/product-management/products.apis";
 import { IPageProps } from "@/interfaces/common/IBaseResponse.interface";
 import { IProductCategory } from "@/interfaces/models/IProduct-categories.interface";
 import { IProduct } from "@/interfaces/models/IProducts.interface";

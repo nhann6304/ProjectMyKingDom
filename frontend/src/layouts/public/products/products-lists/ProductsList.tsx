@@ -5,7 +5,7 @@ import "./style.scss";
 import {
     FindAllProduct,
     FindProductBySlugCate,
-} from "@/apis/product-management/products.apis";
+} from "@/apis/modules/product-management/products.apis";
 import categoryIcon from "@/assets/common/icon-public/svg/icon/cateIcon.svg";
 import listIcon from "@/assets/common/icon-public/svg/icon/listIcon.svg";
 import CardProduct from "@/components/cards/CardProduct";
@@ -28,7 +28,7 @@ import { Fragment, useEffect, useState, useTransition } from "react";
 import { IProduct } from "@/interfaces/models/IProducts.interface";
 import Loading from "@/components/loading/Loading";
 import OptionItems from "@/components/options/options-items/OptionItems";
-import { findAllProductCate } from "@/apis/product-management/product-categories.apis";
+import { findAllProductCate } from "@/apis/modules/product-management/product-categories.apis";
 import ListFilterProd from "@/components/lists/ListFilterProd";
 import { convertOjbToString } from "@/utils";
 import { CONST_API_COMMON, CONST_APIS } from "@/constants/apis.constant";
@@ -98,7 +98,6 @@ export default function ProductLayout({
             let sortField: string | undefined =
                 SORT_FIELD_MAP[sortValue as ESortOptions]; // Field tương ứng
 
-            // Nếu không có sortField, gán giá trị mặc định
             const sort: { field: string; order: string } | null =
                 sortField && sortValue ? { field: sortField, order: sortValue } : null;
 

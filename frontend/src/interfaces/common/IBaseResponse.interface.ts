@@ -15,6 +15,7 @@ export interface IQueries<T = any> {
     // searchVal?: string;
     // filterBy?: string;
     // filterVal?: string;
+    sort?: string
     fieldsWhereSelected?: Array<keyof T> | any;
     fieldsWhereSelectedValue?: Array<string>;
     [key: string]: string | number | boolean | any;
