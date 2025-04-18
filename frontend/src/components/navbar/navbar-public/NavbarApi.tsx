@@ -47,7 +47,7 @@ export default function NavbarApi({ categories }: IProps) {
         >
             {/* TopNav hiện trước */}
             <div className="transition-transform duration-500 translate-y-0">
-                <TopNavPublic />
+                <TopNavPublic background="var(--color-blue-global)" />
             </div>
 
             {/* BottomNav xuất hiện sau TopNav 200ms */}

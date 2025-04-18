@@ -1,6 +1,7 @@
 import NavClient from "@/components/navbar/navbar-public/NavClient";
-import "./style.scss"
+import "./style.scss";
 import NavbarPublic from "@/components/navbar/navbar-public/NavbarApi";
+import FooterLayout from "@/layouts/public/footer/FooterLayout";
 
 export default function WithLayout({
     children,
@@ -12,8 +13,12 @@ export default function WithLayout({
             <nav>
                 <NavClient />
             </nav>
+            {/* // */}
             <main>{children}</main>
-            <footer>footer</footer>
+            {/* // */}
+            <footer>
+                <FooterLayout />
+            </footer>
         </div>
     );
 }

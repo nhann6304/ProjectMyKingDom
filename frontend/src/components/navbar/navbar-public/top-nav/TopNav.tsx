@@ -2,7 +2,6 @@
 
 import Slider, { Settings } from "react-slick";
 import styled from "styled-components";
-
 //
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,10 +12,15 @@ import {
   ShopIcon,
 } from "@/assets/common/icon-public/svg/top-nav/IconTopNav";
 
-const TopNavContainer = styled.div`
+interface IProps {
+  background: string
+}
+
+const TopNavContainer = styled.div<{ $background: string }>`
   width: 100%;
   height: 4rem;
-  background-color: var(--color-blue-global);
+  /* background-color: var(--color-blue-global); */
+ background-color: ${({ $background }) => $background};
 
   .item-parent {
     display: flex;
@@ -74,7 +78,7 @@ const TopNavContainer = styled.div`
   }
 `;
 
-export default function TopNavPublic() {
+export default function TopNavPublic({ background }: IProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -96,7 +100,7 @@ export default function TopNavPublic() {
   };
 
   return (
-    <TopNavContainer>
+    <TopNavContainer $background={background}>
       <div className="item-parent container-pub">
         {isMobile ? (
           <Slider className="slider-carousel" {...settings}>
