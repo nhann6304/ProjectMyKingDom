@@ -1,18 +1,19 @@
-
-import Link from "next/link";
+import SidebarAdmin from "@/components/sidebar/SidebarAdmin";
+import { Providers } from "@/context/providers";
 import "./style.scss";
-import Image from "next/image";
-import MenuAdmin from "@/components/menu/menu-admin/MenuAdmin";
-import NavbarAdmin from "@/components/navbar/navbar-admin/NavbarAdmin";
-//
-import logo from "@/assets/common/logo/logo-res.png";
 export default function DashboardLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <div className="bg-background font-sans">
+            <Providers>
+                <div className="flex min-h-[100dvh]">
+                    <SidebarAdmin />
+                    <div className="flex-grow overflow-auto">{children}</div>
+                </div>
+            </Providers>
             {children}
         </div>
     );
